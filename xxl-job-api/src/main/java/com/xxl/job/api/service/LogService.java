@@ -7,9 +7,10 @@ public interface LogService {
 	/**
 	 * Status Report 状态汇报
 	 *
-	 * @param taskId 任务ID
-	 * @param ip     ip
-	 * @param log    日志信息
+	 * @param taskInstanceId 任务实例ID
+	 * @param ip             ip
+	 * @param log            日志信息
+	 * @return 0：成功
 	 */
-	void report(String taskId, String ip, String log);
+	Integer report(String taskInstanceId, String ip, String log);
 }

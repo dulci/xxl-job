@@ -14,26 +14,27 @@ import com.xxl.job.api.service.StatusService;
 		registry = "${dubbo.registry.id}"
 )
 public class StatusServiceImpl implements StatusService {
-
 	/**
 	 * Status Report 状态汇报
 	 *
-	 * @param taskId 任务ID
-	 * @param status 状态值
+	 * @param taskInstanceId 任务实例ID
+	 * @param status         状态值
+	 * @return 0：成功
 	 */
 	@Override
-	public void report(String taskId, Integer status) {
-
+	public Integer report(String taskInstanceId, Integer status) {
+		return 0;
 	}
 
 	/**
 	 * Status Report 状态汇报
 	 *
-	 * @param taskId    任务ID
-	 * @param jobStatus 状态值
+	 * @param taskInstanceId 任务实例ID
+	 * @param jobStatus      状态值
+	 * @return 0：成功
 	 */
 	@Override
-	public void report(String taskId, JobStatus jobStatus) {
-
+	public Integer report(String taskInstanceId, JobStatus jobStatus) {
+		return 0;
 	}
 }

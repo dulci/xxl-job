@@ -9,16 +9,18 @@ public interface StatusService {
 	/**
 	 * Status Report 状态汇报
 	 *
-	 * @param taskId 任务ID
-	 * @param status 状态值
+	 * @param taskInstanceId 任务实例ID
+	 * @param status         状态值
+	 * @return 0：成功
 	 */
-	void report(String taskId, Integer status);
+	Integer report(String taskInstanceId, Integer status);
 
 	/**
 	 * Status Report 状态汇报
 	 *
-	 * @param taskId 任务ID
-	 * @param jobStatus 状态值
+	 * @param taskInstanceId 任务实例ID
+	 * @param jobStatus      状态值
+	 * @return 0：成功
 	 */
-	void report(String taskId, JobStatus jobStatus);
+	Integer report(String taskInstanceId, JobStatus jobStatus);
 }

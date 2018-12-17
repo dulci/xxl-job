@@ -7,7 +7,7 @@ public class SubJobInfoForBatchCreate {
 	/**
 	 * 子任务ID
 	 */
-	private String taskId;
+	private Integer taskId = 0;
 
 	/**
 	 * 子任务序号
@@ -18,4 +18,28 @@ public class SubJobInfoForBatchCreate {
 	 * 子任务总数量
 	 */
 	private Integer total;
+
+	public Integer getTaskId() {
+		return taskId;
+	}
+
+	public void setTaskId(Integer taskId) {
+		this.taskId = taskId;
+	}
+
+	public Integer getIndex() {
+		return index;
+	}
+
+	public void setIndex(Integer index) {
+		this.index = index;
+	}
+
+	public Integer getTotal() {
+		return total;
+	}
+
+	public void setTotal(Integer total) {
+		this.total = total;
+	}
 }

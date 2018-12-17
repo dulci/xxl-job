@@ -23,7 +23,7 @@ public class LogServiceImpl implements LogService {
 	 * @return 0：成功
 	 */
 	@Override
-	public Integer report(String taskInstanceId, String ip, String log) {
-return 0;
+	public Integer report(Integer taskInstanceId, String ip, String log) {
+		return 0;
 	}
 }

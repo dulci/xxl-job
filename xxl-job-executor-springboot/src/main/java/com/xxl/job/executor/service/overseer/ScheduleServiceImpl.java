@@ -22,7 +22,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 	 * @return 0：继续执行，1：中止
 	 */
 	@Override
-	public Integer report(String taskInstanceId, Double persent) {
+	public Integer report(Integer taskInstanceId, Double persent) {
 		return null;
 	}
 }

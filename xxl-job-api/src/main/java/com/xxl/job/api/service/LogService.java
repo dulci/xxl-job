@@ -12,5 +12,5 @@ public interface LogService {
 	 * @param log            日志信息
 	 * @return 0：成功
 	 */
-	Integer report(String taskInstanceId, String ip, String log);
+	Integer report(Integer taskInstanceId, String ip, String log);
 }

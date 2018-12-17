@@ -22,7 +22,7 @@ public class ScheduleApi {
 	 * @param persent        百分比
 	 * @return 0：继续执行，1：中止
 	 */
-	public Integer report(String taskInstanceId, Double persent) {
+	public Integer report(Integer taskInstanceId, Double persent) {
 		if (StringUtils.isEmpty(taskInstanceId)) {
 			log.error("taskInstanceId can not be empty");
 			return -1;

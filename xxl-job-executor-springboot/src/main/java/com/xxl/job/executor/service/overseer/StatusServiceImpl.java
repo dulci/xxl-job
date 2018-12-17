@@ -22,7 +22,7 @@ public class StatusServiceImpl implements StatusService {
 	 * @return 0：成功
 	 */
 	@Override
-	public Integer report(String taskInstanceId, Integer status) {
+	public Integer report(Integer taskInstanceId, Integer status) {
 		return 0;
 	}
 
@@ -34,7 +34,7 @@ public class StatusServiceImpl implements StatusService {
 	 * @return 0：成功
 	 */
 	@Override
-	public Integer report(String taskInstanceId, JobStatus jobStatus) {
+	public Integer report(Integer taskInstanceId, JobStatus jobStatus) {
 		return 0;
 	}
 }

@@ -15,7 +15,7 @@ public interface SubJobService {
 	 * @param index              子任务序号
 	 * @return 子任务实例ID
 	 */
-	String create(String mainTaskInstanceId, Integer index);
+	Integer create(Integer mainTaskInstanceId, Integer index);
 
 	/**
 	 * SubJob create 创建子任务
@@ -25,7 +25,7 @@ public interface SubJobService {
 	 * @param total              子任务序总数
 	 * @return 子任务实例ID
 	 */
-	String create(String mainTaskInstanceId, Integer index, Integer total);
+	Integer create(Integer mainTaskInstanceId, Integer index, Integer total);
 
 	/**
 	 * SubJob batchCreate 批量创建子任务
@@ -34,7 +34,7 @@ public interface SubJobService {
 	 * @param total              子任务序总数
 	 * @return 子任务实例ID列表
 	 */
-	List<SubJobInfoForBatchCreate> batchCreate(String mainTaskInstanceId, Integer total);
+	List<SubJobInfoForBatchCreate> batchCreate(Integer mainTaskInstanceId, Integer total);
 
 	/**
 	 * SubJob isContinueProcess 是否执行询问
@@ -42,5 +42,5 @@ public interface SubJobService {
 	 * @param taskInstanceId 任务实例ID
 	 * @return 0：执行，1：中止
 	 */
-	Integer isContinueProcess(String taskInstanceId);
+	Integer isContinueProcess(Integer taskInstanceId);
 }

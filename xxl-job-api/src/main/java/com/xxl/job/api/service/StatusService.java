@@ -13,7 +13,7 @@ public interface StatusService {
 	 * @param status         状态值
 	 * @return 0：成功
 	 */
-	Integer report(String taskInstanceId, Integer status);
+	Integer report(Integer taskInstanceId, Integer status);
 
 	/**
 	 * Status Report 状态汇报
@@ -22,5 +22,5 @@ public interface StatusService {
 	 * @param jobStatus      状态值
 	 * @return 0：成功
 	 */
-	Integer report(String taskInstanceId, JobStatus jobStatus);
+	Integer report(Integer taskInstanceId, JobStatus jobStatus);
 }

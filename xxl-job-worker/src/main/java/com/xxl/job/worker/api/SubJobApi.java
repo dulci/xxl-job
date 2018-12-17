@@ -26,21 +26,21 @@ public class SubJobApi {
 	 * @param index              子任务序号
 	 * @return 子任务实例ID
 	 */
-	public String create(String mainTaskInstanceId, Integer index) {
+	public Integer create(Integer mainTaskInstanceId, Integer index) {
 		if (StringUtils.isEmpty(mainTaskInstanceId)) {
 			log.error("mainTaskInstanceId can not be empty");
-			return "";
+			return 0;
 		}
 		if (index == null) {
 			log.error("index can not be empty");
-			return "";
+			return 0;
 		}
 		try {
 			return subJobService.create(mainTaskInstanceId, index);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return "";
+		return 0;
 	}
 
 	/**
@@ -51,21 +51,21 @@ public class SubJobApi {
 	 * @param total              子任务序总数
 	 * @return 子任务实例ID
 	 */
-	public String create(String mainTaskInstanceId, Integer index, Integer total) {
+	public Integer create(Integer mainTaskInstanceId, Integer index, Integer total) {
 		if (StringUtils.isEmpty(mainTaskInstanceId)) {
 			log.error("mainTaskInstanceId can not be empty");
-			return "";
+			return 0;
 		}
 		if (index == null) {
 			log.error("index can not be empty");
-			return "";
+			return 0;
 		}
 		try {
 			return subJobService.create(mainTaskInstanceId, index, total);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return "";
+		return 0;
 	}
 
 	/**
@@ -75,7 +75,7 @@ public class SubJobApi {
 	 * @param total              子任务序总数
 	 * @return 子任务实例ID列表
 	 */
-	public List<SubJobInfoForBatchCreate> batchCreate(String mainTaskInstanceId, Integer total) {
+	public List<SubJobInfoForBatchCreate> batchCreate(Integer mainTaskInstanceId, Integer total) {
 		if (StringUtils.isEmpty(mainTaskInstanceId)) {
 			log.error("mainTaskInstanceId can not be empty");
 			return new ArrayList<>();
@@ -98,7 +98,7 @@ public class SubJobApi {
 	 * @param taskInstanceId 任务实例ID
 	 * @return 0：执行，1：中止
 	 */
-	public Integer isContinueProcess(String taskInstanceId) {
+	public Integer isContinueProcess(Integer taskInstanceId) {
 		if (StringUtils.isEmpty(taskInstanceId)) {
 			log.error("taskInstanceId can not be empty");
 			return -1;

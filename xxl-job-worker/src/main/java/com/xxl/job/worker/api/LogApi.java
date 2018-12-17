@@ -25,7 +25,7 @@ public class LogApi {
 	 * @param log            日志信息
 	 * @return 0：成功
 	 */
-	public Integer report(String taskInstanceId, String log) {
+	public Integer report(Integer taskInstanceId, String log) {
 		if (StringUtils.isEmpty(taskInstanceId)) {
 			this.log.error("taskInstanceId can not be empty");
 			return -1;

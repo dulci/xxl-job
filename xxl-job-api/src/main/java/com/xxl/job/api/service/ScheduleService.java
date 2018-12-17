@@ -11,5 +11,5 @@ public interface ScheduleService {
 	 * @param persent 百分比
 	 * @return 0：继续执行，1：中止
 	 */
-	Integer report(String taskInstanceId, Double persent);
+	Integer report(Integer taskInstanceId, Double persent);
 }

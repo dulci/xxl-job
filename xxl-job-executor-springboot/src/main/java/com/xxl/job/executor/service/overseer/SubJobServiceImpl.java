@@ -3,6 +3,9 @@ package com.xxl.job.executor.service.overseer;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.xxl.job.api.dto.SubJobInfoForBatchCreate;
 import com.xxl.job.api.service.SubJobService;
+import com.xxl.job.executor.dao.XxlJobLogDao;
+import com.xxl.job.executor.dao.XxlJobSubLogDao;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
@@ -16,6 +19,10 @@ import java.util.List;
 		registry = "${dubbo.registry.id}"
 )
 public class SubJobServiceImpl implements SubJobService {
+	@Autowired
+	private XxlJobLogDao xxlJobLogDao;
+	@Autowired
+	private XxlJobSubLogDao xxlJobSubLogDao;
 
 	/**
 	 * SubJob create 创建子任务
@@ -25,7 +32,8 @@ public class SubJobServiceImpl implements SubJobService {
 	 * @return 子任务实例ID
 	 */
 	@Override
-	public String create(String mainTaskInstanceId, Integer index) {
+	public Integer create(Integer mainTaskInstanceId, Integer index) {
+		xxlJobLogDao.load(mainTaskInstanceId);
 		return null;
 	}
 
@@ -38,7 +46,7 @@ public class SubJobServiceImpl implements SubJobService {
 	 * @return 子任务实例ID
 	 */
 	@Override
-	public String create(String mainTaskInstanceId, Integer index, Integer total) {
+	public Integer create(Integer mainTaskInstanceId, Integer index, Integer total) {
 		return null;
 	}
 
@@ -50,7 +58,7 @@ public class SubJobServiceImpl implements SubJobService {
 	 * @return 子任务实例ID列表
 	 */
 	@Override
-	public List<SubJobInfoForBatchCreate> batchCreate(String mainTaskInstanceId, Integer total) {
+	public List<SubJobInfoForBatchCreate> batchCreate(Integer mainTaskInstanceId, Integer total) {
 		return null;
 	}
 
@@ -61,7 +69,7 @@ public class SubJobServiceImpl implements SubJobService {
 	 * @return 0：执行，1：中止
 	 */
 	@Override
-	public Integer isContinueProcess(String taskInstanceId) {
+	public Integer isContinueProcess(Integer taskInstanceId) {
 		return null;
 	}
 }

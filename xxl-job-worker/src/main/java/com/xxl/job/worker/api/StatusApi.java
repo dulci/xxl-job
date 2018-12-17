@@ -23,7 +23,7 @@ public class StatusApi {
 	 * @param status         状态值
 	 * @return 0：成功
 	 */
-	public Integer report(String taskInstanceId, Integer status) {
+	public Integer report(Integer taskInstanceId, Integer status) {
 		if (StringUtils.isEmpty(taskInstanceId)) {
 			log.error("taskInstanceId can not be empty");
 			return -1;
@@ -47,7 +47,7 @@ public class StatusApi {
 	 * @param jobStatus      状态值
 	 * @return 0：成功
 	 */
-	public Integer report(String taskInstanceId, JobStatus jobStatus) {
+	public Integer report(Integer taskInstanceId, JobStatus jobStatus) {
 		if (StringUtils.isEmpty(taskInstanceId)) {
 			log.error("taskInstanceId can not be empty");
 			return -1;

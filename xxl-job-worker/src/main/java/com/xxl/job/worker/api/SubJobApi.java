@@ -3,6 +3,7 @@ package com.xxl.job.worker.api;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.xxl.job.api.dto.SubJobInfoForBatchCreate;
 import com.xxl.job.api.service.SubJobService;
+import com.xxl.job.worker.util.IpUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
@@ -36,7 +37,7 @@ public class SubJobApi {
 			return 0;
 		}
 		try {
-			return subJobService.create(mainTaskInstanceId, index);
+			return subJobService.create(mainTaskInstanceId, IpUtil.getIp(), index);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -61,7 +62,7 @@ public class SubJobApi {
 			return 0;
 		}
 		try {
-			return subJobService.create(mainTaskInstanceId, index, total);
+			return subJobService.create(mainTaskInstanceId, IpUtil.getIp(), index, total);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -85,7 +86,7 @@ public class SubJobApi {
 			return new ArrayList<>();
 		}
 		try {
-			return subJobService.batchCreate(mainTaskInstanceId, total);
+			return subJobService.batchCreate(mainTaskInstanceId, IpUtil.getIp(), total);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

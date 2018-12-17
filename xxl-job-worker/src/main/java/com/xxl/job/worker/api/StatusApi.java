@@ -3,6 +3,7 @@ package com.xxl.job.worker.api;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.xxl.job.api.enums.JobStatus;
 import com.xxl.job.api.service.StatusService;
+import com.xxl.job.worker.util.IpUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
@@ -33,7 +34,7 @@ public class StatusApi {
 			return -1;
 		}
 		try {
-			return statusService.report(taskInstanceId, status);
+			return statusService.report(taskInstanceId, IpUtil.getIp(), status);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -57,7 +58,7 @@ public class StatusApi {
 			return -1;
 		}
 		try {
-			return statusService.report(taskInstanceId, jobStatus);
+			return statusService.report(taskInstanceId, IpUtil.getIp(), jobStatus);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

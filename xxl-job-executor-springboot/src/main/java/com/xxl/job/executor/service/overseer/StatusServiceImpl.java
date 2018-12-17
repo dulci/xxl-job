@@ -18,11 +18,12 @@ public class StatusServiceImpl implements StatusService {
 	 * Status Report 状态汇报
 	 *
 	 * @param taskInstanceId 任务实例ID
+	 * @param ip             ip
 	 * @param status         状态值
 	 * @return 0：成功
 	 */
 	@Override
-	public Integer report(Integer taskInstanceId, Integer status) {
+	public Integer report(Integer taskInstanceId, String ip, Integer status) {
 		return 0;
 	}
 
@@ -30,11 +31,12 @@ public class StatusServiceImpl implements StatusService {
 	 * Status Report 状态汇报
 	 *
 	 * @param taskInstanceId 任务实例ID
+	 * @param ip             ip
 	 * @param jobStatus      状态值
 	 * @return 0：成功
 	 */
 	@Override
-	public Integer report(Integer taskInstanceId, JobStatus jobStatus) {
+	public Integer report(Integer taskInstanceId, String ip, JobStatus jobStatus) {
 		return 0;
 	}
 }

@@ -14,6 +14,15 @@ public class SubJobInfoForBatchCreate {
 	 */
 	private Integer index;
 
+	public SubJobInfoForBatchCreate() {
+	}
+
+	public SubJobInfoForBatchCreate(Integer taskId, Integer index, Integer total) {
+		this.taskId = taskId;
+		this.index = index;
+		this.total = total;
+	}
+
 	/**
 	 * 子任务总数量
 	 */

@@ -2,6 +2,7 @@ package com.xxl.job.worker.api;
 
 import com.alibaba.dubbo.config.annotation.Service;
 import com.xxl.job.api.service.LogService;
+import com.xxl.job.worker.util.IpUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
@@ -34,15 +35,8 @@ public class LogApi {
 			this.log.error("log is empty");
 			return -1;
 		}
-		String ip = null;
 		try {
-			InetAddress addr = InetAddress.getLocalHost();
-			ip = addr.getHostAddress().toString();
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		}
-		try {
-			return logService.report(taskInstanceId, ip, log);
+			return logService.report(taskInstanceId, IpUtil.getIp(), log);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

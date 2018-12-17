@@ -2,6 +2,7 @@ package com.xxl.job.worker.api;
 
 import com.alibaba.dubbo.config.annotation.Service;
 import com.xxl.job.api.service.ScheduleService;
+import com.xxl.job.worker.util.IpUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
@@ -33,7 +34,7 @@ public class ScheduleApi {
 		}
 		Integer status = -1;
 		try {
-			status = scheduleService.report(taskInstanceId, persent);
+			status = scheduleService.report(taskInstanceId, IpUtil.getIp(), persent);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

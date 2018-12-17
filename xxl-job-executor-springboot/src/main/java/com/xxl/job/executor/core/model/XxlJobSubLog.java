@@ -10,19 +10,19 @@ import java.util.Date;
 public class XxlJobSubLog {
 
 	private int id;
-
 	private int parentId;
 
 	// job info
 	private int jobGroup;
 	private int jobId;
 
+	// subJob info
+	private int index;
+	private int total;
+
 	// execute info
 	private String executorAddress;
-	private String executorHandler;
 	private String executorParam;
-	private String executorShardingParam;
-	private int executorFailRetryCount;
 
 	// trigger info
 	private Date triggerTime;
@@ -33,9 +33,6 @@ public class XxlJobSubLog {
 	private Date handleTime;
 	private int handleCode;
 	private String handleMsg;
-
-	// alarm info
-	private int alarmStatus;
 
 	public int getId() {
 		return id;
@@ -69,6 +66,22 @@ public class XxlJobSubLog {
 		this.jobId = jobId;
 	}
 
+	public int getIndex() {
+		return index;
+	}
+
+	public void setIndex(int index) {
+		this.index = index;
+	}
+
+	public int getTotal() {
+		return total;
+	}
+
+	public void setTotal(int total) {
+		this.total = total;
+	}
+
 	public String getExecutorAddress() {
 		return executorAddress;
 	}
@@ -77,13 +90,6 @@ public class XxlJobSubLog {
 		this.executorAddress = executorAddress;
 	}
 
-	public String getExecutorHandler() {
-		return executorHandler;
-	}
-
-	public void setExecutorHandler(String executorHandler) {
-		this.executorHandler = executorHandler;
-	}
 
 	public String getExecutorParam() {
 		return executorParam;
@@ -91,22 +97,6 @@ public class XxlJobSubLog {
 
 	public void setExecutorParam(String executorParam) {
 		this.executorParam = executorParam;
-	}
-
-	public String getExecutorShardingParam() {
-		return executorShardingParam;
-	}
-
-	public void setExecutorShardingParam(String executorShardingParam) {
-		this.executorShardingParam = executorShardingParam;
-	}
-
-	public int getExecutorFailRetryCount() {
-		return executorFailRetryCount;
-	}
-
-	public void setExecutorFailRetryCount(int executorFailRetryCount) {
-		this.executorFailRetryCount = executorFailRetryCount;
 	}
 
 	public Date getTriggerTime() {
@@ -155,14 +145,6 @@ public class XxlJobSubLog {
 
 	public void setHandleMsg(String handleMsg) {
 		this.handleMsg = handleMsg;
-	}
-
-	public int getAlarmStatus() {
-		return alarmStatus;
-	}
-
-	public void setAlarmStatus(int alarmStatus) {
-		this.alarmStatus = alarmStatus;
 	}
 
 }

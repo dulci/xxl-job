@@ -7,9 +7,10 @@ public interface ScheduleService {
 	/**
 	 * Schedule Report 进度汇报
 	 *
-	 * @param taskInstanceId  任务实例ID
-	 * @param persent 百分比
+	 * @param taskInstanceId 任务实例ID
+	 * @param ip             ip
+	 * @param persent        百分比
 	 * @return 0：继续执行，1：中止
 	 */
-	Integer report(Integer taskInstanceId, Double persent);
+	Integer report(Integer taskInstanceId, String ip, Double persent);
 }

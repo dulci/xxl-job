@@ -24,6 +24,18 @@ public class LogServiceImpl implements LogService {
 	 */
 	@Override
 	public Integer report(Integer taskInstanceId, String ip, String log) {
+
 		return 0;
+	}
+
+
+	private  static class LogThread extends Thread {
+		private Integer logId;
+		private String ip;
+		private String log;
+
+
+
+
 	}
 }

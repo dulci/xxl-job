@@ -29,8 +29,7 @@ public class StatusServiceImpl implements StatusService {
 	 */
 	@Override
 	public Integer report(Integer taskInstanceId, String ip, Integer status, String msg) {
-	public Integer report(Integer taskInstanceId, String ip, Integer status) {
-		ReturnT result = new ReturnT(status, null);
+		ReturnT result = new ReturnT(status, msg);
 		TriggerCallbackThread.pushCallBack(new HandleCallbackParam(taskInstanceId, System.currentTimeMillis(), result));
 		return 0;
 	}
@@ -45,8 +44,7 @@ public class StatusServiceImpl implements StatusService {
 	 */
 	@Override
 	public Integer report(Integer taskInstanceId, String ip, JobStatus jobStatus, String msg) {
-	public Integer report(Integer taskInstanceId, String ip, JobStatus jobStatus) {
-		ReturnT result = new ReturnT(Integer.valueOf(jobStatus.getValue()), null);
+		ReturnT result = new ReturnT(Integer.valueOf(jobStatus.getValue()), msg);
 		TriggerCallbackThread.pushCallBack(new HandleCallbackParam(taskInstanceId, System.currentTimeMillis(), result));
 		return 0;
 	}

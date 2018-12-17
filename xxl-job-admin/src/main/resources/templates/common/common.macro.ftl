@@ -192,6 +192,7 @@
         Powered by <b>XXL-JOB</b> ${I18n.admin_version}
 		<div class="pull-right hidden-xs">
             <strong>Copyright &copy; 2015-${.now?string('yyyy')} &nbsp;
+				系统维护者 杜磊(dul-c) 张建龙(zhangjl-h) &nbsp;
                 <a href="http://www.xuxueli.com/" target="_blank" >xuxueli</a>
 				&nbsp;
                 <a href="https://github.com/xuxueli/xxl-job" target="_blank" >github</a>

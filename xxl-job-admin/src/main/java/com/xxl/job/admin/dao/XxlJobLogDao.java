@@ -32,6 +32,8 @@ public interface XxlJobLogDao {
 	
 	public XxlJobLog load(@Param("id") int id);
 
+	public List<XxlJobLog> loadByParentId(@Param("parentId") int parentId);
+
 	public int save(XxlJobLog xxlJobLog);
 
 	public int updateTriggerInfo(XxlJobLog xxlJobLog);

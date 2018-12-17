@@ -5,9 +5,14 @@
 	
 	<resultMap id="XxlJobLog" type="com.xxl.job.admin.core.model.XxlJobLog" >
 		<result column="id" property="id" />
+		<result column="parent_id" property="parentId" />
+		<result column="type" property="type" />
 
 		<result column="job_group" property="jobGroup" />
 		<result column="job_id" property="jobId" />
+
+		<result column="index" property="index" />
+		<result column="total" property="total" />
 
 		<result column="executor_address" property="executorAddress" />
 		<result column="executor_handler" property="executorHandler" />
@@ -28,8 +33,12 @@
 
 	<sql id="Base_Column_List">
 		t.id,
+		t.parent_id,
+		t.type,
 		t.job_group,
 		t.job_id,
+		t.index,
+		t.total,
 		t.executor_address,
 		t.executor_handler,
 		t.executor_param,
@@ -116,7 +125,15 @@
 		WHERE t.id = #{id}
 	</select>
 
-	
+	<select id="loadByParentId" parameterType="java.lang.Integer" resultMap="XxlJobLog">
+		SELECT
+			<include refid="Base_Column_List" />
+		FROM
+			XXL_JOB_QRTZ_TRIGGER_LOG AS t
+		WHERE
+			t.parent_id = #{parentId}
+	</select>
+
 	<insert id="save" parameterType="com.xxl.job.admin.core.model.XxlJobLog" useGeneratedKeys="true" keyProperty="id" >
 		INSERT INTO XXL_JOB_QRTZ_TRIGGER_LOG (
 			`job_group`,

@@ -104,7 +104,6 @@
 			<version>1.2.44</version>
 		</dependency>
 
-
 		<!-- mysql -->
 		<dependency>
 			<groupId>mysql</groupId>
@@ -128,6 +127,12 @@
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
 			<version>${commons-lang3.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.16.16</version>
 		</dependency>
 	</dependencies>
 

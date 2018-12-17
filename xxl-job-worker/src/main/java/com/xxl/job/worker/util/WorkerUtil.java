@@ -32,7 +32,7 @@ public class WorkerUtil {
 	 * @param log            日志信息
 	 * @return 0：成功
 	 */
-	public Integer report(String taskInstanceId, String log) {
+	public Integer report(Integer taskInstanceId, String log) {
 		return logApi.report(taskInstanceId, log);
 	}
 
@@ -43,7 +43,7 @@ public class WorkerUtil {
 	 * @param persent        百分比
 	 * @return 0：继续执行，1：中止
 	 */
-	public Integer report(String taskInstanceId, Double persent) {
+	public Integer report(Integer taskInstanceId, Double persent) {
 		return scheduleApi.report(taskInstanceId, persent);
 	}
 
@@ -52,10 +52,11 @@ public class WorkerUtil {
 	 *
 	 * @param taskInstanceId 任务实例ID
 	 * @param status         状态值
+	 * @param msg            备注消息
 	 * @return 0：成功
 	 */
-	public Integer report(String taskInstanceId, Integer status) {
-		return statusApi.report(taskInstanceId, status);
+	public Integer report(Integer taskInstanceId, Integer status, String msg) {
+		return statusApi.report(taskInstanceId, status, msg);
 	}
 
 	/**
@@ -63,10 +64,11 @@ public class WorkerUtil {
 	 *
 	 * @param taskInstanceId 任务实例ID
 	 * @param jobStatus      状态值
+	 * @param msg            备注消息
 	 * @return 0：成功
 	 */
-	public Integer report(String taskInstanceId, JobStatus jobStatus) {
-		return statusApi.report(taskInstanceId, jobStatus);
+	public Integer report(Integer taskInstanceId, JobStatus jobStatus, String msg) {
+		return statusApi.report(taskInstanceId, jobStatus, msg);
 	}
 
 	/**
@@ -76,7 +78,7 @@ public class WorkerUtil {
 	 * @param index              子任务序号
 	 * @return 子任务实例ID
 	 */
-	public String create(String mainTaskInstanceId, Integer index) {
+	public Integer create(Integer mainTaskInstanceId, Integer index) {
 		return subJobApi.create(mainTaskInstanceId, index);
 	}
 
@@ -88,7 +90,7 @@ public class WorkerUtil {
 	 * @param total              子任务序总数
 	 * @return 子任务实例ID
 	 */
-	public String create(String mainTaskInstanceId, Integer index, Integer total) {
+	public Integer create(Integer mainTaskInstanceId, Integer index, Integer total) {
 		return subJobApi.create(mainTaskInstanceId, index, total);
 	}
 
@@ -99,7 +101,7 @@ public class WorkerUtil {
 	 * @param total              子任务序总数
 	 * @return 子任务实例ID列表
 	 */
-	public List<SubJobInfoForBatchCreate> batchCreate(String mainTaskInstanceId, Integer total) {
+	public List<SubJobInfoForBatchCreate> batchCreate(Integer mainTaskInstanceId, Integer total) {
 		return subJobApi.batchCreate(mainTaskInstanceId, total);
 	}
 
@@ -109,7 +111,7 @@ public class WorkerUtil {
 	 * @param taskInstanceId 任务实例ID
 	 * @return 0：执行，1：中止
 	 */
-	public Integer isContinueProcess(String taskInstanceId) {
+	public Integer isContinueProcess(Integer taskInstanceId) {
 		return subJobApi.isContinueProcess(taskInstanceId);
 	}
 }

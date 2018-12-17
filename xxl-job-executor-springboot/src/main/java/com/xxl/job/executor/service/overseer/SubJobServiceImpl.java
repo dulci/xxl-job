@@ -4,8 +4,10 @@ import com.alibaba.dubbo.config.annotation.Service;
 import com.xxl.job.api.dto.SubJobInfoForBatchCreate;
 import com.xxl.job.api.service.SubJobService;
 import com.xxl.job.core.biz.model.ReturnT;
+import com.xxl.job.core.util.DateUtil;
 import com.xxl.job.executor.core.model.XxlJobLog;
 import com.xxl.job.executor.dao.XxlJobLogDao;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
@@ -21,6 +23,7 @@ import java.util.List;
 		protocol = "${dubbo.protocol.id}",
 		registry = "${dubbo.registry.id}"
 )
+@Slf4j
 public class SubJobServiceImpl implements SubJobService {
 	@Autowired
 	private XxlJobLogDao xxlJobLogDao;
@@ -35,6 +38,10 @@ public class SubJobServiceImpl implements SubJobService {
 	 */
 	@Override
 	public Integer create(Integer mainTaskInstanceId, String ip, Integer index) {
+		StringBuffer stringBuffer = new StringBuffer();
+		stringBuffer.append(DateUtil.format(new Date())).append(" recieve subjob creating application ").append("[" + mainTaskInstanceId + "]").append("[" + ip + "]").append(" ").append(index);
+		this.log.info(stringBuffer.toString());
+
 		return create(mainTaskInstanceId, ip, index, null);
 	}
 
@@ -49,6 +56,10 @@ public class SubJobServiceImpl implements SubJobService {
 	 */
 	@Override
 	public Integer create(Integer mainTaskInstanceId, String ip, Integer index, Integer total) {
+		StringBuffer stringBuffer = new StringBuffer();
+		stringBuffer.append(DateUtil.format(new Date())).append(" recieve subjob creating application ").append("[" + mainTaskInstanceId + "]").append("[" + ip + "]").append(" ").append(index).append(" ").append(total);
+		this.log.info(stringBuffer.toString());
+
 		XxlJobLog xxlJobLog = xxlJobLogDao.load(mainTaskInstanceId);
 		if (xxlJobLog == null) {
 			return 0;
@@ -66,6 +77,10 @@ public class SubJobServiceImpl implements SubJobService {
 	 */
 	@Override
 	public List<SubJobInfoForBatchCreate> batchCreate(Integer mainTaskInstanceId, String ip, Integer total) {
+		StringBuffer stringBuffer = new StringBuffer();
+		stringBuffer.append(DateUtil.format(new Date())).append(" recieve subjob batch creating application ").append("[" + mainTaskInstanceId + "]").append("[" + ip + "]").append(" ").append(total);
+		this.log.info(stringBuffer.toString());
+
 		List<SubJobInfoForBatchCreate> result = new ArrayList<>();
 		XxlJobLog xxlJobLog = xxlJobLogDao.load(mainTaskInstanceId);
 		if (xxlJobLog == null) {
@@ -85,6 +100,10 @@ public class SubJobServiceImpl implements SubJobService {
 	 */
 	@Override
 	public Integer isContinueProcess(Integer taskInstanceId) {
+		StringBuffer stringBuffer = new StringBuffer();
+		stringBuffer.append(DateUtil.format(new Date())).append(" recieve subjob continuing asking ").append("[" + taskInstanceId + "]");
+		this.log.info(stringBuffer.toString());
+
 		// TODO
 		// 策略1：存在失败就停止
 		// 策略2：存在多少个失败停止

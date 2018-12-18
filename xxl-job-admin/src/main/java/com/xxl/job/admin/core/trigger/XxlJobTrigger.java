@@ -115,6 +115,7 @@ public class XxlJobTrigger {
         triggerParam.setBroadcastIndex(index);
         triggerParam.setBroadcastTotal(total);
         triggerParam.setMqKey(jobInfo.getMqKey());
+        triggerParam.setJobDesc(jobInfo.getJobDesc());
         // 3、init address
         String address = null;
         ReturnT<String> routeAddressResult = null;

@@ -75,6 +75,7 @@ public class JobFailMonitorHelper {
 									boolean alarmResult = true;
 									try {
 										alarmResult = failAlarm(info, log);
+
 									} catch (Exception e) {
 										alarmResult = false;
 										logger.error(e.getMessage(), e);

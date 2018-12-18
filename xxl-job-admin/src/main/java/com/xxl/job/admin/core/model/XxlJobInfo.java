@@ -20,6 +20,7 @@ public class XxlJobInfo {
 	
 	private String author;		// 负责人
 	private String alarmEmail;	// 报警邮件
+	private String alarmTel;//报警电话
 
 	private String executorRouteStrategy;	// 执行器路由策略
 	private String executorHandler;		    // 执行器，任务Handler名称
@@ -206,5 +207,13 @@ public class XxlJobInfo {
 
 	public void setMqKey(String mqKey) {
 		this.mqKey = mqKey;
+	}
+
+	public String getAlarmTel() {
+		return alarmTel;
+	}
+
+	public void setAlarmTel(String alarmTel) {
+		this.alarmTel = alarmTel;
 	}
 }

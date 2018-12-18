@@ -22,9 +22,10 @@ public class StatusApi {
 	 *
 	 * @param taskInstanceId 任务实例ID
 	 * @param status         状态值
+	 * @param msg            备注消息
 	 * @return 0：成功
 	 */
-	public Integer report(Integer taskInstanceId, Integer status) {
+	public Integer report(Integer taskInstanceId, Integer status, String msg) {
 		if (StringUtils.isEmpty(taskInstanceId)) {
 			log.error("taskInstanceId can not be empty");
 			return -1;
@@ -34,7 +35,7 @@ public class StatusApi {
 			return -1;
 		}
 		try {
-			return statusService.report(taskInstanceId, IpUtil.getIp(), status);
+			return statusService.report(taskInstanceId, IpUtil.getIp(), status, msg);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -46,9 +47,10 @@ public class StatusApi {
 	 *
 	 * @param taskInstanceId 任务实例ID
 	 * @param jobStatus      状态值
+	 * @param msg            备注消息
 	 * @return 0：成功
 	 */
-	public Integer report(Integer taskInstanceId, JobStatus jobStatus) {
+	public Integer report(Integer taskInstanceId, JobStatus jobStatus, String msg) {
 		if (StringUtils.isEmpty(taskInstanceId)) {
 			log.error("taskInstanceId can not be empty");
 			return -1;
@@ -58,7 +60,7 @@ public class StatusApi {
 			return -1;
 		}
 		try {
-			return statusService.report(taskInstanceId, IpUtil.getIp(), jobStatus);
+			return statusService.report(taskInstanceId, IpUtil.getIp(), jobStatus, msg);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

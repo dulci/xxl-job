@@ -2,6 +2,10 @@ package com.xxl.job.executor.service.overseer;
 
 import com.alibaba.dubbo.config.annotation.Service;
 import com.xxl.job.api.service.ScheduleService;
+import com.xxl.job.core.util.DateUtil;
+import lombok.extern.slf4j.Slf4j;
+
+import java.util.Date;
 
 /**
  * Created by dul-c on 2018-12-12.
@@ -12,6 +16,7 @@ import com.xxl.job.api.service.ScheduleService;
 		protocol = "${dubbo.protocol.id}",
 		registry = "${dubbo.registry.id}"
 )
+@Slf4j
 public class ScheduleServiceImpl implements ScheduleService {
 
 	/**
@@ -24,6 +29,9 @@ public class ScheduleServiceImpl implements ScheduleService {
 	 */
 	@Override
 	public Integer report(Integer taskInstanceId, String ip, Double persent) {
+		StringBuffer stringBuffer = new StringBuffer();
+		stringBuffer.append(DateUtil.format(new Date())).append(" recieve schedule report ").append("[" + taskInstanceId + "]").append("[" + ip + "]").append(" ").append(persent);
+		this.log.info(stringBuffer.toString());
 		return null;
 	}
 }

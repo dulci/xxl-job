@@ -4,11 +4,10 @@ import com.alibaba.dubbo.config.annotation.Service;
 import com.xxl.job.api.dto.SubJobInfoForBatchCreate;
 import com.xxl.job.api.service.SubJobService;
 import com.xxl.job.core.biz.model.ReturnT;
+import com.xxl.job.core.util.DateUtil;
 import com.xxl.job.executor.core.model.XxlJobLog;
-import com.xxl.job.executor.core.model.XxlJobSubLog;
 import com.xxl.job.executor.dao.XxlJobLogDao;
-import com.xxl.job.executor.dao.XxlJobSubLogDao;
-import org.springframework.beans.BeanUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
@@ -24,11 +23,10 @@ import java.util.List;
 		protocol = "${dubbo.protocol.id}",
 		registry = "${dubbo.registry.id}"
 )
+@Slf4j
 public class SubJobServiceImpl implements SubJobService {
 	@Autowired
 	private XxlJobLogDao xxlJobLogDao;
-	@Autowired
-	private XxlJobSubLogDao xxlJobSubLogDao;
 
 	/**
 	 * SubJob create 创建子任务
@@ -40,6 +38,10 @@ public class SubJobServiceImpl implements SubJobService {
 	 */
 	@Override
 	public Integer create(Integer mainTaskInstanceId, String ip, Integer index) {
+		StringBuffer stringBuffer = new StringBuffer();
+		stringBuffer.append(DateUtil.format(new Date())).append(" recieve subjob creating application ").append("[" + mainTaskInstanceId + "]").append("[" + ip + "]").append(" ").append(index);
+		this.log.info(stringBuffer.toString());
+
 		return create(mainTaskInstanceId, ip, index, null);
 	}
 
@@ -54,24 +56,15 @@ public class SubJobServiceImpl implements SubJobService {
 	 */
 	@Override
 	public Integer create(Integer mainTaskInstanceId, String ip, Integer index, Integer total) {
+		StringBuffer stringBuffer = new StringBuffer();
+		stringBuffer.append(DateUtil.format(new Date())).append(" recieve subjob creating application ").append("[" + mainTaskInstanceId + "]").append("[" + ip + "]").append(" ").append(index).append(" ").append(total);
+		this.log.info(stringBuffer.toString());
+
 		XxlJobLog xxlJobLog = xxlJobLogDao.load(mainTaskInstanceId);
 		if (xxlJobLog == null) {
 			return 0;
 		}
-		XxlJobSubLog xxlJobSubLog = new XxlJobSubLog();
-		xxlJobSubLog.setParentId(xxlJobLog.getId());
-		xxlJobSubLog.setJobGroup(xxlJobLog.getJobGroup());
-		xxlJobSubLog.setJobId(xxlJobLog.getJobId());
-		xxlJobSubLog.setIndex(index);
-		if (total != null) {
-			xxlJobSubLog.setTotal(total);
-		}
-		xxlJobSubLog.setExecutorParam("子任务序号：" + index);
-		xxlJobSubLog.setTriggerTime(new Date());
-		xxlJobSubLog.setTriggerCode(ReturnT.SUCCESS_CODE);
-		xxlJobSubLog.setTriggerMsg("任务触发类型：接口触发<br>创建机器：" + ip + "<br>");
-		xxlJobSubLogDao.save(xxlJobSubLog);
-		return xxlJobSubLog.getId();
+		return saveXxlJobSubLog(xxlJobLog, ip, index, total);
 	}
 
 	/**
@@ -84,26 +77,17 @@ public class SubJobServiceImpl implements SubJobService {
 	 */
 	@Override
 	public List<SubJobInfoForBatchCreate> batchCreate(Integer mainTaskInstanceId, String ip, Integer total) {
+		StringBuffer stringBuffer = new StringBuffer();
+		stringBuffer.append(DateUtil.format(new Date())).append(" recieve subjob batch creating application ").append("[" + mainTaskInstanceId + "]").append("[" + ip + "]").append(" ").append(total);
+		this.log.info(stringBuffer.toString());
+
 		List<SubJobInfoForBatchCreate> result = new ArrayList<>();
 		XxlJobLog xxlJobLog = xxlJobLogDao.load(mainTaskInstanceId);
 		if (xxlJobLog == null) {
 			return result;
 		}
 		for (int i = 1; i <= total; i++) {
-			XxlJobSubLog xxlJobSubLog = new XxlJobSubLog();
-			xxlJobSubLog.setParentId(xxlJobLog.getId());
-			xxlJobSubLog.setJobGroup(xxlJobLog.getJobGroup());
-			xxlJobSubLog.setJobId(xxlJobLog.getJobId());
-			xxlJobSubLog.setIndex(i);
-			if (total != null) {
-				xxlJobSubLog.setTotal(total);
-			}
-			xxlJobSubLog.setExecutorParam("子任务序号：" + i);
-			xxlJobSubLog.setTriggerTime(new Date());
-			xxlJobSubLog.setTriggerCode(ReturnT.SUCCESS_CODE);
-			xxlJobSubLog.setTriggerMsg("任务触发类型：接口触发<br>创建机器：" + ip + "<br>");
-			xxlJobSubLogDao.save(xxlJobSubLog);
-			result.add(new SubJobInfoForBatchCreate(xxlJobSubLog.getId(), i, total));
+			result.add(new SubJobInfoForBatchCreate(saveXxlJobSubLog(xxlJobLog, ip, i, total), i, total));
 		}
 		return result;
 	}
@@ -116,6 +100,30 @@ public class SubJobServiceImpl implements SubJobService {
 	 */
 	@Override
 	public Integer isContinueProcess(Integer taskInstanceId) {
-		return null;
+		StringBuffer stringBuffer = new StringBuffer();
+		stringBuffer.append(DateUtil.format(new Date())).append(" recieve subjob continuing asking ").append("[" + taskInstanceId + "]");
+		this.log.info(stringBuffer.toString());
+
+		// TODO
+		// 策略1：存在失败就停止
+		// 策略2：存在多少个失败停止
+		// 策略3：大于多少百分比失败停止
+		// 策略4：永不停止
+		return 0;
+	}
+
+	private Integer saveXxlJobSubLog(XxlJobLog xxlJobLog, String ip, Integer index, Integer total) {
+		XxlJobLog xxlJobSubLog = new XxlJobLog();
+		xxlJobSubLog.setParentId(xxlJobLog.getId());
+		xxlJobSubLog.setType(2);
+		xxlJobSubLog.setJobGroup(xxlJobLog.getJobGroup());
+		xxlJobSubLog.setJobId(xxlJobLog.getJobId());
+		xxlJobSubLog.setIndex(index);
+		if (total != null) {
+			xxlJobSubLog.setTotal(total);
+		}
+		xxlJobSubLog.setExecutorParam("任务触发类型：接口触发<br>创建机器：" + ip + "<br>子任务序号：" + index);
+		xxlJobLogDao.save(xxlJobSubLog);
+		return xxlJobSubLog.getId();
 	}
 }

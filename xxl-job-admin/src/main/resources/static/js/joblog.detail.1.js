@@ -7,6 +7,24 @@ $(function() {
         return;
     }
 
+    function pullSubjobTable() {
+        $.ajax({
+            type: 'POST',
+            async: false,   // sync, make log ordered
+            url: base_url + '/joblog/subjobTable',
+            data: {
+                "logId": logId
+            },
+            success: function (data) {
+                if (data != '') {
+                    $('#subJobTable').parent().show();
+                    $('#subJobTable').append(data);
+                }
+            }
+        });
+    }
+    pullSubjobTable();
+
     // pull log
     var fromLineNum = 1;    // [from, to], start as 1
     var pullFailCount = 0;

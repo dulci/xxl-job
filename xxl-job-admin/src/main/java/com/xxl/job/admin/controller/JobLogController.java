@@ -116,6 +116,18 @@ public class JobLogController {
 		return "joblog/joblog.detail";
 	}
 
+	@RequestMapping("/subjobTable")
+	public String subjobTable(int logId, Model model){
+		XxlJobLog jobLog = xxlJobLogDao.load(logId);
+		if (jobLog == null) {
+			throw new RuntimeException(I18nUtil.getString("joblog_logid_unvalid"));
+		}
+		List<XxlJobLog> subjobLogs = xxlJobLogDao.loadByParentId(logId);
+
+		model.addAttribute("subjobLogs", subjobLogs);
+		return "joblog/joblog.detail.subjob";
+	}
+
 	@RequestMapping("/logDetailCat")
 	@ResponseBody
 	public ReturnT<LogResult> logDetailCat(String executorAddress, long triggerTime, int logId, int fromLineNum){

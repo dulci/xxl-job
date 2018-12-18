@@ -39,8 +39,8 @@ public class RabbitMQJobHandler extends IJobHandler {
 			String  jobDesc =LogInfoUtil.getJobDesc();
 			XxlJobLogger.log("logId({});mqkey({});param({}) ;jobId:({});jobDesc :({})", logId,mqKey,param,jobId,jobDesc);
 			Map<String, Object> map = new HashMap<>();
-			map.put("logId", logId);
-			map.put("taskInstanceId", param);
+			map.put("taskInstanceId", logId);
+			map.put("param", param);
 			map.put("jobId", jobId);
 			map.put("jobDesc", jobDesc);
 			amqpTemplate.convertAndSend(param,map);

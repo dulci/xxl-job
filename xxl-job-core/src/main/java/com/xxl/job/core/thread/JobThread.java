@@ -120,7 +120,7 @@ public class JobThread extends Thread{
 					String logFileName = XxlJobFileAppender.makeLogFileName(new Date(triggerParam.getLogDateTim()), triggerParam.getLogId());
 					XxlJobFileAppender.contextHolder.set(logFileName);
 					ShardingUtil.setShardingVo(new ShardingUtil.ShardingVO(triggerParam.getBroadcastIndex(), triggerParam.getBroadcastTotal()));
-					LogInfoUtil.setLogInfo(new LogInfoUtil.LogInfoVO(triggerParam.getJobId(),triggerParam.getJobId()));
+					LogInfoUtil.setLogInfo(new LogInfoUtil.LogInfoVO(triggerParam.getJobId(),triggerParam.getLogId()));
 					// execute
 					XxlJobLogger.log("<br>----------- xxl-job job execute start -----------<br>----------- Param:" + triggerParam.getExecutorParams());
 

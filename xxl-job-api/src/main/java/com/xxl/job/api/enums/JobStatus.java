@@ -8,7 +8,7 @@ public enum JobStatus {
 	SUCCESS("200"),
 	FAIL("500"),
 	FAIL_TIMEOUT("502"),
-	PROCESSING("600");
+	PROCESSING("100");
 
 	private JobStatus(String value) {
 		this.value = value;

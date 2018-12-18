@@ -17,7 +17,7 @@ public abstract class IJobHandler {
 	/** fail timeout */
 	public static final ReturnT<String> FAIL_TIMEOUT = new ReturnT<String>(502, null);
 	/** fail timeout */
-	public static final ReturnT<String> PROCESS = new ReturnT<String>(600,null);
+	public static final ReturnT<String> PROCESS = new ReturnT<String>(100,null);
 
 			/**
              * execute handler, invoked when executor receives a scheduling request

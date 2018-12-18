@@ -32,7 +32,9 @@ public class RabbitMQJobHandler extends IJobHandler {
 
 		try {
 
-			amqpTemplate.convertAndSend(param,LogInfoUtil.getLogId());
+			//Integer logId =LogInfoUtil.getLogId();
+
+			//amqpTemplate.convertAndSend(param,logId);
 
 			XxlJobLogger.log("RabbitMQ({}) succsss", param);
 		} catch (AmqpException e) {

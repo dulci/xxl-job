@@ -160,7 +160,7 @@ $(function() {
                             } else if (data == 502) {
                                 html = '<span style="color: red">'+ I18n.joblog_handleCode_502 +'</span>';
                             }else if (data == 100) {
-                                html = '<span style="color: green">'+ I18n.joblog_handleCode_100 +'</span>';
+                                html = '<span style="color: goldenrod">'+ I18n.joblog_handleCode_100 +'</span>';
                             }
                             else if (data == 0) {
                                 html = '';

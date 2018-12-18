@@ -97,7 +97,7 @@ $(function () {
                 "render": function (data, type, row) {
                     var html = data;
                     if (data == 100) {
-                        html = '<span style="color: green">' + I18n.joblog_handleCode_100 + '</span>';
+                        html = '<span style="color: goldenrod">' + I18n.joblog_handleCode_100 + '</span>';
                     } else if (data == 200) {
                         html = '<span style="color: green">' + I18n.joblog_handleCode_200 + '</span>';
                     } else if (data == 500) {

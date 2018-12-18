@@ -192,6 +192,19 @@
 		GROUP BY triggerDay;
     </select>
 
+	<select id="selectCountByParentId" resultType="java.lang.Integer" >
+		SELECT
+			ifnull(count(1), 0)
+		FROM
+			XXL_JOB_QRTZ_TRIGGER_LOG
+		WHERE
+			parent_id = #{parentId}
+			<if test="handleCode != null">
+				and
+				handle_code = #{handleCode}
+			</if>
+	</select>
+
 	<delete id="clearLog" >
 		delete from XXL_JOB_QRTZ_TRIGGER_LOG
 		<trim prefix="WHERE" prefixOverrides="AND | OR" >
@@ -235,11 +248,22 @@
 		ORDER BY id ASC
 	</select>
 
-	<update id="updateAlarmStatus" >
+	<update id="updateAlarmStatus">
 		UPDATE XXL_JOB_QRTZ_TRIGGER_LOG
 		SET
 			`alarm_status` = #{newAlarmStatus}
 		WHERE `id`= #{logId} AND `alarm_status` = #{oldAlarmStatus}
+	</update>
+
+	<update id="updatePersent">
+		UPDATE
+			XXL_JOB_QRTZ_TRIGGER_LOG
+		SET
+			`persent` = #{persent}
+		WHERE
+			`id`= #{logId}
+			AND
+			`persent` <![CDATA[<]]> = #{persent}
 	</update>
 	
 </mapper>

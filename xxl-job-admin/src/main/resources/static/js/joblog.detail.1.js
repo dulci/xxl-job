@@ -97,7 +97,7 @@ $(function () {
                 "render": function (data, type, row) {
                     var html = data;
                     if (data == 100) {
-                        html = '<span style="color: goldenrod">' + I18n.joblog_handleCode_100 + '</span>';
+                        html = '<div style="height: 15px; width: 100%; background-color: goldenrod; border-radius: 7px;"><div style="height: 15px; width: ' + row.persent + '%; background-color: lawngreen; border-radius: 7px;"></div><label style="color: white; position: relative; left: 46%; top: -16px;">' + row.persent + '%</label></div>';
                     } else if (data == 200) {
                         html = '<span style="color: green">' + I18n.joblog_handleCode_200 + '</span>';
                     } else if (data == 500) {

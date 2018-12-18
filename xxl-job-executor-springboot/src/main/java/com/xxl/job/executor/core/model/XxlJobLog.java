@@ -41,6 +41,8 @@ public class XxlJobLog {
 	private int handleCode;
 	private String handleMsg;
 
+	private Double persent;
+
 	// alarm info
 	private int alarmStatus;
 

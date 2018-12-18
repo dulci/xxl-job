@@ -7,7 +7,10 @@ import com.xxl.job.core.biz.model.HandleCallbackParam;
 import com.xxl.job.core.biz.model.ReturnT;
 import com.xxl.job.core.thread.TriggerCallbackThread;
 import com.xxl.job.core.util.DateUtil;
+import com.xxl.job.executor.core.model.XxlJobLog;
+import com.xxl.job.executor.dao.XxlJobLogDao;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -24,6 +27,9 @@ import java.util.Date;
 @Component
 @Slf4j
 public class StatusServiceImpl implements StatusService {
+	@Autowired
+	private XxlJobLogDao xxlJobLogDao;
+
 	/**
 	 * Status Report 状态汇报
 	 *
@@ -37,6 +43,19 @@ public class StatusServiceImpl implements StatusService {
 		StringBuffer stringBuffer = new StringBuffer();
 		stringBuffer.append(DateUtil.format(new Date())).append(" recieve status report ").append("[" + taskInstanceId + "]").append("[" + ip + "]").append(" ").append(status).append(" ").append(msg);
 		this.log.info(stringBuffer.toString());
+
+		if (status.equals(ReturnT.SUCCESS_CODE)) {
+			XxlJobLog xxlJobLog = xxlJobLogDao.load(taskInstanceId);
+			if (xxlJobLog != null && xxlJobLog.getType() == 2) {
+				Integer total = xxlJobLog.getTotal();
+				if (xxlJobLog.getTotal() == 0) {
+					total = xxlJobLogDao.selectCountByParentId(xxlJobLog.getParentId(), null);
+				}
+				Integer finish = xxlJobLogDao.selectCountByParentId(xxlJobLog.getParentId(), ReturnT.SUCCESS_CODE);
+				Double persent = (Double.valueOf(finish + 1)) / Double.valueOf(total) * 100.0;
+				xxlJobLogDao.updatePersent(xxlJobLog.getParentId(), persent);
+			}
+		}
 
 		ReturnT result = new ReturnT(status, msg);
 		TriggerCallbackThread.pushCallBack(new HandleCallbackParam(taskInstanceId, System.currentTimeMillis(), result));

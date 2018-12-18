@@ -73,7 +73,6 @@ public class JobLogController {
 	public Map<String, Object> pageList(@RequestParam(required = false, defaultValue = "0") int start,
 	                                    @RequestParam(required = false, defaultValue = "10") int length,
 	                                    int jobGroup, int jobId, int logStatus, String filterTime) {
-
 		// parse param
 		Date triggerTimeStart = null;
 		Date triggerTimeEnd = null;

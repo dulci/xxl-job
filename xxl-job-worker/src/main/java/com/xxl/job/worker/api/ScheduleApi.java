@@ -32,6 +32,10 @@ public class ScheduleApi {
 			log.error("persent can not be empty");
 			return -1;
 		}
+		if (persent < 0.0 || persent > 100.0) {
+			log.error("persent must be bwteen 0.0 and 100.0");
+			return -1;
+		}
 		Integer status = -1;
 		try {
 			status = scheduleService.report(taskInstanceId, IpUtil.getIp(), persent);

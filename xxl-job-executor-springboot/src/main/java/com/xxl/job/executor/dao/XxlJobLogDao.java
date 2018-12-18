@@ -10,11 +10,12 @@ import java.util.Map;
 
 /**
  * job log
+ *
  * @author xuxueli 2016-1-12 18:03:06
  */
 @Mapper
 public interface XxlJobLogDao {
-	
+
 	public List<XxlJobLog> pageList(@Param("offset") int offset,
 	                                @Param("pagesize") int pagesize,
 	                                @Param("jobGroup") int jobGroup,
@@ -22,6 +23,7 @@ public interface XxlJobLogDao {
 	                                @Param("triggerTimeStart") Date triggerTimeStart,
 	                                @Param("triggerTimeEnd") Date triggerTimeEnd,
 	                                @Param("logStatus") int logStatus);
+
 	public int pageListCount(@Param("offset") int offset,
 	                         @Param("pagesize") int pagesize,
 	                         @Param("jobGroup") int jobGroup,
@@ -45,6 +47,8 @@ public interface XxlJobLogDao {
 	public List<Map<String, Object>> triggerCountByDay(@Param("from") Date from,
 	                                                   @Param("to") Date to);
 
+	public int selectCountByParentId(@Param("parentId") int parentId, @Param("handleCode") Integer handleCode);
+
 	public int clearLog(@Param("jobGroup") int jobGroup,
 	                    @Param("jobId") int jobId,
 	                    @Param("clearBeforeTime") Date clearBeforeTime,
@@ -55,5 +59,8 @@ public interface XxlJobLogDao {
 	public int updateAlarmStatus(@Param("logId") int logId,
 	                             @Param("oldAlarmStatus") int oldAlarmStatus,
 	                             @Param("newAlarmStatus") int newAlarmStatus);
+
+	public int updatePersent(@Param("logId") int logId,
+	                         @Param("persent") Double persent);
 
 }

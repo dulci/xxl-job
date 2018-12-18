@@ -2,8 +2,12 @@ package com.xxl.job.executor.service.overseer;
 
 import com.alibaba.dubbo.config.annotation.Service;
 import com.xxl.job.api.service.ScheduleService;
+import com.xxl.job.core.log.XxlJobFileAppender;
+import com.xxl.job.core.log.XxlJobLogger;
 import com.xxl.job.core.util.DateUtil;
+import com.xxl.job.executor.dao.XxlJobLogDao;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Date;
 
@@ -18,6 +22,8 @@ import java.util.Date;
 )
 @Slf4j
 public class ScheduleServiceImpl implements ScheduleService {
+	@Autowired
+	private XxlJobLogDao xxlJobLogDao;
 
 	/**
 	 * Schedule Report 进度汇报
@@ -32,6 +38,17 @@ public class ScheduleServiceImpl implements ScheduleService {
 		StringBuffer stringBuffer = new StringBuffer();
 		stringBuffer.append(DateUtil.format(new Date())).append(" recieve schedule report ").append("[" + taskInstanceId + "]").append("[" + ip + "]").append(" ").append(persent);
 		this.log.info(stringBuffer.toString());
-		return null;
+		String logFileName = XxlJobFileAppender.makeLogFileName(new Date(), taskInstanceId);
+		XxlJobFileAppender.contextHolder.set(logFileName);
+		XxlJobLogger.log("ip:{} , task current persent is :{}", ip, persent);
+
+		xxlJobLogDao.updatePersent(taskInstanceId, persent);
+
+		// TODO
+		// 策略1：存在失败就停止
+		// 策略2：存在多少个失败停止
+		// 策略3：大于多少百分比失败停止
+		// 策略4：永不停止
+		return 0;
 	}
 }

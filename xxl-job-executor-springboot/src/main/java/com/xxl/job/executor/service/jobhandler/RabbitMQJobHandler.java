@@ -43,7 +43,7 @@ public class RabbitMQJobHandler extends IJobHandler {
 			map.put("param", param);
 			map.put("jobId", jobId);
 			map.put("jobDesc", jobDesc);
-			amqpTemplate.convertAndSend(param,map);
+			amqpTemplate.convertAndSend(mqKey,map);
 			XxlJobLogger.log("RabbitMQ({}) succsss", param);
 		} catch (AmqpException e) {
 			e.printStackTrace();

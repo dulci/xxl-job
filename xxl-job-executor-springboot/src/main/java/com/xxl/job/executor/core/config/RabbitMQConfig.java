@@ -20,7 +20,7 @@ public class RabbitMQConfig {
 	public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
 		RabbitTemplate template = new RabbitTemplate(connectionFactory);
 		template.setMessageConverter(messageConverter());
-		template.setExchange("my-mq-exchange");
+		template.setExchange("quartz-mq-exchange");
 		return template;
 	}
 
@@ -39,7 +39,7 @@ public class RabbitMQConfig {
 
 	@Bean
 	public DirectExchange directExchange() {
-		return new DirectExchange("my-mq-exchange");
+		return new DirectExchange("quartz-mq-exchange");
 	}
 
 

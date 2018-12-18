@@ -183,6 +183,7 @@ public class XxlJobServiceImpl implements XxlJobService {
 		exists_jobInfo.setExecutorTimeout(jobInfo.getExecutorTimeout());
 		exists_jobInfo.setExecutorFailRetryCount(jobInfo.getExecutorFailRetryCount());
 		exists_jobInfo.setChildJobId(jobInfo.getChildJobId());
+		exists_jobInfo.setMqKey(jobInfo.getMqKey());
         xxlJobInfoDao.update(exists_jobInfo);
 
 

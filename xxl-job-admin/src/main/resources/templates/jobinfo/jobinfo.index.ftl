@@ -66,12 +66,14 @@
 				                <thead>
 					            	<tr>
 					            		<th name="id" >${I18n.jobinfo_field_id}</th>
+
 					                	<th name="jobGroup" >${I18n.jobinfo_field_jobgroup}</th>
 					                  	<th name="jobDesc" >${I18n.jobinfo_field_jobdesc}</th>
                                         <th name="glueType" >${I18n.jobinfo_field_gluetype}</th>
 					                  	<th name="executorParam" >${I18n.jobinfo_field_executorparam}</th>
                                         <th name="jobCron" >Cron</th>
-					                  	<th name="addTime" >addTime</th>
+                                        <th name="mqKey" >${I18n.jobinfo_field_mqkey}</th>
+                                        <th name="addTime" >addTime</th>
 					                  	<th name="updateTime" >updateTime</th>
 					                  	<th name="author" >${I18n.jobinfo_field_author}</th>
 					                  	<th name="alarmEmail" >${I18n.jobinfo_field_alarmemail}</th>
@@ -162,6 +164,12 @@
                         <label for="lastname" class="col-sm-2 control-label">${I18n.jobinfo_field_alarmemail}<font color="black">*</font></label>
                         <div class="col-sm-4"><input type="text" class="form-control" name="alarmEmail" placeholder="${I18n.jobinfo_field_alarmemail_placeholder}" maxlength="100" ></div>
 					</div>
+                    <div class="form-group">
+                        <label for="firstname" class="col-sm-2 control-label">${I18n.jobinfo_field_mqkey}<font color="black">*</font></label>
+                        <div class="col-sm-10">
+                            <input type="text" class=" form-control" name="mqKey" placeholder="${I18n.system_please_input}${I18n.jobinfo_field_mqkey}" maxlength="100"  ></input>
+                        </div>
+                    </div>
                     <div class="form-group">
                         <label for="firstname" class="col-sm-2 control-label">${I18n.jobinfo_field_executorparam}<font color="black">*</font></label>
                         <div class="col-sm-10">
@@ -357,6 +365,12 @@ exit 0
                         <div class="col-sm-4"><input type="text" class="form-control" name="author" placeholder="${I18n.system_please_input}${I18n.jobinfo_field_author}" maxlength="50" ></div>
                         <label for="lastname" class="col-sm-2 control-label">${I18n.jobinfo_field_alarmemail}<font color="black">*</font></label>
                         <div class="col-sm-4"><input type="text" class="form-control" name="alarmEmail" placeholder="${I18n.jobinfo_field_alarmemail_placeholder}" maxlength="100" ></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="firstname" class="col-sm-2 control-label">${I18n.jobinfo_field_mqkey}<font color="black">*</font></label>
+                        <div class="col-sm-10">
+                            <input type="text" class=" form-control" name="mqKey" placeholder="${I18n.system_please_input}${I18n.jobinfo_field_mqkey}" maxlength="100"  ></input>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label for="firstname" class="col-sm-2 control-label">${I18n.jobinfo_field_executorparam}<font color="black">*</font></label>

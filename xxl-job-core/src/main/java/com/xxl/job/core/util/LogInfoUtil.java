@@ -16,6 +16,11 @@ public class LogInfoUtil {
         LogInfoVO logInfoVO =  logContext.get();
         return logInfoVO.getLogId();
     }
+    public static String getMqKey(){
+        LogInfoVO logInfoVO =  logContext.get();
+        return logInfoVO.getMqKey();
+    }
+
 
 
 
@@ -23,10 +28,12 @@ public class LogInfoUtil {
 
         private int jobId;
         private int logId;
+        private String mqKey;
 
-        public LogInfoVO(int jobId, int logId) {
+        public LogInfoVO(int jobId, int logId,String mqKey) {
             this.jobId = jobId;
             this.logId = logId;
+            this.mqKey=mqKey;
         }
 
         public int getJobId() {
@@ -43,6 +50,14 @@ public class LogInfoUtil {
 
         public void setLogId(int logId) {
             this.logId = logId;
+        }
+
+        public String getMqKey() {
+            return mqKey;
+        }
+
+        public void setMqKey(String mqKey) {
+            this.mqKey = mqKey;
         }
     }
 

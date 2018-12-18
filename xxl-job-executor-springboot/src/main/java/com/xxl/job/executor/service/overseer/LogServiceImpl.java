@@ -24,7 +24,7 @@ import java.util.Date;
 public class LogServiceImpl implements LogService {
 
 	/**
-	 * Status Report 状态汇报
+	 * Log Report 日志汇报
 	 *
 	 * @param taskInstanceId 任务实例ID
 	 * @param ip             ip

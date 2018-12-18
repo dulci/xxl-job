@@ -20,7 +20,7 @@ public class LogApi {
 	private LogService logService;
 
 	/**
-	 * Status Report 状态汇报
+	 * Log Report 日志汇报
 	 *
 	 * @param taskInstanceId 任务实例ID
 	 * @param log            日志信息

@@ -28,10 +28,10 @@
     <dubbo:consumer timeout="50000"/>
     <dubbo:protocol port="12345"/>
 
-    <dubbo:reference id="logService" check="false" interface="com.xxl.job.api.service.LogService" version="1.0.0"/>
-    <dubbo:reference id="scheduleService" check="false" interface="com.xxl.job.api.service.ScheduleService" version="1.0.0"/>
-    <dubbo:reference id="statusService" check="false" interface="com.xxl.job.api.service.StatusService" version="1.0.0"/>
-    <dubbo:reference id="subJobService" check="false" interface="com.xxl.job.api.service.SubJobService" version="1.0.0"/>
+    <dubbo:reference id="logService" check="false" interface="com.xxl.job.api.service.LogService" version="1.0.0" async="true" />
+    <dubbo:reference id="scheduleService" check="false" interface="com.xxl.job.api.service.ScheduleService" version="1.0.0" async="true"/>
+    <dubbo:reference id="statusService" check="false" interface="com.xxl.job.api.service.StatusService" version="1.0.0" async="false" />
+    <dubbo:reference id="subJobService" check="false" interface="com.xxl.job.api.service.SubJobService" version="1.0.0" async="false"/>
 
     <bean id="logApi" class="com.xxl.job.worker.api.LogApi" />
     <bean id="scheduleApi" class="com.xxl.job.worker.api.ScheduleApi" />

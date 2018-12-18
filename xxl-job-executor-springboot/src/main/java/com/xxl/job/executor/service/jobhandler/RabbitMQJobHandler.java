@@ -24,32 +24,32 @@ import java.util.concurrent.TimeUnit;
  *
  * @author zhangjl-h
  */
-@JobHandler(value="rabbitMQJobHandler")
+@JobHandler(value = "rabbitMQJobHandler")
 @Component
 public class RabbitMQJobHandler extends IJobHandler {
 	@Autowired
 	private AmqpTemplate amqpTemplate;
+
 	@Override
 	public ReturnT<String> execute(String param) throws Exception {
 		try {
-
-			Integer logId =LogInfoUtil.getLogId();
-			String  mqKey =LogInfoUtil.getMqKey();
-			Integer jobId =LogInfoUtil.getJobId();
-			String  jobDesc =LogInfoUtil.getJobDesc();
-			XxlJobLogger.log("logId({});mqkey({});param({}) ;jobId:({});jobDesc :({})", logId,mqKey,param,jobId,jobDesc);
+			Integer logId = LogInfoUtil.getLogId();
+			String mqKey = LogInfoUtil.getMqKey();
+			Integer jobId = LogInfoUtil.getJobId();
+			String jobDesc = LogInfoUtil.getJobDesc();
+			XxlJobLogger.log("logId({});mqkey({});param({}) ;jobId:({});jobDesc :({})", logId, mqKey, param, jobId, jobDesc);
 			Map<String, Object> map = new HashMap<>();
 			map.put("taskInstanceId", logId);
 			map.put("param", param);
 			map.put("jobId", jobId);
 			map.put("jobDesc", jobDesc);
-			amqpTemplate.convertAndSend(mqKey,map);
+			amqpTemplate.convertAndSend(mqKey, map);
 			XxlJobLogger.log("RabbitMQ({}) succsss", param);
 		} catch (AmqpException e) {
 			e.printStackTrace();
 			XxlJobLogger.log("RabbitMQ({}) fail", param);
 			XxlJobLogger.log(e);
-			return  FAIL;
+			return FAIL;
 		}
 		return PROCESS;
 	}

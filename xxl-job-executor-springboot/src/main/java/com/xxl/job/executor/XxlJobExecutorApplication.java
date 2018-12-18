@@ -12,8 +12,8 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 public class XxlJobExecutorApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(XxlJobExecutorApplication.class, args);
-		//new SpringApplicationBuilder(XxlJobExecutorApplication.class).web(WebApplicationType.NONE).run(args);
+//		SpringApplication.run(XxlJobExecutorApplication.class, args);
+		new SpringApplicationBuilder(XxlJobExecutorApplication.class).web(WebApplicationType.NONE).run(args);
 	}
 
 }

@@ -6,14 +6,15 @@ package com.xxl.job.core.util;
  */
 public class LogInfoUtil {
 
-    private static ThreadLocal<LogInfoVO> logContext = new ThreadLocal<LogInfoVO>();
+    private static InheritableThreadLocal<LogInfoVO> logContext = new InheritableThreadLocal<LogInfoVO>();
 
     public static void setLogInfo(LogInfoVO logInfoVO){
         logContext.set(logInfoVO);
     }
 
     public static Integer getLogId(){
-        return logContext.get().getLogId();
+        LogInfoVO logInfoVO =  logContext.get();
+        return logInfoVO.getLogId();
     }
 
 

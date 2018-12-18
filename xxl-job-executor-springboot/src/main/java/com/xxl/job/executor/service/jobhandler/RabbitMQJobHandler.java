@@ -15,6 +15,8 @@ import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -29,13 +31,15 @@ public class RabbitMQJobHandler extends IJobHandler {
 	private AmqpTemplate amqpTemplate;
 	@Override
 	public ReturnT<String> execute(String param) throws Exception {
-
 		try {
 
-			//Integer logId =LogInfoUtil.getLogId();
-
-			//amqpTemplate.convertAndSend(param,logId);
-
+			Integer logId =LogInfoUtil.getLogId();
+			String  mqKey =LogInfoUtil.getMqKey();
+			XxlJobLogger.log("logId({});mqkey({});param({})  ", logId,mqKey,param);amqpTemplate.convertAndSend(mqKey,logId);
+			Map<String, Object> map = new HashMap<>();
+			map.put("logId", logId);
+			map.put("param", param);
+			amqpTemplate.convertAndSend(param,map);
 			XxlJobLogger.log("RabbitMQ({}) succsss", param);
 		} catch (AmqpException e) {
 			e.printStackTrace();

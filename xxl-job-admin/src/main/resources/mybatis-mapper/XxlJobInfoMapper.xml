@@ -22,7 +22,7 @@
 		<result column="executor_block_strategy" property="executorBlockStrategy" />
 		<result column="executor_timeout" property="executorTimeout" />
 		<result column="executor_fail_retry_count" property="executorFailRetryCount" />
-
+		<result column="mq_key" property="mqKey" />
 	    <result column="glue_type" property="glueType" />
 	    <result column="glue_source" property="glueSource" />
 	    <result column="glue_remark" property="glueRemark" />
@@ -46,6 +46,7 @@
 		t.executor_block_strategy,
 		t.executor_timeout,
 		t.executor_fail_retry_count,
+		t.mq_key,
 		t.glue_type,
 		t.glue_source,
 		t.glue_remark,
@@ -102,6 +103,7 @@
 			executor_block_strategy,
 			executor_timeout,
 			executor_fail_retry_count,
+	  		mq_key,
 			glue_type,
 			glue_source,
 			glue_remark,
@@ -121,6 +123,7 @@
 			#{executorBlockStrategy},
 			#{executorTimeout},
 			#{executorFailRetryCount},
+			#{mqKey},
 			#{glueType},
 			#{glueSource},
 			#{glueRemark},
@@ -153,6 +156,7 @@
 			executor_block_strategy = #{executorBlockStrategy},
 			executor_timeout = ${executorTimeout},
 			executor_fail_retry_count = ${executorFailRetryCount},
+			mq_key = #{mqKey},
 			glue_type = #{glueType},
 			glue_source = #{glueSource},
 			glue_remark = #{glueRemark},

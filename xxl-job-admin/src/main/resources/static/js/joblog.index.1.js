@@ -128,9 +128,7 @@ $(function() {
 								html = '<span style="color: green">'+ I18n.system_success +'</span>';
                             } else if (data == 500) {
                                 html = '<span style="color: red">'+ I18n.system_fail +'</span>';
-                            } else if (data == 600) {
-        						html = '<span style="color: red">'+ I18n.system_process +'</span>';
-    						} else if (data == 0) {
+                            } else if (data == 0) {
                                 html = '';
 							}
                             return html;
@@ -161,7 +159,10 @@ $(function() {
                                 html = '<span style="color: red">'+ I18n.joblog_handleCode_500 +'</span>';
                             } else if (data == 502) {
                                 html = '<span style="color: red">'+ I18n.joblog_handleCode_502 +'</span>';
-                            } else if (data == 0) {
+                            }else if (data == 100) {
+                                html = '<span style="color: green">'+ I18n.joblog_handleCode_100 +'</span>';
+                            }
+                            else if (data == 0) {
                                 html = '';
                             }
                             return html;

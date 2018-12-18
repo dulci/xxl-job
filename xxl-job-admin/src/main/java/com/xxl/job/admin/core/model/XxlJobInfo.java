@@ -27,6 +27,7 @@ public class XxlJobInfo {
 	private String executorBlockStrategy;	// 阻塞处理策略
 	private int executorTimeout;     		// 任务执行超时时间，单位秒
 	private int executorFailRetryCount;		// 失败重试次数
+	private  String mqKey; //mq键值
 	
 	private String glueType;		// GLUE类型	#com.xxl.job.core.glue.GlueTypeEnum
 	private String glueSource;		// GLUE源代码
@@ -199,4 +200,11 @@ public class XxlJobInfo {
 		this.jobStatus = jobStatus;
 	}
 
+	public String getMqKey() {
+		return mqKey;
+	}
+
+	public void setMqKey(String mqKey) {
+		this.mqKey = mqKey;
+	}
 }

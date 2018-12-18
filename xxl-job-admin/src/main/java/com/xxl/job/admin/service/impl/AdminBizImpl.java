@@ -55,7 +55,7 @@ public class AdminBizImpl implements AdminBiz {
         if (log == null) {
             return new ReturnT<String>(ReturnT.FAIL_CODE, "log item not found.");
         }
-        if (log.getHandleCode() >=200) {
+        if (log.getHandleCode()!= null &&  log.getHandleCode() >=200) {
             return new ReturnT<String>(ReturnT.FAIL_CODE, "log repeate callback.");     // avoid repeat callback, trigger child job etc
         }
 

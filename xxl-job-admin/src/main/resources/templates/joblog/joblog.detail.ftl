@@ -47,7 +47,26 @@
     <div class="content-wrapper">
         <section class="content">
             <div style="font-size: 12px; position: relative; background-color: white; display: none;">
-                <div id="subJobTable"></div>
+                <div id="subJobTable" style="padding: 10px;">
+                    <table id="subjob_list" class="table table-bordered table-striped display" width="100%">
+                        <thead>
+                        <tr>
+                            <th class="text-center" name="id">子任务ID</th>
+                            <th class="text-center" name="index">序号</th>
+                            <th class="text-center" name="total">子任务总数</th>
+                            <th class="text-center" name="triggerTime">调度时间</th>
+                            <th class="text-center" name="executorAddress">调度地址</th>
+                            <th class="text-center" name="triggerCode">调度结果</th>
+                            <th class="text-center" name="triggerMsg">调度备注</th>
+                            <th class="text-center" name="handleTime">执行时间</th>
+                            <th class="text-center" name="handleCode">执行结果</th>
+                            <th class="text-center" name="handleMsg">执行备注</th>
+                            <th class="text-center" name="handleMsg">操作</th>
+                        </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
             </div>
             <pre style="font-size: 12px; position: relative;">
                 <div id="logConsole"></div>
@@ -71,7 +90,9 @@
     var triggerTime = '${triggerTime?c}';
     var logId = '${logId}';
 </script>
+<script src="${request.contextPath}/static/adminlte/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="${request.contextPath}/static/adminlte/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<script src="${request.contextPath}/static/adminlte/bower_components/moment/moment.min.js"></script>
 <script src="${request.contextPath}/static/js/joblog.detail.1.js"></script>
-
 </body>
 </html>

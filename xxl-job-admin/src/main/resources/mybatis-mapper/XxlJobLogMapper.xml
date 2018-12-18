@@ -132,6 +132,21 @@
 			XXL_JOB_QRTZ_TRIGGER_LOG AS t
 		WHERE
 			t.parent_id = #{parentId}
+		ORDER BY
+			t.index DESC
+		LIMIT
+			#{offset}, #{pagesize}
+	</select>
+
+	<select id="countByParentId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+		SELECT
+			ifnull(count(1), 0)
+		FROM
+			XXL_JOB_QRTZ_TRIGGER_LOG AS t
+		WHERE
+			t.parent_id = #{parentId}
+		ORDER BY
+			t.index DESC
 	</select>
 
 	<insert id="save" parameterType="com.xxl.job.admin.core.model.XxlJobLog" useGeneratedKeys="true" keyProperty="id" >

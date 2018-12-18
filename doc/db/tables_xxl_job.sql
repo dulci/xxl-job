@@ -169,6 +169,7 @@ CREATE TABLE `XXL_JOB_QRTZ_TRIGGER_INFO` (
   `glue_remark` varchar(128) DEFAULT NULL COMMENT 'GLUE备注',
   `glue_updatetime` datetime DEFAULT NULL COMMENT 'GLUE更新时间',
   `child_jobid` varchar(255) DEFAULT NULL COMMENT '子任务ID，多个逗号分隔',
+  `mq_key` varchar(200) DEFAULT NULL COMMENT 'mq键值',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

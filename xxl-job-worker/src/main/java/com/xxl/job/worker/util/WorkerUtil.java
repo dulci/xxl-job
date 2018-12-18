@@ -7,6 +7,8 @@ import com.xxl.job.worker.api.LogApi;
 import com.xxl.job.worker.api.ScheduleApi;
 import com.xxl.job.worker.api.StatusApi;
 import com.xxl.job.worker.api.SubJobApi;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -25,14 +27,17 @@ public class WorkerUtil {
 	@Autowired
 	private SubJobApi subJobApi;
 
+	private static Logger logger = LoggerFactory.getLogger(WorkerUtil.class);
+
 	/**
-	 * Status Report 状态汇报
+	 * Log Report 日志汇报
 	 *
 	 * @param taskInstanceId 任务实例ID
 	 * @param log            日志信息
 	 * @return 0：成功
 	 */
-	public Integer report(Integer taskInstanceId, String log) {
+	public Integer reportLog(Integer taskInstanceId, String log) {
+		logger.info(log);
 		return logApi.report(taskInstanceId, log);
 	}
 
@@ -43,8 +48,19 @@ public class WorkerUtil {
 	 * @param persent        百分比
 	 * @return 0：继续执行，1：中止
 	 */
-	public Integer report(Integer taskInstanceId, Double persent) {
+	public Integer reportPersent(Integer taskInstanceId, Double persent) {
 		return scheduleApi.report(taskInstanceId, persent);
+	}
+
+	/**
+	 * Status Report 状态汇报
+	 *
+	 * @param taskInstanceId 任务实例ID
+	 * @param status         状态值
+	 * @return 0：成功
+	 */
+	public Integer reportStatus(Integer taskInstanceId, Integer status) {
+		return statusApi.report(taskInstanceId, status, null);
 	}
 
 	/**
@@ -55,8 +71,19 @@ public class WorkerUtil {
 	 * @param msg            备注消息
 	 * @return 0：成功
 	 */
-	public Integer report(Integer taskInstanceId, Integer status, String msg) {
+	public Integer reportStatus(Integer taskInstanceId, Integer status, String msg) {
 		return statusApi.report(taskInstanceId, status, msg);
+	}
+
+	/**
+	 * Status Report 状态汇报
+	 *
+	 * @param taskInstanceId 任务实例ID
+	 * @param jobStatus      状态值
+	 * @return 0：成功
+	 */
+	public Integer reportStatus(Integer taskInstanceId, JobStatus jobStatus) {
+		return statusApi.report(taskInstanceId, jobStatus, null);
 	}
 
 	/**
@@ -67,7 +94,7 @@ public class WorkerUtil {
 	 * @param msg            备注消息
 	 * @return 0：成功
 	 */
-	public Integer report(Integer taskInstanceId, JobStatus jobStatus, String msg) {
+	public Integer reportStatus(Integer taskInstanceId, JobStatus jobStatus, String msg) {
 		return statusApi.report(taskInstanceId, jobStatus, msg);
 	}
 
@@ -78,7 +105,7 @@ public class WorkerUtil {
 	 * @param index              子任务序号
 	 * @return 子任务实例ID
 	 */
-	public Integer create(Integer mainTaskInstanceId, Integer index) {
+	public Integer createSubJob(Integer mainTaskInstanceId, Integer index) {
 		return subJobApi.create(mainTaskInstanceId, index);
 	}
 
@@ -90,7 +117,7 @@ public class WorkerUtil {
 	 * @param total              子任务序总数
 	 * @return 子任务实例ID
 	 */
-	public Integer create(Integer mainTaskInstanceId, Integer index, Integer total) {
+	public Integer createSubJob(Integer mainTaskInstanceId, Integer index, Integer total) {
 		return subJobApi.create(mainTaskInstanceId, index, total);
 	}
 
@@ -101,7 +128,7 @@ public class WorkerUtil {
 	 * @param total              子任务序总数
 	 * @return 子任务实例ID列表
 	 */
-	public List<SubJobInfoForBatchCreate> batchCreate(Integer mainTaskInstanceId, Integer total) {
+	public List<SubJobInfoForBatchCreate> batchCreateSubJob(Integer mainTaskInstanceId, Integer total) {
 		return subJobApi.batchCreate(mainTaskInstanceId, total);
 	}
 

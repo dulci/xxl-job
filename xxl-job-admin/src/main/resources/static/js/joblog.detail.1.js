@@ -96,7 +96,9 @@ $(function () {
                 "width": '15%',
                 "render": function (data, type, row) {
                     var html = data;
-                    if (data == 200) {
+                    if (data == 100) {
+                        html = '<span style="color: green">' + I18n.joblog_handleCode_100 + '</span>';
+                    } else if (data == 200) {
                         html = '<span style="color: green">' + I18n.joblog_handleCode_200 + '</span>';
                     } else if (data == 500) {
                         html = '<span style="color: red">' + I18n.joblog_handleCode_500 + '</span>';

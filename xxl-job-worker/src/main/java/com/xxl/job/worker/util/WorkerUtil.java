@@ -57,11 +57,33 @@ public class WorkerUtil {
 	 *
 	 * @param taskInstanceId 任务实例ID
 	 * @param status         状态值
+	 * @return 0：成功
+	 */
+	public Integer reportStatus(Integer taskInstanceId, Integer status) {
+		return statusApi.report(taskInstanceId, status, null);
+	}
+
+	/**
+	 * Status Report 状态汇报
+	 *
+	 * @param taskInstanceId 任务实例ID
+	 * @param status         状态值
 	 * @param msg            备注消息
 	 * @return 0：成功
 	 */
 	public Integer reportStatus(Integer taskInstanceId, Integer status, String msg) {
 		return statusApi.report(taskInstanceId, status, msg);
+	}
+
+	/**
+	 * Status Report 状态汇报
+	 *
+	 * @param taskInstanceId 任务实例ID
+	 * @param jobStatus      状态值
+	 * @return 0：成功
+	 */
+	public Integer reportStatus(Integer taskInstanceId, JobStatus jobStatus) {
+		return statusApi.report(taskInstanceId, jobStatus, null);
 	}
 
 	/**

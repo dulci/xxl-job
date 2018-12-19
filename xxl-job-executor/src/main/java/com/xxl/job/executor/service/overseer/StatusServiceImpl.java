@@ -9,7 +9,9 @@ import com.xxl.job.core.thread.TriggerCallbackThread;
 import com.xxl.job.core.util.DateUtil;
 import com.xxl.job.executor.core.model.XxlJobLog;
 import com.xxl.job.executor.dao.XxlJobLogDao;
+import com.xxl.job.executor.dto.MainJobCallbackInfo;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Date;
@@ -48,15 +50,15 @@ public class StatusServiceImpl implements StatusService {
 		}
 
 		// 当前任务数据更新
-		jobDataUpdate(xxlJobLog, status, ip);
+		jobDataUpdate(xxlJobLog, status, ip, msg);
 
 		// 更新主任务进度及状态
-		Integer mainStatus = updateMainJobPersentAndStatus(xxlJobLog, status);
+		MainJobCallbackInfo mainJobCallbackInfo = updateMainJobPersentAndStatus(xxlJobLog, status);
 
 		// 主任务状态通知Admin
-		if (!mainStatus.equals(JobStatus.UNSTARTED)) {
-			ReturnT result = new ReturnT(status, msg);
-			TriggerCallbackThread.pushCallBack(new HandleCallbackParam(taskInstanceId, System.currentTimeMillis(), result));
+		if (!mainJobCallbackInfo.getStatus().equals(JobStatus.UNSTARTED) && mainJobCallbackInfo.getTaskInstanceId() != null) {
+			ReturnT result = new ReturnT(mainJobCallbackInfo.getStatus(), msg);
+			TriggerCallbackThread.pushCallBack(new HandleCallbackParam(mainJobCallbackInfo.getTaskInstanceId(), System.currentTimeMillis(), result));
 		}
 		return 0;
 	}
@@ -81,10 +83,13 @@ public class StatusServiceImpl implements StatusService {
 	/**
 	 * 当前任务数据更新（状态、执行时间、执行备注、重复执行次数）
 	 */
-	private void jobDataUpdate(XxlJobLog xxlJobLog, Integer status, String ip) {
+	private void jobDataUpdate(XxlJobLog xxlJobLog, Integer status, String ip, String msg) {
 		if (status.equals(Integer.valueOf(JobStatus.PROCESSING.getValue()))) {
 			xxlJobLog.setTriggerTime(new Date());
 			xxlJobLog.setTriggerMsg("执行机器IP:" + ip);
+			if (StringUtils.isNotEmpty(msg)) {
+				xxlJobLog.setHandleMsg(xxlJobLog.getHandleMsg() + "<br>" + msg);
+			}
 			if (Integer.valueOf(JobStatus.PROCESSING.getValue()).equals(xxlJobLog.getHandleCode())) {
 				xxlJobLog.setExecutorFailRetryCount(xxlJobLog.getExecutorFailRetryCount() + 1);
 			}
@@ -96,11 +101,14 @@ public class StatusServiceImpl implements StatusService {
 	/**
 	 * 更新主任务进度及状态
 	 */
-	private Integer updateMainJobPersentAndStatus(XxlJobLog xxlJobLog, Integer status) {
-		Integer mainStatus = Integer.valueOf(JobStatus.UNSTARTED.getValue());
+	private MainJobCallbackInfo updateMainJobPersentAndStatus(XxlJobLog xxlJobLog, Integer status) {
+		MainJobCallbackInfo result = new MainJobCallbackInfo();
 		XxlJobLog mainJobLog = xxlJobLogDao.load(xxlJobLog.getParentId());
 		if (xxlJobLog.getType() == 1) {//主任务汇报
-			mainStatus = status;
+			if (mainJobLog != null) {
+				result.setStatus(status);
+				result.setTaskInstanceId(mainJobLog.getId());
+			}
 		} else if (status.equals(Integer.valueOf(JobStatus.SUCCESS.getValue()))) {//子任务执行成功
 			Integer total = xxlJobLog.getTotal();
 			if (xxlJobLog.getTotal() == 0) {
@@ -119,13 +127,14 @@ public class StatusServiceImpl implements StatusService {
 				}
 				xxlJobLogDao.updateTriggerInfo(mainJobLog);
 
-				if ((finish == total)) {
+				if (finish == total) {
 					if (mainJobLog.getType() == 2) {
 						// 若主任务仍然是子任务则进行递归调用
 						return updateMainJobPersentAndStatus(mainJobLog, Integer.valueOf(JobStatus.SUCCESS.getValue()));
 					} else {
 						// 若主任务不是子任务则进行递归调用
-						mainStatus = Integer.valueOf(JobStatus.SUCCESS.getValue());
+						result.setStatus(Integer.valueOf(JobStatus.SUCCESS.getValue()));
+						result.setTaskInstanceId(mainJobLog.getId());
 					}
 				}
 			}
@@ -137,10 +146,11 @@ public class StatusServiceImpl implements StatusService {
 					xxlJobLogDao.updateTriggerInfo(mainJobLog);
 				} else {
 					// 若主任务不是子任务则进行递归调用
-					mainStatus = Integer.valueOf(JobStatus.FAIL.getValue());
+					result.setStatus(Integer.valueOf(JobStatus.FAIL.getValue()));
+					result.setTaskInstanceId(mainJobLog.getId());
 				}
 			}
 		}
-		return mainStatus;
+		return result;
 	}
 }

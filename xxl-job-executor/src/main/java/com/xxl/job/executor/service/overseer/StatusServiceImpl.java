@@ -98,6 +98,9 @@ public class StatusServiceImpl implements StatusService {
 		if (xxlJobLog.getType() == 2) {
 			xxlJobLog.setHandleCode(status);
 		}
+		if (status.equals(Integer.valueOf(JobStatus.SUCCESS.getValue()))) {
+			xxlJobLog.setPersent(100.0);
+		}
 		xxlJobLogDao.updateTriggerInfo(xxlJobLog);
 	}
 

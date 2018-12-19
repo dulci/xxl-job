@@ -7,7 +7,6 @@ import com.xxl.job.core.biz.model.HandleCallbackParam;
 import com.xxl.job.core.biz.model.ReturnT;
 import com.xxl.job.core.thread.TriggerCallbackThread;
 import com.xxl.job.core.util.DateUtil;
-import com.xxl.job.executor.common.JobLogCommon;
 import com.xxl.job.executor.core.model.XxlJobLog;
 import com.xxl.job.executor.dao.XxlJobLogDao;
 import lombok.extern.slf4j.Slf4j;
@@ -28,9 +27,6 @@ import java.util.Date;
 public class StatusServiceImpl implements StatusService {
 	@Autowired
 	private XxlJobLogDao xxlJobLogDao;
-
-	@Autowired
-	private JobLogCommon jobLogCommon;
 
 	/**
 	 * Status Report 状态汇报

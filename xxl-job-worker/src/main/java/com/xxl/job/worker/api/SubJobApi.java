@@ -45,6 +45,20 @@ public class SubJobApi {
 	}
 
 	/**
+	 * SubJob createFinish 创建子任务完成
+	 *
+	 * @param mainTaskInstanceId 主任务实例ID
+	 * @return 0：成功
+	 */
+	public Integer createFinish(Integer mainTaskInstanceId) {
+		if (StringUtils.isEmpty(mainTaskInstanceId)) {
+			log.error("mainTaskInstanceId can not be empty");
+			return 0;
+		}
+		return subJobService.createFinish(mainTaskInstanceId);
+	}
+
+	/**
 	 * SubJob create 创建子任务
 	 *
 	 * @param mainTaskInstanceId 主任务实例ID

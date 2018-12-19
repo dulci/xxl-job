@@ -19,6 +19,14 @@ public interface SubJobService {
 	Integer create(Integer mainTaskInstanceId, String ip, Integer index);
 
 	/**
+	 * SubJob createFinish 创建子任务完成
+	 *
+	 * @param mainTaskInstanceId 主任务实例ID
+	 * @return 0：成功
+	 */
+	Integer createFinish(Integer mainTaskInstanceId);
+
+	/**
 	 * SubJob create 创建子任务
 	 *
 	 * @param mainTaskInstanceId 主任务实例ID

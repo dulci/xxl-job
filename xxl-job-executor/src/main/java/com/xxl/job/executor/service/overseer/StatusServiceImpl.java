@@ -1,0 +1,150 @@
+package com.xxl.job.executor.service.overseer;
+
+import com.alibaba.dubbo.config.annotation.Service;
+import com.xxl.job.api.enums.JobStatus;
+import com.xxl.job.api.service.StatusService;
+import com.xxl.job.core.biz.model.HandleCallbackParam;
+import com.xxl.job.core.biz.model.ReturnT;
+import com.xxl.job.core.thread.TriggerCallbackThread;
+import com.xxl.job.core.util.DateUtil;
+import com.xxl.job.executor.common.JobLogCommon;
+import com.xxl.job.executor.core.model.XxlJobLog;
+import com.xxl.job.executor.dao.XxlJobLogDao;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.Date;
+
+/**
+ * Created by dul-c on 2018-12-12.
+ */
+@Service(
+		version = "${xxl.job.overseer.service.version}",
+		application = "${dubbo.application.id}",
+		protocol = "${dubbo.protocol.id}",
+		registry = "${dubbo.registry.id}"
+)
+@Slf4j
+public class StatusServiceImpl implements StatusService {
+	@Autowired
+	private XxlJobLogDao xxlJobLogDao;
+
+	@Autowired
+	private JobLogCommon jobLogCommon;
+
+	/**
+	 * Status Report 状态汇报
+	 *
+	 * @param taskInstanceId 任务实例ID
+	 * @param ip             ip
+	 * @param status         状态值
+	 * @return 0：成功
+	 */
+	@Override
+	public Integer report(Integer taskInstanceId, String ip, Integer status, String msg) {
+		StringBuffer stringBuffer = new StringBuffer();
+		stringBuffer.append(DateUtil.format(new Date())).append(" recieve status report ").append("[" + taskInstanceId + "]").append("[" + ip + "]").append(" ").append(status).append(" ").append(msg);
+		this.log.info(stringBuffer.toString());
+
+		XxlJobLog xxlJobLog = xxlJobLogDao.load(taskInstanceId);
+		if (xxlJobLog == null) {
+			return 0;
+		}
+
+		// 当前任务数据更新
+		jobDataUpdate(xxlJobLog, status, ip);
+
+		// 更新主任务进度及状态
+		Integer mainStatus = updateMainJobPersentAndStatus(xxlJobLog, status);
+
+		// 主任务状态通知Admin
+		if (!mainStatus.equals(JobStatus.UNSTARTED)) {
+			ReturnT result = new ReturnT(status, msg);
+			TriggerCallbackThread.pushCallBack(new HandleCallbackParam(taskInstanceId, System.currentTimeMillis(), result));
+		}
+		return 0;
+	}
+
+	/**
+	 * Status Report 状态汇报
+	 *
+	 * @param taskInstanceId 任务实例ID
+	 * @param ip             ip
+	 * @param jobStatus      状态值
+	 * @return 0：成功
+	 */
+	@Override
+	public Integer report(Integer taskInstanceId, String ip, JobStatus jobStatus, String msg) {
+		StringBuffer stringBuffer = new StringBuffer();
+		stringBuffer.append(DateUtil.format(new Date())).append(" recieve status report ").append("[" + taskInstanceId + "]").append("[" + ip + "]").append(" ").append(jobStatus.getValue()).append(" ").append(msg);
+		this.log.info(stringBuffer.toString());
+
+		return report(taskInstanceId, ip, Integer.valueOf(jobStatus.getValue()), msg);
+	}
+
+	/**
+	 * 当前任务数据更新（状态、执行时间、执行备注、重复执行次数）
+	 */
+	private void jobDataUpdate(XxlJobLog xxlJobLog, Integer status, String ip) {
+		if (status.equals(Integer.valueOf(JobStatus.PROCESSING.getValue()))) {
+			xxlJobLog.setTriggerTime(new Date());
+			xxlJobLog.setTriggerMsg("执行机器IP:" + ip);
+			if (Integer.valueOf(JobStatus.PROCESSING.getValue()).equals(xxlJobLog.getHandleCode())) {
+				xxlJobLog.setExecutorFailRetryCount(xxlJobLog.getExecutorFailRetryCount() + 1);
+			}
+		}
+		xxlJobLog.setHandleCode(status);
+		xxlJobLogDao.updateTriggerInfo(xxlJobLog);
+	}
+
+	/**
+	 * 更新主任务进度及状态
+	 */
+	private Integer updateMainJobPersentAndStatus(XxlJobLog xxlJobLog, Integer status) {
+		Integer mainStatus = Integer.valueOf(JobStatus.UNSTARTED.getValue());
+		XxlJobLog mainJobLog = xxlJobLogDao.load(xxlJobLog.getParentId());
+		if (xxlJobLog.getType() == 1) {//主任务汇报
+			mainStatus = status;
+		} else if (status.equals(Integer.valueOf(JobStatus.SUCCESS.getValue()))) {//子任务执行成功
+			Integer total = xxlJobLog.getTotal();
+			if (xxlJobLog.getTotal() == 0) {
+				total = xxlJobLogDao.selectCountByParentId(xxlJobLog.getParentId(), null);
+			}
+			Integer finish = xxlJobLogDao.selectCountByParentId(xxlJobLog.getParentId(), Integer.valueOf(JobStatus.SUCCESS.getValue()));
+			Double persent = (Double.valueOf(finish)) / Double.valueOf(total) * 100.0;
+
+			if (mainJobLog != null) {
+				// 更新主任务进度
+				mainJobLog.setPersent(persent);
+
+				// 更新主任务状态(只更新不是子任务的主任务的状态)
+				if ((finish == total) && mainJobLog.getType() == 2) {
+					mainJobLog.setTriggerCode(Integer.valueOf(JobStatus.SUCCESS.getValue()));
+				}
+				xxlJobLogDao.updateTriggerInfo(mainJobLog);
+
+				if ((finish == total)) {
+					if (mainJobLog.getType() == 2) {
+						// 若主任务仍然是子任务则进行递归调用
+						return updateMainJobPersentAndStatus(mainJobLog, Integer.valueOf(JobStatus.SUCCESS.getValue()));
+					} else {
+						// 若主任务不是子任务则进行递归调用
+						mainStatus = Integer.valueOf(JobStatus.SUCCESS.getValue());
+					}
+				}
+			}
+		} else if (status.equals(Integer.valueOf(JobStatus.FAIL.getValue()))) {//子任务执行失败
+			if (mainJobLog != null) {
+				if (mainJobLog.getType() == 2) {
+					// 若主任务仍然是子任务则进行递归调用
+					mainJobLog.setHandleCode(Integer.valueOf(JobStatus.FAIL.getValue()));
+					xxlJobLogDao.updateTriggerInfo(mainJobLog);
+				} else {
+					// 若主任务不是子任务则进行递归调用
+					mainStatus = Integer.valueOf(JobStatus.FAIL.getValue());
+				}
+			}
+		}
+		return mainStatus;
+	}
+}

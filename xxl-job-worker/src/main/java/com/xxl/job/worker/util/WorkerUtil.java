@@ -49,7 +49,7 @@ public class WorkerUtil {
 	 * @param e              异常信息
 	 * @return 0：成功
 	 */
-	public Integer report(Integer taskInstanceId, Exception e) {
+	public Integer reportException(Integer taskInstanceId, Exception e) {
 		e.printStackTrace();
 		return logApi.report(taskInstanceId, e);
 	}

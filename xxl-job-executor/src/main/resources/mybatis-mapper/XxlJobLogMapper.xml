@@ -5,9 +5,13 @@
 	
 	<resultMap id="XxlJobLog" type="com.xxl.job.executor.core.model.XxlJobLog" >
 		<result column="id" property="id" />
+		<result column="parent_id" property="parentId" />
+		<result column="type" property="type" />
 
 		<result column="job_group" property="jobGroup" />
 		<result column="job_id" property="jobId" />
+		<result column="index" property="index" />
+		<result column="total" property="total" />
 
 		<result column="executor_address" property="executorAddress" />
 		<result column="executor_handler" property="executorHandler" />
@@ -23,13 +27,19 @@
 	    <result column="handle_code" property="handleCode" />
 	    <result column="handle_msg" property="handleMsg" />
 
+		<result column="persent" property="persent" />
+
 		<result column="alarm_status" property="alarmStatus" />
 	</resultMap>
 
 	<sql id="Base_Column_List">
 		t.id,
+		t.parent_id,
+		t.type,
 		t.job_group,
 		t.job_id,
+		t.index,
+		t.total,
 		t.executor_address,
 		t.executor_handler,
 		t.executor_param,
@@ -41,6 +51,7 @@
 		t.handle_time,
 		t.handle_code,
 		t.handle_msg,
+		t.persent,
 		t.alarm_status
 	</sql>
 	
@@ -125,10 +136,12 @@
 			`job_id`,
 			`index`,
 			`total`,
+			`executor_address`,
 			`executor_param`,
 			`trigger_time`,
 			`trigger_code`,
-			`trigger_msg`
+			`trigger_msg`,
+			`handle_code`
 		) VALUES (
 			#{parentId},
 			#{type},
@@ -136,15 +149,18 @@
 			#{jobId},
 			#{index},
 			#{total},
+			#{executorAddress},
 			#{executorParam},
 			#{triggerTime},
 			#{triggerCode},
-			#{triggerMsg}
+			#{triggerMsg},
+			#{handleCode}
 		);
 	</insert>
 
 	<update id="updateTriggerInfo" >
-		UPDATE XXL_JOB_QRTZ_TRIGGER_LOG
+		UPDATE
+			XXL_JOB_QRTZ_TRIGGER_LOG
 		SET
 			`trigger_time`= #{triggerTime},
 			`trigger_code`= #{triggerCode},
@@ -153,7 +169,10 @@
 			`executor_handler`=#{executorHandler},
 			`executor_param`= #{executorParam},
 			`executor_sharding_param`= #{executorShardingParam},
-			`executor_fail_retry_count`= #{executorFailRetryCount}
+			`executor_fail_retry_count`= #{executorFailRetryCount},
+			`handle_time`= #{handleTime},
+			`handle_code`= #{handleCode},
+			`handle_msg`= #{handleMsg},
 			`persent`= #{persent}
 		WHERE `id`= #{id}
 	</update>
@@ -277,7 +296,9 @@
 		WHERE
 			`id`= #{logId}
 			AND
-			`persent` <![CDATA[<]]> #{persent}
+			(`persent` <![CDATA[<]]> #{persent}
+			OR
+			`persent` is null)
 	</update>
 	
 </mapper>

@@ -2,6 +2,7 @@ package com.xxl.job.executor.service.overseer;
 
 import com.alibaba.dubbo.config.annotation.Service;
 import com.xxl.job.api.dto.SubJobInfoForBatchCreate;
+import com.xxl.job.api.enums.JobStatus;
 import com.xxl.job.api.service.SubJobService;
 import com.xxl.job.core.biz.model.ReturnT;
 import com.xxl.job.core.util.DateUtil;
@@ -137,9 +138,9 @@ public class SubJobServiceImpl implements SubJobService {
 		}
 		xxlJobSubLog.setExecutorAddress(xxlJobLog.getExecutorAddress());
 		xxlJobSubLog.setExecutorParam("任务触发类型：接口触发<br>创建机器：" + ip + "<br>子任务序号：" + index);
-		xxlJobSubLog.setTriggerTime(new Date());
 		xxlJobSubLog.setTriggerCode(ReturnT.SUCCESS_CODE);
 		xxlJobSubLog.setTriggerMsg("任务触发类型：接口触发<br>创建机器：" + ip + "<br>子任务序号：" + index);
+		xxlJobSubLog.setHandleCode(Integer.valueOf(JobStatus.UNSTARTED.getValue()));
 		xxlJobLogDao.save(xxlJobSubLog);
 		return xxlJobSubLog.getId();
 	}

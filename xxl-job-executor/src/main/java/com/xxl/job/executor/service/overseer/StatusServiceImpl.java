@@ -85,16 +85,19 @@ public class StatusServiceImpl implements StatusService {
 	 */
 	private void jobDataUpdate(XxlJobLog xxlJobLog, Integer status, String ip, String msg) {
 		if (status.equals(Integer.valueOf(JobStatus.PROCESSING.getValue()))) {
-			xxlJobLog.setTriggerTime(new Date());
-			xxlJobLog.setTriggerMsg("执行机器IP:" + ip);
+			xxlJobLog.setHandleTime(new Date());
 			if (StringUtils.isNotEmpty(msg)) {
 				xxlJobLog.setHandleMsg(xxlJobLog.getHandleMsg() + "<br>" + msg);
+			} else {
+				xxlJobLog.setHandleMsg("执行机器IP:" + ip);
 			}
 			if (Integer.valueOf(JobStatus.PROCESSING.getValue()).equals(xxlJobLog.getHandleCode())) {
 				xxlJobLog.setExecutorFailRetryCount(xxlJobLog.getExecutorFailRetryCount() + 1);
 			}
 		}
-		xxlJobLog.setHandleCode(status);
+		if (xxlJobLog.getType() == 2) {
+			xxlJobLog.setHandleCode(status);
+		}
 		xxlJobLogDao.updateTriggerInfo(xxlJobLog);
 	}
 
@@ -105,10 +108,8 @@ public class StatusServiceImpl implements StatusService {
 		MainJobCallbackInfo result = new MainJobCallbackInfo();
 		XxlJobLog mainJobLog = xxlJobLogDao.load(xxlJobLog.getParentId());
 		if (xxlJobLog.getType() == 1) {//主任务汇报
-			if (mainJobLog != null) {
-				result.setStatus(status);
-				result.setTaskInstanceId(mainJobLog.getId());
-			}
+			result.setStatus(status);
+			result.setTaskInstanceId(xxlJobLog.getId());
 		} else if (status.equals(Integer.valueOf(JobStatus.SUCCESS.getValue()))) {//子任务执行成功
 			Integer total = xxlJobLog.getTotal();
 			if (xxlJobLog.getTotal() == 0) {

@@ -73,6 +73,10 @@
                 <li class="fa fa-refresh fa-spin" style="font-size: 20px;float: left;" id="logConsoleRunning"></li>
                 <div><hr><hr></div>
             </pre>
+            <div style="font-size: 12px; position: relative;">
+                <button class="btn btn-danger btn-xs job_trigger" type="button" id="stop">stop</button>&nbsp;
+                <button class="btn btn-primary btn-xs job_trigger" type="button" id="continue">continue</button>
+            </div>
         </section>
     </div>
 

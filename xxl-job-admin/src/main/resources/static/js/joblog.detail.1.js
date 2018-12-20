@@ -8,7 +8,8 @@ $(function () {
     }
 
     // init date tables
-    var subjobTable = $("#subjob_list").dataTable({
+    var subjobTable = $("#subjob_list").DataTable({
+        "retrieve": true,
         "deferRender": true,
         "processing": true,
         "serverSide": true,
@@ -126,9 +127,6 @@ $(function () {
                     return function () {
                         if (row.triggerCode == 200 || row.handleCode != 0) {
                             var temp = '<a href="javascript:;" class="logDetail" _id="' + row.id + '">' + I18n.joblog_rolling_log + '</a>';
-                            if (row.handleCode == 0) {
-                                temp += '<br><a href="javascript:;" class="logKill" _id="' + row.id + '" style="color: red;" >' + I18n.joblog_kill_log + '</a>';
-                            }
                             return temp;
                         }
                         return null;
@@ -161,6 +159,10 @@ $(function () {
             }
         }
     });
+
+    setInterval(function () {
+        subjobTable.ajax.reload(null, false); // 刷新表格数据，分页信息不会重置
+    }, 15000);
 
     // logTips alert
     $('body').off('click', '.logTips').on('click', '.logTips', function () {
@@ -255,6 +257,7 @@ $(function () {
     // pull log
     var fromLineNum = 1;    // [from, to], start as 1
     var pullFailCount = 0;
+    var noneContentTimes = 0;
 
     function pullLog() {
         // pullFailCount, max=20
@@ -288,25 +291,26 @@ $(function () {
                         return;
                     }
                     if (fromLineNum > data.content.toLineNum) {
-                        console.log('pullLog already line-end');
-
-                        // valid end
-                        if (data.content.end) {
-                            logRunStop('<br><span style="color: green;">[Rolling Log Finish]</span>');
+                        noneContentTimes += 1;
+                        if (noneContentTimes > 60) {
+                            console.log('pullLog already line-end');
+                            // valid end
+                            if (data.content.end) {
+                                logRunStop('<br><span style="color: green;">[Rolling Log Finish or Stop Rolling.]</span>');
+                                return;
+                            }
                             return;
                         }
-
-                        return;
                     }
-
                     // append content
                     fromLineNum = data.content.toLineNum + 1;
+                    if (data.content.logContent != '') {
+                        noneContentTimes = 0;
+                    }
                     $('#logConsole').append(data.content.logContent);
                     pullFailCount = 0;
-
                     // scroll to bottom
-                    scrollTo(0, document.body.scrollHeight);        // $('#logConsolePre').scrollTop( document.body.scrollHeight + 300 );
-
+                    scrollTo(0, document.body.scrollHeight);
                 } else {
                     console.log('pullLog fail:' + data.msg);
                 }
@@ -317,15 +321,9 @@ $(function () {
     // pull first page
     pullLog();
 
-    // handler already callback, end
-    if (handleCode > 0) {
-        logRunStop('<br><span style="color: green;">[Load Log Finish]</span><br />');
-        return;
-    }
-
     // round until end
     var logRun = setInterval(function () {
-        pullLog()
+        pullLog();
     }, 3000);
 
     function logRunStop(content) {
@@ -333,4 +331,20 @@ $(function () {
         logRun = window.clearInterval(logRun);
         $('#logConsole').append(content);
     }
-});
+
+    // logTips alert
+    $('body').off('click', '#stop').on('click', '#stop', function () {
+        $('#logConsoleRunning').hide();
+        logRun = window.clearInterval(logRun);
+    });
+
+    // logTips alert
+    $('body').off('click', '#continue').on('click', '#continue', function () {
+        $('#logConsoleRunning').show();
+        noneContentTimes = 0;
+        logRun = setInterval(function () {
+            pullLog();
+        }, 3000);
+    });
+})
+;

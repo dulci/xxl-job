@@ -9,6 +9,7 @@ import org.springframework.util.StringUtils;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.Date;
 
 /**
  * Created by dul-c on 2018-12-12.
@@ -41,5 +42,20 @@ public class LogApi {
 			e.printStackTrace();
 		}
 		return -1;
+	}
+
+	/**
+	 * Log Report 日志汇报
+	 *
+	 * @param taskInstanceId 任务实例ID
+	 * @param e              异常信息
+	 * @return 0：成功
+	 */
+	public Integer report(Integer taskInstanceId, Exception e) {
+		if (e == null) {
+			this.log.error("exception is null");
+			return -1;
+		}
+		return logService.report(taskInstanceId, IpUtil.getIp(), e);
 	}
 }

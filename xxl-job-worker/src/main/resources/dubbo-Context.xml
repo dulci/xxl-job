@@ -25,13 +25,13 @@
 
     <dubbo:application name="xxl-job-worker"/>
     <dubbo:registry address="zookeeper://192.168.133.176:2181"/>
-    <dubbo:consumer timeout="50000"/>
+    <dubbo:consumer timeout="10000" retries="5" version="1.0.0"/>
     <dubbo:protocol port="12345"/>
 
-    <dubbo:reference id="logService" check="false" interface="com.xxl.job.api.service.LogService" version="1.0.0"/>
-    <dubbo:reference id="scheduleService" check="false" interface="com.xxl.job.api.service.ScheduleService" version="1.0.0"/>
-    <dubbo:reference id="statusService" check="false" interface="com.xxl.job.api.service.StatusService" version="1.0.0"/>
-    <dubbo:reference id="subJobService" check="false" interface="com.xxl.job.api.service.SubJobService" version="1.0.0"/>
+    <dubbo:reference id="logService" check="false" interface="com.xxl.job.api.service.LogService" async="true" />
+    <dubbo:reference id="scheduleService" check="false" interface="com.xxl.job.api.service.ScheduleService" async="true" />
+    <dubbo:reference id="statusService" check="false" interface="com.xxl.job.api.service.StatusService" async="false" />
+    <dubbo:reference id="subJobService" check="false" interface="com.xxl.job.api.service.SubJobService" async="false" />
 
     <bean id="logApi" class="com.xxl.job.worker.api.LogApi" />
     <bean id="scheduleApi" class="com.xxl.job.worker.api.ScheduleApi" />

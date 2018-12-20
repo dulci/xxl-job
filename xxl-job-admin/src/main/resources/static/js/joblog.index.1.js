@@ -70,7 +70,7 @@ $(function() {
 	});
 
 	// init date tables
-	var logTable = $("#joblog_list").dataTable({
+	var logTable = $("#joblog_list").DataTable({
 		"deferRender": true,
 		"processing" : true, 
 	    "serverSide": true,
@@ -219,7 +219,11 @@ $(function() {
             }
         }
 	});
-	
+
+    setInterval(function () {
+        logTable.ajax.reload(null, false); // 刷新表格数据，分页信息不会重置
+    }, 15000);
+
 	// logTips alert
 	$('#joblog_list').on('click', '.logTips', function(){
 		var msg = $(this).find('span').html();

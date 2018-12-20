@@ -14,6 +14,11 @@ public class SubJobInfoForBatchCreate {
 	 */
 	private Integer index;
 
+	/**
+	 * 子任务总数量
+	 */
+	private Integer total;
+
 	public SubJobInfoForBatchCreate() {
 	}
 
@@ -22,11 +27,6 @@ public class SubJobInfoForBatchCreate {
 		this.index = index;
 		this.total = total;
 	}
-
-	/**
-	 * 子任务总数量
-	 */
-	private Integer total;
 
 	public Integer getTaskId() {
 		return taskId;

@@ -10,6 +10,7 @@ import com.xxl.job.worker.api.SubJobApi;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -39,6 +40,18 @@ public class WorkerUtil {
 	public Integer reportLog(Integer taskInstanceId, String log) {
 		logger.info(log);
 		return logApi.report(taskInstanceId, log);
+	}
+
+	/**
+	 * Log Report 日志汇报
+	 *
+	 * @param taskInstanceId 任务实例ID
+	 * @param e              异常信息
+	 * @return 0：成功
+	 */
+	public Integer reportException(Integer taskInstanceId, Exception e) {
+		e.printStackTrace();
+		return logApi.report(taskInstanceId, e);
 	}
 
 	/**
@@ -107,6 +120,16 @@ public class WorkerUtil {
 	 */
 	public Integer createSubJob(Integer mainTaskInstanceId, Integer index) {
 		return subJobApi.create(mainTaskInstanceId, index);
+	}
+
+	/**
+	 * SubJob createFinish 创建子任务完成
+	 *
+	 * @param mainTaskInstanceId 主任务实例ID
+	 * @return 0：成功
+	 */
+	public Integer createFinish(Integer mainTaskInstanceId) {
+		return subJobApi.createFinish(mainTaskInstanceId);
 	}
 
 	/**

@@ -126,6 +126,12 @@
 			<artifactId>lombok</artifactId>
 			<version>1.16.16</version>
 		</dependency>
+
+		<dependency>
+			<groupId>glodon.member.center</groupId>
+			<artifactId>member-center-util</artifactId>
+			<version>1.5.7</version>
+		</dependency>
 	</dependencies>
 
 	<build>

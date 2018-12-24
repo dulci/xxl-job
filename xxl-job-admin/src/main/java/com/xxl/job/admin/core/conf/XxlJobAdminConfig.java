@@ -45,7 +45,10 @@ public class XxlJobAdminConfig implements InitializingBean{
 
     @Value("${spring.mail.username}")
     private String emailUserName;
-
+    @Value("${xxl.job.sms.username}")
+    private String smsUserName;
+    @Value("${xxl.job.sms.password}")
+    private String smsPassword;
     // dao, service
 
     @Resource
@@ -105,4 +108,19 @@ public class XxlJobAdminConfig implements InitializingBean{
         return mailSender;
     }
 
+    public String getSmsUserName() {
+        return smsUserName;
+    }
+
+    public void setSmsUserName(String smsUserName) {
+        this.smsUserName = smsUserName;
+    }
+
+    public String getSmsPassword() {
+        return smsPassword;
+    }
+
+    public void setSmsPassword(String smsPassword) {
+        this.smsPassword = smsPassword;
+    }
 }

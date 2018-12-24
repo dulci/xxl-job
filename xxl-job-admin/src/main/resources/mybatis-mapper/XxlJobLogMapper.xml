@@ -276,12 +276,12 @@
 
 	<select id="findFailJobLogIds" resultType="int" >
 		SELECT id FROM `XXL_JOB_QRTZ_TRIGGER_LOG`
-		WHERE !(
-			(trigger_code in (0, 200) and handle_code in( 0,100))
+		WHERE
+				trigger_code in (500, 502)
 			OR
-			(handle_code = 200)
-		)
-		AND `alarm_status` = 0
+				handle_code in (500, 502)
+			AND
+				`alarm_status` = 0
 		ORDER BY id ASC
 	</select>
 

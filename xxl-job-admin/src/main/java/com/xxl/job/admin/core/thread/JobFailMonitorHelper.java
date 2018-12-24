@@ -7,6 +7,7 @@ import com.xxl.job.admin.core.model.XxlJobLog;
 import com.xxl.job.admin.core.trigger.TriggerTypeEnum;
 import com.xxl.job.admin.core.util.I18nUtil;
 import com.xxl.job.core.biz.model.ReturnT;
+import glodon.gcj.member.center.utils.util.SMSSendUtil;
 import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,7 +49,6 @@ public class JobFailMonitorHelper {
 				// monitor
 				while (!toStop) {
 					try {
-
 						List<Integer> failLogIds = XxlJobAdminConfig.getAdminConfig().getXxlJobLogDao().findFailJobLogIds(1000);
 						if (CollectionUtils.isNotEmpty(failLogIds)) {
 							for (int failLogId: failLogIds) {
@@ -71,10 +71,21 @@ public class JobFailMonitorHelper {
 
 								// 2、fail alarm monitor
 								int newAlarmStatus = 0;		// 告警状态：0-默认、-1=锁定状态、1-无需告警、2-告警成功、3-告警失败
-								if (info!=null && info.getAlarmEmail()!=null && info.getAlarmEmail().trim().length()>0) {
+								if (info!=null &&
+										(
+												(info.getAlarmEmail()!=null && info.getAlarmEmail().trim().length()>0)
+												||
+												(info.getAlarmTel() !=null && info.getAlarmTel().trim().length()>0)
+
+										) ){
 									boolean alarmResult = true;
 									try {
-										alarmResult = failAlarm(info, log);
+										if(info.getAlarmEmail()!=null && info.getAlarmEmail().trim().length()>0 ) {
+											alarmResult = failAlarm(info, log);
+										}
+										if(info.getAlarmTel() !=null && info.getAlarmTel().trim().length()>0 && log.getExecutorFailRetryCount() <= 0){
+											alarmResult = failSendSms(info, log);
+										}
 
 									} catch (Exception e) {
 										alarmResult = false;
@@ -138,6 +149,9 @@ public class JobFailMonitorHelper {
 			"   </tbody>\n" +
 			"</table>";
 
+	private static final String smsBodyTemplate = "执行器：{0}任务描述：{1},任务id：{2},日志id:{3}";
+
+
 	/**
 	 * fail alarm
 	 *
@@ -195,5 +209,43 @@ public class JobFailMonitorHelper {
 
 		return alarmResult;
 	}
+
+
+	private boolean failSendSms(XxlJobInfo info, XxlJobLog jobLog){
+		boolean alarmResult = true;
+
+		// send monitor email
+		if (info!=null && info.getAlarmTel()!=null && info.getAlarmTel().trim().length()>0) {
+
+
+			Set<String> telSet = new HashSet<String>(Arrays.asList(info.getAlarmTel().split(",")));
+			XxlJobGroup group = XxlJobAdminConfig.getAdminConfig().getXxlJobGroupDao().load(Integer.valueOf(info.getJobGroup()));
+			String content = MessageFormat.format(smsBodyTemplate,
+					group!=null?group.getTitle():"null",
+					info.getJobDesc(),
+					info.getId(),
+					jobLog.getId());
+
+			for (String tel: telSet) {
+
+				// make mail
+				try {
+					XxlJobAdminConfig xxlJobAdminConfig = XxlJobAdminConfig.getAdminConfig();
+
+					SMSSendUtil.sendISMS(xxlJobAdminConfig.getSmsPassword(), xxlJobAdminConfig.getSmsPassword(), tel, content);
+					//XxlJobAdminConfig.getAdminConfig().getMailSender().send(mimeMessage);
+				} catch (Exception e) {
+					logger.error(">>>>>>>>>>> job monitor alarm tel send error, JobLogId:{}", jobLog.getId(), e);
+
+					alarmResult = false;
+				}
+
+			}
+		}
+
+
+		return alarmResult;
+	}
+
 
 }

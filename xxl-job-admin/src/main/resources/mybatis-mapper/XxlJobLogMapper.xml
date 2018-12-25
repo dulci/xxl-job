@@ -282,6 +282,7 @@
 				handle_code in (500, 502)
 			AND
 				`alarm_status` = 0
+			and type = 1
 		ORDER BY id ASC
 	</select>
 

@@ -186,4 +186,15 @@
 		FROM XXL_JOB_QRTZ_TRIGGER_INFO
 	</select>
 
+	<select id="findJobsByChildJobId" resultMap="XxlJobInfo">
+		SELECT
+			<include refid="Base_Column_List" />
+		FROM
+			XXL_JOB_QRTZ_TRIGGER_INFO
+		where
+			child_jobid regexp  #{jobidRegexp}
+			and
+			id != #{id}
+	</select>
+
 </mapper>

@@ -297,5 +297,19 @@
 			`alarm_status` = #{newAlarmStatus}
 		WHERE `id`= #{logId} AND `alarm_status` = #{oldAlarmStatus}
 	</update>
+
+	<select id="selectSuccessCount" resultType="java.lang.Integer" >
+		SELECT
+		ifnull(count(1), 0)
+		FROM
+		XXL_JOB_QRTZ_TRIGGER_LOG
+		WHERE
+		flow_instance = #{log.flowInstance}
+		and
+		job_id in
+		<foreach collection="jobList" item="job" open="(" separator="," close=")">
+			#{job.id}
+		</foreach>
+	</select>
 	
 </mapper>

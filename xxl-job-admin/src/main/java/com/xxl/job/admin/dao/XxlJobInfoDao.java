@@ -37,4 +37,6 @@ public interface XxlJobInfoDao {
 
 	public int findAllCount();
 
+	List<XxlJobInfo> findJobsByChildJobId(@Param("id") Integer id, @Param("jobidRegexp") String jobidRegexp);
+
 }

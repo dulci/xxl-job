@@ -1,5 +1,6 @@
 package com.xxl.job.admin.dao;
 
+import com.xxl.job.admin.core.model.XxlJobInfo;
 import com.xxl.job.admin.core.model.XxlJobLog;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -63,5 +64,9 @@ public interface XxlJobLogDao {
 	public int updateAlarmStatus(@Param("logId") int logId,
 	                             @Param("oldAlarmStatus") int oldAlarmStatus,
 	                             @Param("newAlarmStatus") int newAlarmStatus);
+
+
+	int selectSuccessCount(@Param("log") XxlJobLog xxlJobLog,
+						   @Param("jobList") List<XxlJobInfo> jobList);
 
 }

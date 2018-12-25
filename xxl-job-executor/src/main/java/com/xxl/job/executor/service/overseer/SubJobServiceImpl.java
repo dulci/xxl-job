@@ -138,6 +138,7 @@ public class SubJobServiceImpl implements SubJobService {
 		}
 		xxlJobSubLog.setExecutorAddress(xxlJobLog.getExecutorAddress());
 		xxlJobSubLog.setExecutorParam("任务触发类型：接口触发<br>创建机器：" + ip + "<br>子任务序号：" + index);
+		xxlJobSubLog.setTriggerTime(new Date());
 		xxlJobSubLog.setTriggerCode(ReturnT.SUCCESS_CODE);
 		xxlJobSubLog.setTriggerMsg("任务触发类型：接口触发<br>创建机器：" + ip + "<br>子任务序号：" + index);
 		xxlJobSubLog.setHandleCode(Integer.valueOf(JobStatus.UNSTARTED.getValue()));

@@ -36,6 +36,7 @@ public class AdminBizImpl implements AdminBiz {
     private XxlJobInfoDao xxlJobInfoDao;
     @Resource
     private XxlJobRegistryDao xxlJobRegistryDao;
+    public final static  String  CHILD_JOBID_REGXP="^{0}|,{0}$|,{0},";
 
 
     @Override
@@ -71,16 +72,27 @@ public class AdminBizImpl implements AdminBiz {
                     int childJobId = (StringUtils.isNotBlank(childJobIds[i]) && StringUtils.isNumeric(childJobIds[i]))?Integer.valueOf(childJobIds[i]):-1;
                     if (childJobId > 0) {
 
-                        JobTriggerPoolHelper.trigger(childJobId, TriggerTypeEnum.PARENT, -1, null, null);
-                        ReturnT<String> triggerChildResult = ReturnT.SUCCESS;
+                        //查询子任务的后置任务
+                        if(checkChildJobExecute(log,childJobId)) {
 
-                        // add msg
-                        callbackMsg += MessageFormat.format(I18nUtil.getString("jobconf_callback_child_msg1"),
-                                (i+1),
-                                childJobIds.length,
-                                childJobIds[i],
-                                (triggerChildResult.getCode()==ReturnT.SUCCESS_CODE?I18nUtil.getString("system_success"):I18nUtil.getString("system_fail")),
-                                triggerChildResult.getMsg());
+
+                            JobTriggerPoolHelper.trigger(childJobId, TriggerTypeEnum.PARENT, -1, null, null);
+                            ReturnT<String> triggerChildResult = ReturnT.SUCCESS;
+
+                            // add msg
+                            callbackMsg += MessageFormat.format(I18nUtil.getString("jobconf_callback_child_msg1"),
+                                    (i + 1),
+                                    childJobIds.length,
+                                    childJobIds[i],
+                                    (triggerChildResult.getCode() == ReturnT.SUCCESS_CODE ? I18nUtil.getString("system_success") : I18nUtil.getString("system_fail")),
+                                    triggerChildResult.getMsg());
+                        }else{
+                            callbackMsg += MessageFormat.format(I18nUtil.getString("jobconf_callback_child_msg3"),
+                                    (i+1),
+                                    childJobIds.length,
+                                    childJobIds[i]);
+                        }
+
                     } else {
                         callbackMsg += MessageFormat.format(I18nUtil.getString("jobconf_callback_child_msg2"),
                                 (i+1),
@@ -126,6 +138,26 @@ public class AdminBizImpl implements AdminBiz {
     public ReturnT<String> registryRemove(RegistryParam registryParam) {
         xxlJobRegistryDao.registryDelete(registryParam.getRegistGroup(), registryParam.getRegistryKey(), registryParam.getRegistryValue());
         return ReturnT.SUCCESS;
+    }
+
+    /**
+     * 检查子任务是可以执行
+     * @param log
+     * @param childJobId
+     * @return
+     */
+    private boolean checkChildJobExecute(XxlJobLog log ,int childJobId){
+        String jobidRegexp = MessageFormat.format(AdminBizImpl.CHILD_JOBID_REGXP,childJobId);
+        List<XxlJobInfo> jobInfoList =  xxlJobInfoDao.findJobsByChildJobId(log.getJobId(),jobidRegexp);
+        if(jobInfoList == null  ||  jobInfoList.size() ==0){
+            return true;
+
+        }
+        int successCount = xxlJobLogDao.selectSuccessCount(log,jobInfoList);
+        if(successCount == jobInfoList.size()) {
+            return true;
+        }
+        return  false;
     }
 
 }

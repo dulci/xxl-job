@@ -181,6 +181,7 @@ CREATE TABLE `XXL_JOB_QRTZ_TRIGGER_LOG` (
   `job_id` int(11) NOT NULL COMMENT '任务，主键ID',
   `index` int(11) DEFAULT NULL,
   `total` int(11) DEFAULT NULL,
+  `flow_instance` int(11) DEFAULT NULL,
   `executor_address` varchar(255) DEFAULT NULL COMMENT '执行器地址，本次执行的地址',
   `executor_handler` varchar(255) DEFAULT NULL COMMENT '执行器任务handler',
   `executor_param` varchar(512) DEFAULT NULL COMMENT '执行器任务参数',
@@ -190,7 +191,7 @@ CREATE TABLE `XXL_JOB_QRTZ_TRIGGER_LOG` (
   `trigger_code` int(11) DEFAULT '0' COMMENT '调度-结果',
   `trigger_msg` text COMMENT '调度-日志',
   `handle_time` datetime DEFAULT NULL COMMENT '执行-时间',
-  `handle_code` int(11) DEFAULT NULL COMMENT '执行-状态',
+  `handle_code` int(11) DEFAULT '0' COMMENT '执行-状态',
   `handle_msg` text COMMENT '执行-日志',
   `persent` double(5,2) DEFAULT '0.00',
   `alarm_status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '告警状态：0-默认、1-无需告警、2-告警成功、3-告警失败',
@@ -198,7 +199,8 @@ CREATE TABLE `XXL_JOB_QRTZ_TRIGGER_LOG` (
   KEY `I_trigger_time` (`trigger_time`),
   KEY `I_handle_code` (`handle_code`),
   KEY `I_parent_id` (`parent_id`),
-  KEY `I_type` (`type`)
+  KEY `I_type` (`type`),
+  KEY `I_flow_instance` (`flow_instance`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `XXL_JOB_QRTZ_TRIGGER_LOGGLUE` (

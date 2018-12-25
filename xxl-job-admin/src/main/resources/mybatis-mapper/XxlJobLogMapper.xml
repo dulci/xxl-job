@@ -14,6 +14,8 @@
 		<result column="index" property="index" />
 		<result column="total" property="total" />
 
+		<result column="flow_instance" property="flowInstance" />
+
 		<result column="executor_address" property="executorAddress" />
 		<result column="executor_handler" property="executorHandler" />
 	    <result column="executor_param" property="executorParam" />
@@ -41,6 +43,7 @@
 		t.job_id,
 		t.index,
 		t.total,
+		t.flow_instance,
 		t.executor_address,
 		t.executor_handler,
 		t.executor_param,
@@ -178,12 +181,14 @@
 		INSERT INTO XXL_JOB_QRTZ_TRIGGER_LOG (
 			`job_group`,
 			`job_id`,
+			`flow_instance`,
 			`trigger_time`,
 			`trigger_code`,
 			`handle_code`
 		) VALUES (
 			#{jobGroup},
 			#{jobId},
+			#{flowInstance},
 			#{triggerTime},
 			#{triggerCode},
 			#{handleCode}

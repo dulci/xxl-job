@@ -308,6 +308,8 @@
 		and
 			type = 1
 		and
+			handle_code = 200
+		and
 			job_id in
 			<foreach collection="jobList" item="job" open="(" separator="," close=")">
 				#{job.id}

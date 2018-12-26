@@ -24,6 +24,8 @@ public class XxlJobLog {
 	private int index;
 	private int total;
 
+	private String flowInstance;
+
 	// execute info
 	private String executorAddress;
 	private String executorHandler;

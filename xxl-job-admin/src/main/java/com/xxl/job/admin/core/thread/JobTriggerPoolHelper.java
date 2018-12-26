@@ -15,55 +15,53 @@ import java.util.concurrent.TimeUnit;
  * @author xuxueli 2018-07-03 21:08:07
  */
 public class JobTriggerPoolHelper {
-    private static Logger logger = LoggerFactory.getLogger(JobTriggerPoolHelper.class);
+	private static Logger logger = LoggerFactory.getLogger(JobTriggerPoolHelper.class);
 
 
-    // ---------------------- trigger pool ----------------------
+	// ---------------------- trigger pool ----------------------
 
-    private ThreadPoolExecutor triggerPool = new ThreadPoolExecutor(
-            32,
-            256,
-            60L,
-            TimeUnit.SECONDS,
-            new LinkedBlockingQueue<Runnable>(1000));
+	private ThreadPoolExecutor triggerPool = new ThreadPoolExecutor(
+			32,
+			256,
+			60L,
+			TimeUnit.SECONDS,
+			new LinkedBlockingQueue<Runnable>(1000));
 
 
-    public void addTrigger(final int jobId, final TriggerTypeEnum triggerType, final int failRetryCount, final String executorShardingParam, final String executorParam) {
-        triggerPool.execute(new Runnable() {
-            @Override
-            public void run() {
-                XxlJobTrigger.trigger(jobId, triggerType, failRetryCount, executorShardingParam, executorParam);
-            }
-        });
-    }
+	public void addTrigger(final int jobId, final TriggerTypeEnum triggerType, final int failRetryCount, final String executorShardingParam, final String executorParam, final String flowInstance) {
+		triggerPool.execute(new Runnable() {
+			@Override
+			public void run() {
+				XxlJobTrigger.trigger(jobId, triggerType, failRetryCount, executorShardingParam, executorParam, flowInstance);
+			}
+		});
+	}
 
-    public void stop() {
-        //triggerPool.shutdown();
-        triggerPool.shutdownNow();
-        logger.info(">>>>>>>>> xxl-job trigger thread pool shutdown success.");
-    }
+	public void stop() {
+		//triggerPool.shutdown();
+		triggerPool.shutdownNow();
+		logger.info(">>>>>>>>> xxl-job trigger thread pool shutdown success.");
+	}
 
-    // ---------------------- helper ----------------------
+	// ---------------------- helper ----------------------
 
-    private static JobTriggerPoolHelper helper = new JobTriggerPoolHelper();
+	private static JobTriggerPoolHelper helper = new JobTriggerPoolHelper();
 
-    /**
-     * @param jobId
-     * @param triggerType
-     * @param failRetryCount
-     * 			>=0: use this param
-     * 			<0: use param from job info config
-     * @param executorShardingParam
-     * @param executorParam
-     *          null: use job param
-     *          not null: cover job param
-     */
-    public static void trigger(int jobId, TriggerTypeEnum triggerType, int failRetryCount, String executorShardingParam, String executorParam) {
-        helper.addTrigger(jobId, triggerType, failRetryCount, executorShardingParam, executorParam);
-    }
+	/**
+	 * @param jobId
+	 * @param triggerType
+	 * @param failRetryCount        >=0: use this param
+	 *                              <0: use param from job info config
+	 * @param executorShardingParam
+	 * @param executorParam         null: use job param
+	 *                              not null: cover job param
+	 */
+	public static void trigger(int jobId, TriggerTypeEnum triggerType, int failRetryCount, String executorShardingParam, String executorParam, String flowInstance) {
+		helper.addTrigger(jobId, triggerType, failRetryCount, executorShardingParam, executorParam, flowInstance);
+	}
 
-    public static void toStop() {
-        helper.stop();
-    }
+	public static void toStop() {
+		helper.stop();
+	}
 
 }

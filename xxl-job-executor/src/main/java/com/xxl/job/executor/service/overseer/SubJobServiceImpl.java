@@ -132,6 +132,7 @@ public class SubJobServiceImpl implements SubJobService {
 		xxlJobSubLog.setType(2);
 		xxlJobSubLog.setJobGroup(xxlJobLog.getJobGroup());
 		xxlJobSubLog.setJobId(xxlJobLog.getJobId());
+		xxlJobSubLog.setFlowInstance(xxlJobLog.getFlowInstance());
 		xxlJobSubLog.setIndex(index);
 		if (total != null) {
 			xxlJobSubLog.setTotal(total);

@@ -30,9 +30,10 @@ import java.util.concurrent.TimeUnit;
  */
 public class JobFailMonitorHelper {
 	private static Logger logger = LoggerFactory.getLogger(JobFailMonitorHelper.class);
-	
+
 	private static JobFailMonitorHelper instance = new JobFailMonitorHelper();
-	public static JobFailMonitorHelper getInstance(){
+
+	public static JobFailMonitorHelper getInstance() {
 		return instance;
 	}
 
@@ -40,7 +41,8 @@ public class JobFailMonitorHelper {
 
 	private Thread monitorThread;
 	private volatile boolean toStop = false;
-	public void start(){
+
+	public void start() {
 		monitorThread = new Thread(new Runnable() {
 
 			@Override
@@ -51,7 +53,7 @@ public class JobFailMonitorHelper {
 					try {
 						List<Integer> failLogIds = XxlJobAdminConfig.getAdminConfig().getXxlJobLogDao().findFailJobLogIds(1000);
 						if (CollectionUtils.isNotEmpty(failLogIds)) {
-							for (int failLogId: failLogIds) {
+							for (int failLogId : failLogIds) {
 
 								// lock log
 								int lockRet = XxlJobAdminConfig.getAdminConfig().getXxlJobLogDao().updateAlarmStatus(failLogId, 0, -1);
@@ -63,27 +65,27 @@ public class JobFailMonitorHelper {
 
 								// 1、fail retry monitor
 								if (log.getExecutorFailRetryCount() > 0) {
-									JobTriggerPoolHelper.trigger(log.getJobId(), TriggerTypeEnum.RETRY, (log.getExecutorFailRetryCount()-1), log.getExecutorShardingParam(), null);
-									String retryMsg = "<br><br><span style=\"color:#F39C12;\" > >>>>>>>>>>>"+ I18nUtil.getString("jobconf_trigger_type_retry") +"<<<<<<<<<<< </span><br>";
+									JobTriggerPoolHelper.trigger(log.getJobId(), TriggerTypeEnum.RETRY, (log.getExecutorFailRetryCount() - 1), log.getExecutorShardingParam(), null, log.getFlowInstance());
+									String retryMsg = "<br><br><span style=\"color:#F39C12;\" > >>>>>>>>>>>" + I18nUtil.getString("jobconf_trigger_type_retry") + "<<<<<<<<<<< </span><br>";
 									log.setTriggerMsg(log.getTriggerMsg() + retryMsg);
 									XxlJobAdminConfig.getAdminConfig().getXxlJobLogDao().updateTriggerInfo(log);
 								}
 
 								// 2、fail alarm monitor
-								int newAlarmStatus = 0;		// 告警状态：0-默认、-1=锁定状态、1-无需告警、2-告警成功、3-告警失败
-								if (info!=null &&
+								int newAlarmStatus = 0;        // 告警状态：0-默认、-1=锁定状态、1-无需告警、2-告警成功、3-告警失败
+								if (info != null &&
 										(
-												(info.getAlarmEmail()!=null && info.getAlarmEmail().trim().length()>0)
-												||
-												(info.getAlarmTel() !=null && info.getAlarmTel().trim().length()>0)
+												(info.getAlarmEmail() != null && info.getAlarmEmail().trim().length() > 0)
+														||
+														(info.getAlarmTel() != null && info.getAlarmTel().trim().length() > 0)
 
-										) ){
+										)) {
 									boolean alarmResult = true;
 									try {
-										if(info.getAlarmEmail()!=null && info.getAlarmEmail().trim().length()>0 ) {
+										if (info.getAlarmEmail() != null && info.getAlarmEmail().trim().length() > 0) {
 											alarmResult = failAlarm(info, log);
 										}
-										if(info.getAlarmTel() !=null && info.getAlarmTel().trim().length()>0 && log.getExecutorFailRetryCount() <= 0){
+										if (info.getAlarmTel() != null && info.getAlarmTel().trim().length() > 0 && log.getExecutorFailRetryCount() <= 0) {
 											alarmResult = failSendSms(info, log);
 										}
 
@@ -91,7 +93,7 @@ public class JobFailMonitorHelper {
 										alarmResult = false;
 										logger.error(e.getMessage(), e);
 									}
-									newAlarmStatus = alarmResult?2:3;
+									newAlarmStatus = alarmResult ? 2 : 3;
 								} else {
 									newAlarmStatus = 1;
 								}
@@ -112,7 +114,7 @@ public class JobFailMonitorHelper {
 		monitorThread.start();
 	}
 
-	public void toStop(){
+	public void toStop() {
 		toStop = true;
 		// interrupt and wait
 		monitorThread.interrupt();
@@ -131,11 +133,11 @@ public class JobFailMonitorHelper {
 			"<table border=\"1\" cellpadding=\"3\" style=\"border-collapse:collapse; width:80%;\" >\n" +
 			"   <thead style=\"font-weight: bold;color: #ffffff;background-color: #ff8c00;\" >" +
 			"      <tr>\n" +
-			"         <td width=\"20%\" >"+ I18nUtil.getString("jobinfo_field_jobgroup") +"</td>\n" +
-			"         <td width=\"10%\" >"+ I18nUtil.getString("jobinfo_field_id") +"</td>\n" +
-			"         <td width=\"20%\" >"+ I18nUtil.getString("jobinfo_field_jobdesc") +"</td>\n" +
-			"         <td width=\"10%\" >"+ I18nUtil.getString("jobconf_monitor_alarm_title") +"</td>\n" +
-			"         <td width=\"40%\" >"+ I18nUtil.getString("jobconf_monitor_alarm_content") +"</td>\n" +
+			"         <td width=\"20%\" >" + I18nUtil.getString("jobinfo_field_jobgroup") + "</td>\n" +
+			"         <td width=\"10%\" >" + I18nUtil.getString("jobinfo_field_id") + "</td>\n" +
+			"         <td width=\"20%\" >" + I18nUtil.getString("jobinfo_field_jobdesc") + "</td>\n" +
+			"         <td width=\"10%\" >" + I18nUtil.getString("jobconf_monitor_alarm_title") + "</td>\n" +
+			"         <td width=\"40%\" >" + I18nUtil.getString("jobconf_monitor_alarm_content") + "</td>\n" +
 			"      </tr>\n" +
 			"   </thead>\n" +
 			"   <tbody>\n" +
@@ -143,7 +145,7 @@ public class JobFailMonitorHelper {
 			"         <td>{0}</td>\n" +
 			"         <td>{1}</td>\n" +
 			"         <td>{2}</td>\n" +
-			"         <td>"+ I18nUtil.getString("jobconf_monitor_alarm_type") +"</td>\n" +
+			"         <td>" + I18nUtil.getString("jobconf_monitor_alarm_type") + "</td>\n" +
 			"         <td>{3}</td>\n" +
 			"      </tr>\n" +
 			"   </tbody>\n" +
@@ -157,28 +159,28 @@ public class JobFailMonitorHelper {
 	 *
 	 * @param jobLog
 	 */
-	private boolean failAlarm(XxlJobInfo info, XxlJobLog jobLog){
+	private boolean failAlarm(XxlJobInfo info, XxlJobLog jobLog) {
 		boolean alarmResult = true;
 
 		// send monitor email
-		if (info!=null && info.getAlarmEmail()!=null && info.getAlarmEmail().trim().length()>0) {
+		if (info != null && info.getAlarmEmail() != null && info.getAlarmEmail().trim().length() > 0) {
 
 			String alarmContent = "Alarm Job LogId=" + jobLog.getId();
 			if (jobLog.getTriggerCode() != ReturnT.SUCCESS_CODE) {
 				alarmContent += "<br>TriggerMsg=<br>" + jobLog.getTriggerMsg();
 			}
-			if (jobLog.getHandleCode()>0 && jobLog.getHandleCode() != ReturnT.SUCCESS_CODE) {
+			if (jobLog.getHandleCode() > 0 && jobLog.getHandleCode() != ReturnT.SUCCESS_CODE) {
 				alarmContent += "<br>HandleCode=" + jobLog.getHandleMsg();
 			}
 
 			Set<String> emailSet = new HashSet<String>(Arrays.asList(info.getAlarmEmail().split(",")));
-			for (String email: emailSet) {
+			for (String email : emailSet) {
 				XxlJobGroup group = XxlJobAdminConfig.getAdminConfig().getXxlJobGroupDao().load(Integer.valueOf(info.getJobGroup()));
 
 				String personal = I18nUtil.getString("admin_name_full");
 				String title = I18nUtil.getString("jobconf_monitor");
 				String content = MessageFormat.format(mailBodyTemplate,
-						group!=null?group.getTitle():"null",
+						group != null ? group.getTitle() : "null",
 						info.getId(),
 						info.getJobDesc(),
 						alarmContent);
@@ -211,22 +213,22 @@ public class JobFailMonitorHelper {
 	}
 
 
-	private boolean failSendSms(XxlJobInfo info, XxlJobLog jobLog){
+	private boolean failSendSms(XxlJobInfo info, XxlJobLog jobLog) {
 		boolean alarmResult = true;
 
 		// send monitor email
-		if (info!=null && info.getAlarmTel()!=null && info.getAlarmTel().trim().length()>0) {
+		if (info != null && info.getAlarmTel() != null && info.getAlarmTel().trim().length() > 0) {
 
 
 			Set<String> telSet = new HashSet<String>(Arrays.asList(info.getAlarmTel().split(",")));
 			XxlJobGroup group = XxlJobAdminConfig.getAdminConfig().getXxlJobGroupDao().load(Integer.valueOf(info.getJobGroup()));
 			String content = MessageFormat.format(smsBodyTemplate,
-					group!=null?group.getTitle():"null",
+					group != null ? group.getTitle() : "null",
 					info.getJobDesc(),
 					info.getId(),
 					jobLog.getId());
 
-			for (String tel: telSet) {
+			for (String tel : telSet) {
 
 				// make mail
 				try {

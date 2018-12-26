@@ -10,8 +10,11 @@
 
 		<result column="job_group" property="jobGroup" />
 		<result column="job_id" property="jobId" />
+
 		<result column="index" property="index" />
 		<result column="total" property="total" />
+
+		<result column="flow_instance" property="flowInstance" />
 
 		<result column="executor_address" property="executorAddress" />
 		<result column="executor_handler" property="executorHandler" />
@@ -40,6 +43,7 @@
 		t.job_id,
 		t.index,
 		t.total,
+		t.flow_instance,
 		t.executor_address,
 		t.executor_handler,
 		t.executor_param,
@@ -136,6 +140,7 @@
 			`job_id`,
 			`index`,
 			`total`,
+			`flow_instance`,
 			`executor_address`,
 			`executor_param`,
 			`trigger_time`,
@@ -149,6 +154,7 @@
 			#{jobId},
 			#{index},
 			#{total},
+			#{flowInstance},
 			#{executorAddress},
 			#{executorParam},
 			#{triggerTime},

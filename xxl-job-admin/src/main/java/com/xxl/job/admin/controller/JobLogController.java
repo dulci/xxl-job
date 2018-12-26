@@ -23,10 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import java.text.ParseException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * index controller
@@ -121,15 +118,18 @@ public class JobLogController {
 	@RequestMapping("/subjobTable")
 	public Map<String, Object> subjobTable(@RequestParam("logId") Integer logId, @RequestParam(required = false, defaultValue = "0") int start,
 	                                       @RequestParam(required = false, defaultValue = "10") int length) {
+		Map<String, Object> maps = new HashMap<String, Object>();
 		XxlJobLog jobLog = xxlJobLogDao.load(logId);
 		if (jobLog == null) {
-			throw new RuntimeException(I18nUtil.getString("joblog_logid_unvalid"));
+			maps.put("recordsTotal", 0);        // 总记录数
+			maps.put("recordsFiltered", 0);    // 过滤后的总记录数
+			maps.put("data", new ArrayList<XxlJobLog>());
+			return maps;
 		}
 		List<XxlJobLog> list = xxlJobLogDao.loadByParentId(start, length, logId);
 		int list_count = xxlJobLogDao.countByParentId(logId);
 
 		// package result
-		Map<String, Object> maps = new HashMap<String, Object>();
 		maps.put("recordsTotal", list_count);        // 总记录数
 		maps.put("recordsFiltered", list_count);    // 过滤后的总记录数
 		maps.put("data", list);                    // 分页列表

@@ -234,7 +234,7 @@ public class JobFailMonitorHelper {
 				try {
 					XxlJobAdminConfig xxlJobAdminConfig = XxlJobAdminConfig.getAdminConfig();
 
-					SMSSendUtil.sendISMS(xxlJobAdminConfig.getSmsPassword(), xxlJobAdminConfig.getSmsPassword(), tel, content);
+					SMSSendUtil.sendISMS(xxlJobAdminConfig.getSmsUserName(), xxlJobAdminConfig.getSmsPassword(), tel, content);
 					//XxlJobAdminConfig.getAdminConfig().getMailSender().send(mimeMessage);
 				} catch (Exception e) {
 					logger.error(">>>>>>>>>>> job monitor alarm tel send error, JobLogId:{}", jobLog.getId(), e);

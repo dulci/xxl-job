@@ -11,6 +11,13 @@
 
 	<artifactId>xxl-job-api</artifactId>
 
+	<distributionManagement>
+		<repository>
+			<id>glodon</id>
+			<url>http://caijia-maven.glodon.com/nexus/content/repositories/membercenter</url>
+		</repository>
+	</distributionManagement>
+
 	<dependencies>
 		<!-- Dubbo -->
 		<dependency>

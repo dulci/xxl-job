@@ -304,11 +304,13 @@
 		FROM
 		XXL_JOB_QRTZ_TRIGGER_LOG
 		WHERE
-		flow_instance = #{log.flowInstance}
+			flow_instance = #{log.flowInstance}
 		and
-		job_id in
-		<foreach collection="jobList" item="job" open="(" separator="," close=")">
-			#{job.id}
+			type = 1
+		and
+			job_id in
+			<foreach collection="jobList" item="job" open="(" separator="," close=")">
+				#{job.id}
 		</foreach>
 	</select>
 	

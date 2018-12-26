@@ -130,7 +130,7 @@
 		<dependency>
 			<groupId>glodon.member.center</groupId>
 			<artifactId>member-center-util</artifactId>
-			<version>1.5.7</version>
+			<version>1.0.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 

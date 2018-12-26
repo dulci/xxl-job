@@ -51,7 +51,7 @@ public class RabbitMQJobHandler extends IJobHandler {
 			XxlJobLogger.log(e);
 			return FAIL;
 		}
-		return PROCESS;
+		return NO_START;
 	}
 
 }

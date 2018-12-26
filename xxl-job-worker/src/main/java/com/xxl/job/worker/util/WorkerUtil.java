@@ -30,6 +30,10 @@ public class WorkerUtil {
 
 	private static Logger logger = LoggerFactory.getLogger(WorkerUtil.class);
 
+	public BoundWorkerUtil boundWorkerUtil(Integer taskInstanceId) {
+		return new BoundWorkerUtil(taskInstanceId, this);
+	}
+
 	/**
 	 * Log Report 日志汇报
 	 *
@@ -58,11 +62,11 @@ public class WorkerUtil {
 	 * Schedule Report 进度汇报
 	 *
 	 * @param taskInstanceId 任务实例ID
-	 * @param persent        百分比
+	 * @param percent        百分比
 	 * @return 0：继续执行，1：中止
 	 */
-	public Integer reportPersent(Integer taskInstanceId, Double persent) {
-		return scheduleApi.report(taskInstanceId, persent);
+	public Integer reportPercent(Integer taskInstanceId, Double percent) {
+		return scheduleApi.report(taskInstanceId, percent);
 	}
 
 	/**

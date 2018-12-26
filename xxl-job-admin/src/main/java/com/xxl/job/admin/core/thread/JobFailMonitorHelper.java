@@ -169,7 +169,7 @@ public class JobFailMonitorHelper {
 			if (jobLog.getTriggerCode() != ReturnT.SUCCESS_CODE) {
 				alarmContent += "<br>TriggerMsg=<br>" + jobLog.getTriggerMsg();
 			}
-			if (jobLog.getHandleCode() > 0 && jobLog.getHandleCode() != ReturnT.SUCCESS_CODE) {
+			if (jobLog.getHandleCode() !=null && jobLog.getHandleCode() > 0 && jobLog.getHandleCode() != ReturnT.SUCCESS_CODE) {
 				alarmContent += "<br>HandleCode=" + jobLog.getHandleMsg();
 			}
 
@@ -234,7 +234,7 @@ public class JobFailMonitorHelper {
 				try {
 					XxlJobAdminConfig xxlJobAdminConfig = XxlJobAdminConfig.getAdminConfig();
 
-					SMSSendUtil.sendISMS(xxlJobAdminConfig.getSmsPassword(), xxlJobAdminConfig.getSmsPassword(), tel, content);
+					SMSSendUtil.sendISMS(xxlJobAdminConfig.getSmsUserName(), xxlJobAdminConfig.getSmsPassword(), tel, content);
 					//XxlJobAdminConfig.getAdminConfig().getMailSender().send(mimeMessage);
 				} catch (Exception e) {
 					logger.error(">>>>>>>>>>> job monitor alarm tel send error, JobLogId:{}", jobLog.getId(), e);

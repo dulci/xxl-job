@@ -181,7 +181,7 @@ CREATE TABLE `XXL_JOB_QRTZ_TRIGGER_LOG` (
   `job_id` int(11) NOT NULL COMMENT '任务，主键ID',
   `index` int(11) DEFAULT NULL,
   `total` int(11) DEFAULT NULL,
-  `flow_instance` int(11) DEFAULT NULL,
+  `flow_instance` VARCHAR (20) DEFAULT NULL,
   `executor_address` varchar(255) DEFAULT NULL COMMENT '执行器地址，本次执行的地址',
   `executor_handler` varchar(255) DEFAULT NULL COMMENT '执行器任务handler',
   `executor_param` varchar(512) DEFAULT NULL COMMENT '执行器任务参数',

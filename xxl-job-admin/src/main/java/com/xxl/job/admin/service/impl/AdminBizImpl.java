@@ -67,30 +67,30 @@ public class AdminBizImpl implements AdminBiz {
 			if (xxlJobInfo != null && StringUtils.isNotBlank(xxlJobInfo.getChildJobId())) {
 				callbackMsg = "<br><br><span style=\"color:#00c0ef;\" > >>>>>>>>>>>" + I18nUtil.getString("jobconf_trigger_child_run") + "<<<<<<<<<<< </span><br>";
 
-                String[] childJobIds = xxlJobInfo.getChildJobId().split(",");
-                for (int i = 0; i < childJobIds.length; i++) {
-                    int childJobId = (StringUtils.isNotBlank(childJobIds[i]) && StringUtils.isNumeric(childJobIds[i]))?Integer.valueOf(childJobIds[i]):-1;
-                    if (childJobId > 0) {
+				String[] childJobIds = xxlJobInfo.getChildJobId().split(",");
+				for (int i = 0; i < childJobIds.length; i++) {
+					int childJobId = (StringUtils.isNotBlank(childJobIds[i]) && StringUtils.isNumeric(childJobIds[i])) ? Integer.valueOf(childJobIds[i]) : -1;
+					if (childJobId > 0) {
 
-                        //查询子任务的后置任务
-                        if(checkChildJobExecute(log,childJobId)) {
+						//查询子任务的后置任务
+						if (checkChildJobExecute(log, childJobId)) {
 
-                            JobTriggerPoolHelper.trigger(childJobId, TriggerTypeEnum.PARENT, -1, null, null,log.getFlowInstance());
-                            ReturnT<String> triggerChildResult = ReturnT.SUCCESS;
+							JobTriggerPoolHelper.trigger(childJobId, TriggerTypeEnum.PARENT, -1, null, null, log.getFlowInstance());
+							ReturnT<String> triggerChildResult = ReturnT.SUCCESS;
 
-                            // add msg
-                            callbackMsg += MessageFormat.format(I18nUtil.getString("jobconf_callback_child_msg1"),
-                                    (i + 1),
-                                    childJobIds.length,
-                                    childJobIds[i],
-                                    (triggerChildResult.getCode() == ReturnT.SUCCESS_CODE ? I18nUtil.getString("system_success") : I18nUtil.getString("system_fail")),
-                                    triggerChildResult.getMsg());
-                        }else{
-                            callbackMsg += MessageFormat.format(I18nUtil.getString("jobconf_callback_child_msg3"),
-                                    (i+1),
-                                    childJobIds.length,
-                                    childJobIds[i]);
-                        }
+							// add msg
+							callbackMsg += MessageFormat.format(I18nUtil.getString("jobconf_callback_child_msg1"),
+									(i + 1),
+									childJobIds.length,
+									childJobIds[i],
+									(triggerChildResult.getCode() == ReturnT.SUCCESS_CODE ? I18nUtil.getString("system_success") : I18nUtil.getString("system_fail")),
+									triggerChildResult.getMsg());
+						} else {
+							callbackMsg += MessageFormat.format(I18nUtil.getString("jobconf_callback_child_msg3"),
+									(i + 1),
+									childJobIds.length,
+									childJobIds[i]);
+						}
 
 					} else {
 						callbackMsg += MessageFormat.format(I18nUtil.getString("jobconf_callback_child_msg2"),

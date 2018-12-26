@@ -193,6 +193,7 @@
 			XXL_JOB_QRTZ_TRIGGER_INFO
 		where
 			child_jobid regexp  #{jobidRegexp}
+
 			and
 			id != #{id}
 	</select>

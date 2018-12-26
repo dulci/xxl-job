@@ -75,7 +75,6 @@ public class AdminBizImpl implements AdminBiz {
                         //查询子任务的后置任务
                         if(checkChildJobExecute(log,childJobId)) {
 
-
                             JobTriggerPoolHelper.trigger(childJobId, TriggerTypeEnum.PARENT, -1, null, null);
                             ReturnT<String> triggerChildResult = ReturnT.SUCCESS;
 

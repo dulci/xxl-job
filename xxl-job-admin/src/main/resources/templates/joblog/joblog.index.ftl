@@ -85,6 +85,7 @@
 				                <thead>
 					            	<tr>
                                         <th name="jobId" >${I18n.jobinfo_field_id}</th>
+                                        <th name="id" >id</th>
                                         <th name="jobGroup" >jobGroup</th>
 										<#--<th name="executorAddress" >执行器地址</th>
 										<th name="glueType" >运行模式</th>
@@ -95,6 +96,7 @@
 					                  	<th name="handleTime" >${I18n.joblog_field_handleTime}</th>
 					                  	<th name="handleCode" >${I18n.joblog_field_handleCode}</th>
 					                  	<th name="handleMsg" >${I18n.joblog_field_handleMsg}</th>
+                                        <th name="finishTime" >${I18n.joblog_field_finishTime}</th>
 					                  	<th name="handleMsg" >${I18n.system_opt}</th>
 					                </tr>
 				                </thead>

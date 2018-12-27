@@ -31,7 +31,7 @@ public class WorkerUtil {
 	private static Logger logger = LoggerFactory.getLogger(WorkerUtil.class);
 
 	public BoundWorkerUtil boundWorkerUtil(Integer taskInstanceId) {
-		return new BoundWorkerUtil(taskInstanceId, this);
+		return BoundWorkerUtil.getInstance(taskInstanceId, this);
 	}
 
 	/**

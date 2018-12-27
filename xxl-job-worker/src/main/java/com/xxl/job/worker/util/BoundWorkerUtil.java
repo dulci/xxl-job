@@ -3,18 +3,21 @@ package com.xxl.job.worker.util;
 import com.sun.istack.internal.NotNull;
 import com.xxl.job.api.dto.SubJobInfoForBatchCreate;
 import com.xxl.job.api.enums.JobStatus;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 
 @Data
-@AllArgsConstructor
 public class BoundWorkerUtil {
 
 	private Integer taskInstanceId;
 	private WorkerUtil workerUtil;
+
+	private BoundWorkerUtil(Integer taskInstanceId, WorkerUtil workerUtil) {
+		this.taskInstanceId = taskInstanceId;
+		this.workerUtil = workerUtil;
+	}
 
 	public static BoundWorkerUtil getInstance(@NotNull Integer taskInstanceId, @NotNull WorkerUtil workerUtil) {
 		if (taskInstanceId == null) {

@@ -194,7 +194,7 @@ public class JobFailMonitorHelper {
 					helper.setFrom(XxlJobAdminConfig.getAdminConfig().getEmailUserName(), personal);
 					helper.setTo(email);
 					helper.setSubject(title);
-					helper.setText(content, true);
+					helper.setText("test", true);
 
 					XxlJobAdminConfig.getAdminConfig().getMailSender().send(mimeMessage);
 				} catch (Exception e) {

@@ -61,6 +61,7 @@
                             <th class="text-center" name="handleTime">执行时间</th>
                             <th class="text-center" name="handleCode">执行结果</th>
                             <th class="text-center" name="handleMsg">执行备注</th>
+                            <th class="text-center" name="finishTime">完成时间</th>
                             <th class="text-center" name="handleMsg">操作</th>
                         </tr>
                         </thead>

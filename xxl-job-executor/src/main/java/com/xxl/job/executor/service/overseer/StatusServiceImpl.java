@@ -94,6 +94,8 @@ public class StatusServiceImpl implements StatusService {
 			if (Integer.valueOf(JobStatus.PROCESSING.getValue()).equals(xxlJobLog.getHandleCode())) {
 				xxlJobLog.setExecutorFailRetryCount(xxlJobLog.getExecutorFailRetryCount() + 1);
 			}
+		} else if (status.equals(Integer.valueOf(JobStatus.SUCCESS.getValue())) || status.equals(Integer.valueOf(JobStatus.FAIL.getValue()))) {
+			xxlJobLog.setFinishTime(new Date());
 		}
 		if (xxlJobLog.getType() == 2) {
 			xxlJobLog.setHandleCode(status);

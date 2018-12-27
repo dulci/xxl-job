@@ -29,6 +29,7 @@
 	    <result column="handle_time" property="handleTime" />
 	    <result column="handle_code" property="handleCode" />
 	    <result column="handle_msg" property="handleMsg" />
+		<result column="finish_time" property="finishTime" />
 
 		<result column="persent" property="persent" />
 
@@ -55,6 +56,7 @@
 		t.handle_time,
 		t.handle_code,
 		t.handle_msg,
+		t.finish_time,
 		t.persent,
 		t.alarm_status
 	</sql>
@@ -179,6 +181,7 @@
 			`handle_time`= #{handleTime},
 			`handle_code`= #{handleCode},
 			`handle_msg`= #{handleMsg},
+			`finish_time` = #{finishTime},
 			`persent`= #{persent}
 		WHERE `id`= #{id}
 	</update>

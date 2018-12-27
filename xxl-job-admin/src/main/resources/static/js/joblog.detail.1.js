@@ -63,7 +63,7 @@ $(function () {
             },
             {
                 "data": 'triggerCode',
-                "width": '10%',
+                "width": '5%',
                 "render": function (data, type, row) {
                     var html = data;
                     if (data == 200) {
@@ -80,7 +80,7 @@ $(function () {
             },
             {
                 "data": 'triggerMsg',
-                "width": '10%',
+                "width": '5%',
                 "render": function (data, type, row) {
                     return data ? '<a class="logTips" href="javascript:;" >' + I18n.system_show + '<span style="display:none;">' + data + '</span></a>' : I18n.system_empty;
                 }
@@ -94,7 +94,7 @@ $(function () {
             },
             {
                 "data": 'handleCode',
-                "width": '15%',
+                "width": '20%',
                 "render": function (data, type, row) {
                     var html = data;
                     if (data == 100) {
@@ -113,9 +113,16 @@ $(function () {
             },
             {
                 "data": 'handleMsg',
-                "width": '10%',
+                "width": '5%',
                 "render": function (data, type, row) {
                     return data ? '<a class="logTips" href="javascript:;" >' + I18n.system_show + '<span style="display:none;">' + data + '</span></a>' : I18n.system_empty;
+                }
+            },
+            {
+                "data": 'finishTime',
+                "width": '12%',
+                "render": function (data, type, row) {
+                    return data ? moment(new Date(data)).format("YYYY-MM-DD HH:mm:ss") : "";
                 }
             },
             {

@@ -68,5 +68,6 @@ public interface XxlJobLogDao {
 
 	int selectSuccessCount(@Param("log") XxlJobLog xxlJobLog,
 						   @Param("jobList") List<XxlJobInfo> jobList);
+	List<Integer> findDealthJobLogIds(@Param("pagesize") int pagesize);
 
 }

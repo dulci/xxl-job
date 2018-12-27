@@ -151,7 +151,7 @@ public class JobFailMonitorHelper {
 			"   </tbody>\n" +
 			"</table>";
 
-	private static final String smsBodyTemplate = "执行器：{0}任务描述：{1},任务id：{2},日志id:{3}";
+	private static final String smsBodyTemplate = "任务[{0}][{1}][{2}]执行失败";
 
 
 	/**
@@ -169,7 +169,7 @@ public class JobFailMonitorHelper {
 			if (jobLog.getTriggerCode() != ReturnT.SUCCESS_CODE) {
 				alarmContent += "<br>TriggerMsg=<br>" + jobLog.getTriggerMsg();
 			}
-			if (jobLog.getHandleCode() !=null && jobLog.getHandleCode() > 0 && jobLog.getHandleCode() != ReturnT.SUCCESS_CODE) {
+			if (jobLog.getHandleCode() != null && jobLog.getHandleCode() > 0 && jobLog.getHandleCode() != ReturnT.SUCCESS_CODE) {
 				alarmContent += "<br>HandleCode=" + jobLog.getHandleMsg();
 			}
 
@@ -223,9 +223,8 @@ public class JobFailMonitorHelper {
 			Set<String> telSet = new HashSet<String>(Arrays.asList(info.getAlarmTel().split(",")));
 			XxlJobGroup group = XxlJobAdminConfig.getAdminConfig().getXxlJobGroupDao().load(Integer.valueOf(info.getJobGroup()));
 			String content = MessageFormat.format(smsBodyTemplate,
-					group != null ? group.getTitle() : "null",
-					info.getJobDesc(),
 					info.getId(),
+					info.getJobDesc(),
 					jobLog.getId());
 
 			for (String tel : telSet) {

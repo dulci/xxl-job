@@ -1,20 +1,24 @@
 package com.xxl.job.admin.core.util;
 
+import com.xxl.job.admin.core.conf.XxlJobAdminConfig;
 import org.I0Itec.zkclient.IZkDataListener;
 import org.I0Itec.zkclient.ZkClient;
 import org.I0Itec.zkclient.exception.ZkNodeExistsException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 
-public class ZkDistributeLock implements Lock {
+public class ZkDistributeLock implements Lock  {
 	private static Logger logger = LoggerFactory.getLogger(ZkDistributeLock.class);
 
-	private static final String ZK_IP_PORT = "192.168.133.176:2181";
+	private static final String ZK_IP_PORT = XxlJobAdminConfig.getAdminConfig().getZookeeperAddress();
 	private static final String LOCK_NODE = "/lock/";
 
 	private ZkClient client = new ZkClient(ZK_IP_PORT);
@@ -102,4 +106,6 @@ public class ZkDistributeLock implements Lock {
 	private String getKey(){
 		return "/"+this.lockKey;
 	}
+
+
 }

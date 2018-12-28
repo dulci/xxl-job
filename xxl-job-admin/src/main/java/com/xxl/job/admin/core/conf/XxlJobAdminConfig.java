@@ -50,7 +50,8 @@ public class XxlJobAdminConfig implements InitializingBean{
     @Value("${xxl.job.sms.password}")
     private String smsPassword;
     // dao, service
-
+    @Value("${zookeeper.address}")
+    private String zookeeperAddress;
     @Resource
     private XxlJobLogDao xxlJobLogDao;
     @Resource
@@ -122,5 +123,13 @@ public class XxlJobAdminConfig implements InitializingBean{
 
     public void setSmsPassword(String smsPassword) {
         this.smsPassword = smsPassword;
+    }
+
+    public String getZookeeperAddress() {
+        return zookeeperAddress;
+    }
+
+    public void setZookeeperAddress(String zookeeperAddress) {
+        this.zookeeperAddress = zookeeperAddress;
     }
 }

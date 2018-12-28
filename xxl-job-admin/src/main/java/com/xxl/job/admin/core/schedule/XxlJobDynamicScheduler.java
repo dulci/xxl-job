@@ -3,6 +3,7 @@ package com.xxl.job.admin.core.schedule;
 import com.xxl.job.admin.core.conf.XxlJobAdminConfig;
 import com.xxl.job.admin.core.jobbean.RemoteHttpJobBean;
 import com.xxl.job.admin.core.model.XxlJobInfo;
+import com.xxl.job.admin.core.thread.JobDeathLineMonitorHelper;
 import com.xxl.job.admin.core.thread.JobFailMonitorHelper;
 import com.xxl.job.admin.core.thread.JobRegistryMonitorHelper;
 import com.xxl.job.admin.core.thread.JobTriggerPoolHelper;
@@ -58,6 +59,8 @@ public final class XxlJobDynamicScheduler {
 
         // admin registry monitor run
         JobRegistryMonitorHelper.getInstance().start();
+        //addmin 超时monitor run
+        JobDeathLineMonitorHelper.getInstance().start();
 
         // admin monitor run
         JobFailMonitorHelper.getInstance().start();

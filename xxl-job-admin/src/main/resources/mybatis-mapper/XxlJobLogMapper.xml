@@ -208,6 +208,7 @@
 			`trigger_time`= #{triggerTime},
 			`trigger_code`= #{triggerCode},
 			`trigger_msg`= #{triggerMsg},
+			`death_line`= #{deathLine},
 			`executor_address`= #{executorAddress},
 			`executor_handler`=#{executorHandler},
 			`executor_param`= #{executorParam},
@@ -286,9 +287,11 @@
 	<select id="findFailJobLogIds" resultType="int" >
 		SELECT id FROM `XXL_JOB_QRTZ_TRIGGER_LOG`
 		WHERE
+				(
 				trigger_code in (500, 502)
-			OR
+					OR
 				handle_code in (500, 502)
+				)
 			AND
 				`alarm_status` = 0
 			and type = 1
@@ -319,5 +322,21 @@
 				#{job.id}
 		</foreach>
 	</select>
-	
+	<select id="findDealthJobLogIds" resultType="int" >
+		SELECT
+			id
+		FROM
+			`XXL_JOB_QRTZ_TRIGGER_LOG`
+		WHERE
+			trigger_code = 200
+		and
+			handle_code not in (200,500,502)
+		AND
+		`alarm_status` = 0
+		and type = 1
+		and death_line <![CDATA[ <  ]]> now()
+		ORDER BY id ASC
+	</select>
+
+
 </mapper>

@@ -50,4 +50,6 @@ public class XxlJobLog {
 	// alarm info
 	private Integer alarmStatus;
 
+	private Date deathLine;
+
 }

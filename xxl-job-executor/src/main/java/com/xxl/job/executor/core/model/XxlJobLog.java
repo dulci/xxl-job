@@ -13,7 +13,7 @@ import java.util.Date;
 public class XxlJobLog {
 
 	private int id;
-	private int parentId;
+	private Integer parentId;
 	private int type;
 
 	// job info
@@ -42,9 +42,10 @@ public class XxlJobLog {
 	private Date handleTime;
 	private int handleCode;
 	private String handleMsg;
+	private Integer continueProcessStrategy;
 	private Date finishTime;
 
-	private Double persent;
+	private Double percent;
 
 	// alarm info
 	private int alarmStatus;

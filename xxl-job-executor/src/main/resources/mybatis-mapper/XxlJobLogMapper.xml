@@ -29,9 +29,10 @@
 	    <result column="handle_time" property="handleTime" />
 	    <result column="handle_code" property="handleCode" />
 	    <result column="handle_msg" property="handleMsg" />
+		<result column="continue_process_strategy" property="continueProcessStrategy" />
 		<result column="finish_time" property="finishTime" />
 
-		<result column="persent" property="persent" />
+		<result column="percent" property="percent" />
 
 		<result column="alarm_status" property="alarmStatus" />
 	</resultMap>
@@ -56,8 +57,9 @@
 		t.handle_time,
 		t.handle_code,
 		t.handle_msg,
+		t.continue_process_strategy,
 		t.finish_time,
-		t.persent,
+		t.percent,
 		t.alarm_status
 	</sql>
 	
@@ -148,7 +150,8 @@
 			`trigger_time`,
 			`trigger_code`,
 			`trigger_msg`,
-			`handle_code`
+			`handle_code`,
+			`continue_process_strategy`
 		) VALUES (
 			#{parentId},
 			#{type},
@@ -162,7 +165,8 @@
 			#{triggerTime},
 			#{triggerCode},
 			#{triggerMsg},
-			#{handleCode}
+			#{handleCode},
+			#{continueProcessStrategy}
 		);
 	</insert>
 
@@ -182,7 +186,7 @@
 			`handle_code`= #{handleCode},
 			`handle_msg`= #{handleMsg},
 			`finish_time` = #{finishTime},
-			`persent`= #{persent}
+			`percent`= #{percent}
 		WHERE `id`= #{id}
 	</update>
 
@@ -277,7 +281,7 @@
 		ORDER BY id ASC
 	</select>
 
-	<update id="updateTotalByPersentId">
+	<update id="updateTotalByPercentId">
 		UPDATE
 			XXL_JOB_QRTZ_TRIGGER_LOG
 		SET
@@ -297,17 +301,17 @@
 			`alarm_status` = #{oldAlarmStatus}
 	</update>
 
-	<update id="updatePersent">
+	<update id="updatePercent">
 		UPDATE
 			XXL_JOB_QRTZ_TRIGGER_LOG
 		SET
-			`persent` = #{persent}
+			`percent` = #{percent}
 		WHERE
 			`id`= #{logId}
 			AND
-			(`persent` <![CDATA[<]]> #{persent}
+			(`percent` <![CDATA[<]]> #{percent}
 			OR
-			`persent` is null)
+			`percent` is null)
 	</update>
 	
 </mapper>

@@ -30,19 +30,19 @@ public class ScheduleServiceImpl implements ScheduleService {
 	 *
 	 * @param taskInstanceId 任务实例ID
 	 * @param ip             ip
-	 * @param persent        百分比
+	 * @param percent        百分比
 	 * @return 0：继续执行，1：中止
 	 */
 	@Override
-	public Integer report(Integer taskInstanceId, String ip, Double persent) {
+	public Integer report(Integer taskInstanceId, String ip, Double percent) {
 		StringBuffer stringBuffer = new StringBuffer();
-		stringBuffer.append(DateUtil.format(new Date())).append(" recieve schedule report ").append("[" + taskInstanceId + "]").append("[" + ip + "]").append(" ").append(persent);
+		stringBuffer.append(DateUtil.format(new Date())).append(" recieve schedule report ").append("[" + taskInstanceId + "]").append("[" + ip + "]").append(" ").append(percent);
 		this.log.info(stringBuffer.toString());
 		String logFileName = XxlJobFileAppender.makeLogFileName(new Date(), taskInstanceId);
 		XxlJobFileAppender.contextHolder.set(logFileName);
-		XxlJobLogger.log("ip:{} , task current persent is :{}", ip, persent);
+		XxlJobLogger.log("ip:{} , task current percent is :{}", ip, percent);
 
-		xxlJobLogDao.updatePersent(taskInstanceId, persent);
+		xxlJobLogDao.updatePercent(taskInstanceId, percent);
 
 		// TODO
 		// 策略1：存在失败就停止

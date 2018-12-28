@@ -185,7 +185,7 @@ CREATE TABLE `XXL_JOB_QRTZ_TRIGGER_LOG` (
   `handle_code` int(11) DEFAULT '0' COMMENT '执行-状态',
   `handle_msg` text COMMENT '执行-日志',
   `finish_time` datetime DEFAULT NULL COMMENT '完成时间',
-  `persent` double(5,2) DEFAULT '0.00',
+  `percent` double(5,2) DEFAULT '0.00',
   `alarm_status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '告警状态：0-默认、1-无需告警、2-告警成功、3-告警失败',
   PRIMARY KEY (`id`),
   KEY `I_trigger_time` (`trigger_time`),

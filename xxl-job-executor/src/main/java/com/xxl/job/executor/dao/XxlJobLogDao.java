@@ -56,14 +56,14 @@ public interface XxlJobLogDao {
 
 	public List<Integer> findFailJobLogIds(@Param("pagesize") int pagesize);
 
-	public int updateTotalByPersentId(@Param("parentId") int parentId,
+	public int updateTotalByPercentId(@Param("parentId") int parentId,
 	                                  @Param("total") Integer total);
 
 	public int updateAlarmStatus(@Param("logId") int logId,
 	                             @Param("oldAlarmStatus") int oldAlarmStatus,
 	                             @Param("newAlarmStatus") int newAlarmStatus);
 
-	public int updatePersent(@Param("logId") int logId,
-	                         @Param("persent") Double persent);
+	public int updatePercent(@Param("logId") int logId,
+	                         @Param("percent") Double percent);
 
 }

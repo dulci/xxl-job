@@ -41,7 +41,7 @@ public class SubJobServiceImpl implements SubJobService {
 	public Integer create(Integer mainTaskInstanceId, String ip, Integer index) {
 		StringBuffer stringBuffer = new StringBuffer();
 		stringBuffer.append(DateUtil.format(new Date())).append(" recieve subjob creating application ").append("[" + mainTaskInstanceId + "]").append("[" + ip + "]").append(" ").append(index);
-		this.log.info(stringBuffer.toString());
+		log.info(stringBuffer.toString());
 
 		return create(mainTaskInstanceId, ip, index, null);
 	}
@@ -55,7 +55,7 @@ public class SubJobServiceImpl implements SubJobService {
 	@Override
 	public Integer createFinish(Integer mainTaskInstanceId) {
 		Integer total = xxlJobLogDao.selectCountByParentId(mainTaskInstanceId, null);
-		xxlJobLogDao.updateTotalByPersentId(mainTaskInstanceId, total);
+		xxlJobLogDao.updateTotalByPercentId(mainTaskInstanceId, total);
 		return 0;
 	}
 
@@ -72,7 +72,7 @@ public class SubJobServiceImpl implements SubJobService {
 	public Integer create(Integer mainTaskInstanceId, String ip, Integer index, Integer total) {
 		StringBuffer stringBuffer = new StringBuffer();
 		stringBuffer.append(DateUtil.format(new Date())).append(" recieve subjob creating application ").append("[" + mainTaskInstanceId + "]").append("[" + ip + "]").append(" ").append(index).append(" ").append(total);
-		this.log.info(stringBuffer.toString());
+		log.info(stringBuffer.toString());
 
 		XxlJobLog xxlJobLog = xxlJobLogDao.load(mainTaskInstanceId);
 		if (xxlJobLog == null) {
@@ -93,7 +93,7 @@ public class SubJobServiceImpl implements SubJobService {
 	public List<SubJobInfoForBatchCreate> batchCreate(Integer mainTaskInstanceId, String ip, Integer total) {
 		StringBuffer stringBuffer = new StringBuffer();
 		stringBuffer.append(DateUtil.format(new Date())).append(" recieve subjob batch creating application ").append("[" + mainTaskInstanceId + "]").append("[" + ip + "]").append(" ").append(total);
-		this.log.info(stringBuffer.toString());
+		log.info(stringBuffer.toString());
 
 		List<SubJobInfoForBatchCreate> result = new ArrayList<>();
 		XxlJobLog xxlJobLog = xxlJobLogDao.load(mainTaskInstanceId);
@@ -116,13 +116,18 @@ public class SubJobServiceImpl implements SubJobService {
 	public Integer isContinueProcess(Integer taskInstanceId) {
 		StringBuffer stringBuffer = new StringBuffer();
 		stringBuffer.append(DateUtil.format(new Date())).append(" recieve subjob continuing asking ").append("[" + taskInstanceId + "]");
-		this.log.info(stringBuffer.toString());
+		log.info(stringBuffer.toString());
 
 		// TODO
-		// 策略1：存在失败就停止
-		// 策略2：存在多少个失败停止
-		// 策略3：大于多少百分比失败停止
-		// 策略4：永不停止
+		XxlJobLog xxlJobSubLog = xxlJobLogDao.load(taskInstanceId);
+		if (xxlJobSubLog != null && xxlJobSubLog.getParentId() != null) {
+			// 策略1：存在失败就停止
+			xxlJobLogDao.selectCountByParentId(xxlJobSubLog.getParentId(), Integer.valueOf(JobStatus.FAIL.getValue()));
+
+			// 策略2：存在多少个失败停止
+			// 策略3：大于多少百分比失败停止
+			// 策略4：永不停止
+		}
 		return 0;
 	}
 

@@ -20,25 +20,25 @@ public class ScheduleApi {
 	 * Schedule Report 进度汇报
 	 *
 	 * @param taskInstanceId 任务实例ID
-	 * @param persent        百分比
+	 * @param percent        百分比
 	 * @return 0：继续执行，1：中止
 	 */
-	public Integer report(Integer taskInstanceId, Double persent) {
+	public Integer report(Integer taskInstanceId, Double percent) {
 		if (StringUtils.isEmpty(taskInstanceId)) {
 			log.error("taskInstanceId can not be empty");
 			return -1;
 		}
-		if (persent == null) {
-			log.error("persent can not be empty");
+		if (percent == null) {
+			log.error("percent can not be empty");
 			return -1;
 		}
-		if (persent < 0.0 || persent > 100.0) {
-			log.error("persent must be bwteen 0.0 and 100.0");
+		if (percent < 0.0 || percent > 100.0) {
+			log.error("percent must be bwteen 0.0 and 100.0");
 			return -1;
 		}
 		Integer status = -1;
 		try {
-			status = scheduleService.report(taskInstanceId, IpUtil.getIp(), persent);
+			status = scheduleService.report(taskInstanceId, IpUtil.getIp(), percent);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

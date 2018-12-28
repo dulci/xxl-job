@@ -53,7 +53,7 @@ public class StatusServiceImpl implements StatusService {
 		jobDataUpdate(xxlJobLog, status, ip, msg);
 
 		// 更新主任务进度及状态
-		MainJobCallbackInfo mainJobCallbackInfo = updateMainJobPersentAndStatus(xxlJobLog, status);
+		MainJobCallbackInfo mainJobCallbackInfo = updateMainJobPercentAndStatus(xxlJobLog, status);
 
 		// 主任务状态通知Admin
 		if (!mainJobCallbackInfo.getStatus().equals(JobStatus.UNSTARTED) && mainJobCallbackInfo.getTaskInstanceId() != null) {
@@ -101,7 +101,7 @@ public class StatusServiceImpl implements StatusService {
 			xxlJobLog.setHandleCode(status);
 		}
 		if (status.equals(Integer.valueOf(JobStatus.SUCCESS.getValue()))) {
-			xxlJobLog.setPersent(100.0);
+			xxlJobLog.setPercent(100.0);
 		}
 		xxlJobLogDao.updateTriggerInfo(xxlJobLog);
 	}
@@ -109,7 +109,7 @@ public class StatusServiceImpl implements StatusService {
 	/**
 	 * 更新主任务进度及状态
 	 */
-	private MainJobCallbackInfo updateMainJobPersentAndStatus(XxlJobLog xxlJobLog, Integer status) {
+	private MainJobCallbackInfo updateMainJobPercentAndStatus(XxlJobLog xxlJobLog, Integer status) {
 		MainJobCallbackInfo result = new MainJobCallbackInfo();
 		XxlJobLog mainJobLog = xxlJobLogDao.load(xxlJobLog.getParentId());
 		if (xxlJobLog.getType() == 1) {//主任务汇报
@@ -121,11 +121,11 @@ public class StatusServiceImpl implements StatusService {
 				total = xxlJobLogDao.selectCountByParentId(xxlJobLog.getParentId(), null);
 			}
 			Integer finish = xxlJobLogDao.selectCountByParentId(xxlJobLog.getParentId(), Integer.valueOf(JobStatus.SUCCESS.getValue()));
-			Double persent = (Double.valueOf(finish)) / Double.valueOf(total) * 100.0;
+			Double percent = (Double.valueOf(finish)) / Double.valueOf(total) * 100.0;
 
 			if (mainJobLog != null) {
 				// 更新主任务进度
-				mainJobLog.setPersent(persent);
+				mainJobLog.setPercent(percent);
 
 				// 更新主任务状态(只更新不是子任务的主任务的状态)
 				if ((finish == total) && mainJobLog.getType() == 2) {
@@ -136,7 +136,7 @@ public class StatusServiceImpl implements StatusService {
 				if (finish == total) {
 					if (mainJobLog.getType() == 2) {
 						// 若主任务仍然是子任务则进行递归调用
-						return updateMainJobPersentAndStatus(mainJobLog, Integer.valueOf(JobStatus.SUCCESS.getValue()));
+						return updateMainJobPercentAndStatus(mainJobLog, Integer.valueOf(JobStatus.SUCCESS.getValue()));
 					} else {
 						// 若主任务不是子任务则进行递归调用
 						result.setStatus(Integer.valueOf(JobStatus.SUCCESS.getValue()));

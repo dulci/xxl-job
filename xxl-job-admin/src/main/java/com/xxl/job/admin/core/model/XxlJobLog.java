@@ -42,9 +42,10 @@ public class XxlJobLog {
 	private Date handleTime;
 	private Integer handleCode;
 	private String handleMsg;
+	private Integer continueProcessStrategy;
 	private Date finishTime;
 
-	private Double persent;
+	private Double percent;
 
 	// alarm info
 	private Integer alarmStatus;

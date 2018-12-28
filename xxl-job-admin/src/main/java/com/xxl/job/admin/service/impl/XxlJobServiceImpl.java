@@ -1,5 +1,6 @@
 package com.xxl.job.admin.service.impl;
 
+import com.sun.imageio.plugins.common.I18N;
 import com.xxl.job.admin.core.model.XxlJobGroup;
 import com.xxl.job.admin.core.model.XxlJobInfo;
 import com.xxl.job.admin.core.route.ExecutorRouteStrategyEnum;
@@ -45,11 +46,11 @@ public class XxlJobServiceImpl implements XxlJobService {
 	private XxlJobLogGlueDao xxlJobLogGlueDao;
 	
 	@Override
-	public Map<String, Object> pageList(int start, int length, int jobGroup, String jobDesc, String executorHandler, String filterTime) {
+	public Map<String, Object> pageList(int start, int length, int jobGroup, String jobDesc, String executorHandler, String filterTime, String jobSystem, String jobModule) {
 
 		// page list
-		List<XxlJobInfo> list = xxlJobInfoDao.pageList(start, length, jobGroup, jobDesc, executorHandler);
-		int list_count = xxlJobInfoDao.pageListCount(start, length, jobGroup, jobDesc, executorHandler);
+		List<XxlJobInfo> list = xxlJobInfoDao.pageList(start, length, jobGroup, jobDesc, executorHandler, jobSystem, jobModule);
+		int list_count = xxlJobInfoDao.pageListCount(start, length, jobGroup, jobDesc, executorHandler, jobSystem, jobModule);
 		
 		// fill job info
 		if (list!=null && list.size()>0) {
@@ -75,6 +76,12 @@ public class XxlJobServiceImpl implements XxlJobService {
 		}
 		if (!CronExpression.isValidExpression(jobInfo.getJobCron())) {
 			return new ReturnT<String>(ReturnT.FAIL_CODE, I18nUtil.getString("jobinfo_field_cron_unvalid") );
+		}
+		if (StringUtils.isBlank(jobInfo.getJobSystem())){
+			return new ReturnT<>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_input") + I18nUtil.getString("jobinfo_field_system")));
+		}
+		if (StringUtils.isBlank(jobInfo.getJobModule())){
+			return new ReturnT<>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_input") + I18nUtil.getString("jobinfo_field_module")));
 		}
 		if (StringUtils.isBlank(jobInfo.getJobDesc())) {
 			return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_input")+I18nUtil.getString("jobinfo_field_jobdesc")) );
@@ -134,6 +141,12 @@ public class XxlJobServiceImpl implements XxlJobService {
 		if (!CronExpression.isValidExpression(jobInfo.getJobCron())) {
 			return new ReturnT<String>(ReturnT.FAIL_CODE, I18nUtil.getString("jobinfo_field_cron_unvalid") );
 		}
+		if (StringUtils.isBlank(jobInfo.getJobSystem())){
+			return new ReturnT<>(ReturnT.FAIL_CODE, I18nUtil.getString("system_please_input") + I18nUtil.getString("jobinfo_field_system"));
+		}
+		if (StringUtils.isBlank(jobInfo.getJobModule())){
+			return new ReturnT<>(ReturnT.FAIL_CODE, I18nUtil.getString("system_please_input") + I18nUtil.getString("jobinfo_field_module"));
+		}
 		if (StringUtils.isBlank(jobInfo.getJobDesc())) {
 			return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_input")+I18nUtil.getString("jobinfo_field_jobdesc")) );
 		}
@@ -173,6 +186,8 @@ public class XxlJobServiceImpl implements XxlJobService {
 		//String old_cron = exists_jobInfo.getJobCron();
 
 		exists_jobInfo.setJobCron(jobInfo.getJobCron());
+		exists_jobInfo.setJobSystem(jobInfo.getJobSystem());
+		exists_jobInfo.setJobModule(jobInfo.getJobModule());
 		exists_jobInfo.setJobDesc(jobInfo.getJobDesc());
 		exists_jobInfo.setAuthor(jobInfo.getAuthor());
 		exists_jobInfo.setAlarmEmail(jobInfo.getAlarmEmail());

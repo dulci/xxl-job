@@ -32,7 +32,11 @@ public class JobTriggerPoolHelper {
 		triggerPool.execute(new Runnable() {
 			@Override
 			public void run() {
-				XxlJobTrigger.trigger(jobId, triggerType, failRetryCount, executorShardingParam, executorParam, flowInstance);
+				try {
+					XxlJobTrigger.trigger(jobId, triggerType, failRetryCount, executorShardingParam, executorParam, flowInstance);
+				}catch (Throwable e){
+					logger.error(e.getMessage(), e);
+				}
 			}
 		});
 	}

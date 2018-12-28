@@ -52,6 +52,8 @@ public class XxlJobAdminConfig implements InitializingBean{
     // dao, service
     @Value("${zookeeper.address}")
     private String zookeeperAddress;
+    @Value("${alarm.flag}")
+    private Boolean alarmFlag;
     @Resource
     private XxlJobLogDao xxlJobLogDao;
     @Resource
@@ -131,5 +133,13 @@ public class XxlJobAdminConfig implements InitializingBean{
 
     public void setZookeeperAddress(String zookeeperAddress) {
         this.zookeeperAddress = zookeeperAddress;
+    }
+
+    public Boolean getAlarmFlag() {
+        return alarmFlag;
+    }
+
+    public void setAlarmFlag(Boolean alarmFlag) {
+        this.alarmFlag = alarmFlag;
     }
 }

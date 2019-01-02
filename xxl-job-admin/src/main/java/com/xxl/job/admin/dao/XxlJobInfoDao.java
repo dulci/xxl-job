@@ -18,12 +18,16 @@ public interface XxlJobInfoDao {
 									 @Param("pagesize") int pagesize,
 									 @Param("jobGroup") int jobGroup,
 									 @Param("jobDesc") String jobDesc,
-									 @Param("executorHandler") String executorHandler);
+									 @Param("executorHandler") String executorHandler,
+									 @Param("jobSystem") String jobSystem,
+									 @Param("jobModule") String jobModule);
 	public int pageListCount(@Param("offset") int offset,
 							 @Param("pagesize") int pagesize,
 							 @Param("jobGroup") int jobGroup,
 							 @Param("jobDesc") String jobDesc,
-							 @Param("executorHandler") String executorHandler);
+							 @Param("executorHandler") String executorHandler,
+							 @Param("jobSystem") String jobSystem,
+							 @Param("jobModule") String jobModule);
 	
 	public int save(XxlJobInfo info);
 

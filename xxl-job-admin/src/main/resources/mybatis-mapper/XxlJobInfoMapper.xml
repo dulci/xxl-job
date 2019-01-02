@@ -9,6 +9,8 @@
 		<result column="job_group" property="jobGroup" />
 	    <result column="job_cron" property="jobCron" />
 	    <result column="job_desc" property="jobDesc" />
+		<result column="job_system" property="jobSystem"/>
+		<result column="job_module" property="jobModule"/>
 
 	    <result column="add_time" property="addTime" />
 	    <result column="update_time" property="updateTime" />
@@ -38,6 +40,8 @@
 		t.job_group,
 		t.job_cron,
 		t.job_desc,
+		t.job_system,
+		t.job_module,
 		t.add_time,
 		t.update_time,
 		t.author,
@@ -72,6 +76,12 @@
 			<if test="executorHandler != null and executorHandler != ''">
 				AND t.executor_handler like CONCAT(CONCAT('%', #{executorHandler}), '%')
 			</if>
+			<if test="jobSystem != null and jobSystem != ''">
+				AND t.job_system like CONCAT(CONCAT('%', #{jobSystem}), '%')
+			</if>
+			<if test="jobModule != null and jobModule != ''">
+				AND t.job_module like CONCAT(CONCAT('%', #{jobModule}), '%')
+			</if>
 		</trim>
 		ORDER BY id DESC
 		LIMIT #{offset}, #{pagesize}
@@ -90,6 +100,12 @@
 			<if test="executorHandler != null and executorHandler != ''">
 				AND t.executor_handler like CONCAT(CONCAT('%', #{executorHandler}), '%')
 			</if>
+			<if test="jobSystem != null and jobSystem != ''">
+				AND t.job_system like CONCAT(CONCAT('%', #{jobSystem}), '%')
+			</if>
+			<if test="jobModule != null and jobModule != ''">
+				AND t.job_module like CONCAT(CONCAT('%', #{jobModule}), '%')
+			</if>
 		</trim>
 	</select>
 
@@ -97,6 +113,8 @@
 		INSERT INTO XXL_JOB_QRTZ_TRIGGER_INFO (
 			job_group,
 			job_cron,
+			job_system,
+			job_module,
 			job_desc,
 			add_time,
 			update_time,
@@ -120,6 +138,8 @@
 		) VALUES (
 			#{jobGroup},
 			#{jobCron},
+			#{jobSystem},
+			#{jobModule},
 			#{jobDesc},
 			NOW(),
 			NOW(),
@@ -157,6 +177,8 @@
 		UPDATE XXL_JOB_QRTZ_TRIGGER_INFO
 		SET
 			job_cron = #{jobCron},
+			job_system = #{jobSystem},
+			job_module = #{jobModule},
 			job_desc = #{jobDesc},
 			update_time = NOW(),
 			author = #{author},

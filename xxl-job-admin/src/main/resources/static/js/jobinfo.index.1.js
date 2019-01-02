@@ -12,6 +12,8 @@ $(function() {
 	        	var obj = {};
 	        	obj.jobGroup = $('#jobGroup').val();
                 obj.jobDesc = $('#jobDesc').val();
+                obj.jobSystem = $('#jobSystem').val();
+                obj.jobModule = $('#jobModule').val();
 	        	obj.executorHandler = $('#executorHandler').val();
 	        	obj.start = d.start;
 	        	obj.length = d.length;
@@ -26,10 +28,19 @@ $(function() {
 	                	"data": 'id',
 						"bSortable": false,
 						"visible" : true,
+						"width":'5%'
+					},
+					{
+						"data": 'jobSystem',
+                        "visible" : true,
+                        "width":'10%'
+					},
+					{
+						"data": 'jobModule',
+						"visible" : true,
 						"width":'10%'
 					},
-
-	                { 
+	                {
 	                	"data": 'jobGroup', 
 	                	"visible" : false,
 						"width":'20%',
@@ -46,7 +57,7 @@ $(function() {
 	                {
 	                	"data": 'jobDesc',
 						"visible" : true,
-						"width":'20%'
+						"width":'15%'
 					},
 					{
 						"data": 'glueType',
@@ -312,7 +323,15 @@ $(function() {
         errorClass : 'help-block',
         focusInvalid : true,  
         rules : {
-			jobDesc : {
+			jobSystem: {
+				required: true,
+				maxlength: 50
+			},
+			jobModule: {
+				required: true,
+				maxlength: 50
+			},
+			jobDesc: {
 				required : true,
 				maxlength: 50
 			},
@@ -329,7 +348,13 @@ $(function() {
                 digits:true
             }
         }, 
-        messages : {  
+        messages : {
+			jobSystem: {
+				required: I18n.system_please_input + I18n.jobinfo_field_system
+			},
+			jobModule: {
+				required: I18n.system_please_input + I18n.jobinfo_field_module
+			},
             jobDesc : {
             	required : I18n.system_please_input + I18n.jobinfo_field_jobdesc
             },
@@ -447,6 +472,8 @@ $(function() {
 		// base data
 		$("#updateModal .form input[name='id']").val( row.id );
 		$('#updateModal .form select[name=jobGroup] option[value='+ row.jobGroup +']').prop('selected', true);
+		$("#updateModal .form input[name='jobSystem']").val(row.jobSystem);
+        $("#updateModal .form input[name='jobModule']").val(row.jobModule);
 		$("#updateModal .form input[name='jobDesc']").val( row.jobDesc );
 		$("#updateModal .form input[name='jobCron']").val( row.jobCron );
 		$("#updateModal .form input[name='author']").val( row.author );
@@ -472,6 +499,14 @@ $(function() {
         focusInvalid : true,
 
 		rules : {
+            jobSystem : {
+                required : true,
+                maxlength: 50
+            },
+            jobModule : {
+                required : true,
+                maxlength: 50
+            },
 			jobDesc : {
 				required : true,
 				maxlength: 50
@@ -490,6 +525,12 @@ $(function() {
             }
 		},
 		messages : {
+            jobSystem : {
+                required : I18n.system_please_input + I18n.jobinfo_field_system
+            },
+            jobModule : {
+                required : I18n.system_please_input + I18n.jobinfo_field_module
+            },
 			jobDesc : {
                 required : I18n.system_please_input + I18n.jobinfo_field_jobdesc
 			},

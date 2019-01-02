@@ -17,7 +17,8 @@ public class XxlJobInfo {
 	private int jobGroup;		// 执行器主键ID	(JobKey.group)
 	private String jobCron;		// 任务执行CRON表达式 【base on quartz】
 	private String jobDesc;
-	
+	private String jobSystem;  // 系统名称
+	private String jobModule; // 组名
 	private Date addTime;
 	private Date updateTime;
 	

@@ -6,7 +6,9 @@ import com.xxl.job.api.enums.JobStatus;
 import com.xxl.job.api.service.SubJobService;
 import com.xxl.job.core.biz.model.ReturnT;
 import com.xxl.job.core.util.DateUtil;
+import com.xxl.job.executor.core.model.XxlJobInfo;
 import com.xxl.job.executor.core.model.XxlJobLog;
+import com.xxl.job.executor.dao.XxlJobInfoDao;
 import com.xxl.job.executor.dao.XxlJobLogDao;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,8 @@ import java.util.List;
 public class SubJobServiceImpl implements SubJobService {
 	@Autowired
 	private XxlJobLogDao xxlJobLogDao;
+	@Autowired
+	private XxlJobInfoDao xxlJobInfoDao;
 
 	/**
 	 * SubJob create 创建子任务
@@ -110,7 +114,7 @@ public class SubJobServiceImpl implements SubJobService {
 	 * SubJob isContinueProcess 是否执行询问
 	 *
 	 * @param taskInstanceId 任务实例ID
-	 * @return 0：执行，1：中止
+	 * @return 1：执行，0：中止
 	 */
 	@Override
 	public Integer isContinueProcess(Integer taskInstanceId) {
@@ -118,17 +122,39 @@ public class SubJobServiceImpl implements SubJobService {
 		stringBuffer.append(DateUtil.format(new Date())).append(" recieve subjob continuing asking ").append("[" + taskInstanceId + "]");
 		log.info(stringBuffer.toString());
 
-		// TODO
 		XxlJobLog xxlJobSubLog = xxlJobLogDao.load(taskInstanceId);
 		if (xxlJobSubLog != null && xxlJobSubLog.getParentId() != null) {
-			// 策略1：存在失败就停止
-			xxlJobLogDao.selectCountByParentId(xxlJobSubLog.getParentId(), Integer.valueOf(JobStatus.FAIL.getValue()));
-
-			// 策略2：存在多少个失败停止
-			// 策略3：大于多少百分比失败停止
-			// 策略4：永不停止
+			XxlJobInfo xxlJobInfo = xxlJobInfoDao.loadById(xxlJobSubLog.getJobId());
+			if (xxlJobInfo.getContinueProcessStrategy() != null) {
+				JobStatus jobStatus = JobStatus.valueOf(xxlJobInfo.getContinueProcessStrategy().toString());
+				switch (jobStatus) {
+					// 策略1：存在失败就停止
+					case FAIL_IF_OCCUR_ANY_ERROR:
+						return 0;
+					// 策略2：存在多少个失败停止
+					case FAIL_IF_OCCUR_SOME_ERROR:
+						if (xxlJobInfo.getContinueProcessValue() != null) {
+							if (countErrorSubJob(xxlJobSubLog.getParentId()) >= xxlJobInfo.getContinueProcessValue()) {
+								return 0;
+							}
+						}
+						break;
+					// 策略3：大于多少百分比失败停止
+					case FAIL_IF_OCCUR_PERCENT_ERROR:
+						if (xxlJobInfo.getContinueProcessValue() != null && xxlJobSubLog.getTotal() != null) {
+							double errorPercent = countErrorSubJob(xxlJobSubLog.getParentId()) / (double) xxlJobSubLog.getTotal();
+							if (errorPercent >= xxlJobInfo.getContinueProcessValue()) {
+								return 0;
+							}
+						}
+						break;
+					// 策略4：永不停止
+					case PROCESSING_IGNORE_ANY_ERROR:
+						break;
+				}
+			}
 		}
-		return 0;
+		return 1;
 	}
 
 	private Integer saveXxlJobSubLog(XxlJobLog xxlJobLog, String ip, Integer index, Integer total) {
@@ -151,4 +177,17 @@ public class SubJobServiceImpl implements SubJobService {
 		xxlJobLogDao.save(xxlJobSubLog);
 		return xxlJobSubLog.getId();
 	}
+
+	/**
+	 * 获得失败的子任务数量
+	 */
+	private int countErrorSubJob(Integer parentId) {
+
+
+		int count = 0;
+		count += xxlJobLogDao.selectCountByParentId(parentId, Integer.valueOf(JobStatus.FAIL.getValue()));
+		count += xxlJobLogDao.selectCountByParentId(parentId, Integer.valueOf(JobStatus.FAIL_TIMEOUT.getValue()));
+		return count;
+	}
+
 }

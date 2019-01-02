@@ -29,7 +29,6 @@
 	    <result column="handle_time" property="handleTime" />
 	    <result column="handle_code" property="handleCode" />
 	    <result column="handle_msg" property="handleMsg" />
-		<result column="continue_process_strategy" property="continueProcessStrategy" />
 		<result column="finish_time" property="finishTime" />
 
 		<result column="percent" property="percent" />
@@ -57,7 +56,6 @@
 		t.handle_time,
 		t.handle_code,
 		t.handle_msg,
-		t.continue_process_strategy,
 		t.finish_time,
 		t.percent,
 		t.alarm_status
@@ -97,7 +95,7 @@
 		LIMIT #{offset}, #{pagesize}
 	</select>
 	
-	<select id="pageListCount" resultType="int">
+	<select id="pageListCount" resultType="java.lang.Integer">
 		SELECT count(1)
 		FROM XXL_JOB_QRTZ_TRIGGER_LOG AS t
 		<trim prefix="WHERE" prefixOverrides="AND | OR" >
@@ -150,8 +148,7 @@
 			`trigger_time`,
 			`trigger_code`,
 			`trigger_msg`,
-			`handle_code`,
-			`continue_process_strategy`
+			`handle_code`
 		) VALUES (
 			#{parentId},
 			#{type},
@@ -165,8 +162,7 @@
 			#{triggerTime},
 			#{triggerCode},
 			#{triggerMsg},
-			#{handleCode},
-			#{continueProcessStrategy}
+			#{handleCode}
 		);
 	</insert>
 
@@ -204,7 +200,7 @@
 		WHERE job_id = #{jobId}
 	</delete>
 
-	<select id="triggerCountByHandleCode" resultType="int" >
+	<select id="triggerCountByHandleCode" resultType="java.lang.Integer" >
 		SELECT count(1)
 		FROM XXL_JOB_QRTZ_TRIGGER_LOG AS t
 		<trim prefix="WHERE" prefixOverrides="AND | OR" >
@@ -270,7 +266,7 @@
 		</trim>
 	</delete>
 
-	<select id="findFailJobLogIds" resultType="int" >
+	<select id="findFailJobLogIds" resultType="java.lang.Integer" >
 		SELECT id FROM `XXL_JOB_QRTZ_TRIGGER_LOG`
 		WHERE !(
 			(trigger_code in (0, 200) and handle_code = 0)

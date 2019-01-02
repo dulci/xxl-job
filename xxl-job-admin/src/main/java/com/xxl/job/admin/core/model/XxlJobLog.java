@@ -43,6 +43,7 @@ public class XxlJobLog {
 	private Integer handleCode;
 	private String handleMsg;
 	private Integer continueProcessStrategy;
+	private Double continueProcessValue;
 	private Date finishTime;
 
 	private Double percent;

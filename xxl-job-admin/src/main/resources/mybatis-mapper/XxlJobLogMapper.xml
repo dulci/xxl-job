@@ -30,6 +30,7 @@
 	    <result column="handle_code" property="handleCode" />
 	    <result column="handle_msg" property="handleMsg" />
 		<result column="continue_process_strategy" property="continueProcessStrategy" />
+        <result column="continue_process_value" property="continueProcessValue" />
 		<result column="finish_time" property="finishTime" />
 
 		<result column="percent" property="percent" />
@@ -58,6 +59,7 @@
 		t.handle_code,
 		t.handle_msg,
 		t.continue_process_strategy,
+		t.continue_process_value,
 		t.finish_time,
 		t.percent,
 		t.alarm_status

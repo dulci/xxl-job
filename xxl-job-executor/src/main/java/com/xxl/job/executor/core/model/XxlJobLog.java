@@ -22,7 +22,7 @@ public class XxlJobLog {
 
 	// subJob info
 	private int index;
-	private int total;
+	private Integer total;
 
 	private String flowInstance;
 
@@ -42,7 +42,6 @@ public class XxlJobLog {
 	private Date handleTime;
 	private int handleCode;
 	private String handleMsg;
-	private Integer continueProcessStrategy;
 	private Date finishTime;
 
 	private Double percent;

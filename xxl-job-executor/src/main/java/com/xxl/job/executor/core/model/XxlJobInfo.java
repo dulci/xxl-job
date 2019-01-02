@@ -1,4 +1,4 @@
-package com.xxl.job.admin.core.model;
+package com.xxl.job.executor.core.model;
 
 import lombok.Data;
 

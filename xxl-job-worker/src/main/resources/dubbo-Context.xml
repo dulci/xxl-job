@@ -23,9 +23,9 @@
        http://code.alibabatech.com/schema/dubbo
        http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
 
-    <dubbo:application name="xxl-job-worker"/>
-    <dubbo:registry address="zookeeper://192.168.133.176:2181"/>
-    <dubbo:consumer timeout="10000" retries="5" version="1.0.0"/>
+    <dubbo:application name="xxl-job-worker" />
+    <dubbo:registry address="zookeeper://192.168.133.176:2181" />
+    <dubbo:consumer timeout="10000" retries="5" version="1.0.0" check="false" />
     <dubbo:protocol port="12345"/>
 
     <dubbo:reference id="logService" check="false" interface="com.xxl.job.api.service.LogService" async="true" />

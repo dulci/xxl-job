@@ -114,7 +114,7 @@ public class SubJobServiceImpl implements SubJobService {
 	 * SubJob isContinueProcess 是否执行询问
 	 *
 	 * @param taskInstanceId 任务实例ID
-	 * @return 1：执行，0：中止
+	 * @return 0：执行，1：中止
 	 */
 	@Override
 	public Integer isContinueProcess(Integer taskInstanceId) {
@@ -130,12 +130,12 @@ public class SubJobServiceImpl implements SubJobService {
 				switch (jobStatus) {
 					// 策略1：存在失败就停止
 					case FAIL_IF_OCCUR_ANY_ERROR:
-						return 0;
+						return 1;
 					// 策略2：存在多少个失败停止
 					case FAIL_IF_OCCUR_SOME_ERROR:
 						if (xxlJobInfo.getContinueProcessValue() != null) {
 							if (countErrorSubJob(xxlJobSubLog.getParentId()) >= xxlJobInfo.getContinueProcessValue()) {
-								return 0;
+								return 1;
 							}
 						}
 						break;
@@ -144,7 +144,7 @@ public class SubJobServiceImpl implements SubJobService {
 						if (xxlJobInfo.getContinueProcessValue() != null && xxlJobSubLog.getTotal() != null) {
 							double errorPercent = countErrorSubJob(xxlJobSubLog.getParentId()) / (double) xxlJobSubLog.getTotal();
 							if (errorPercent >= xxlJobInfo.getContinueProcessValue()) {
-								return 0;
+								return 1;
 							}
 						}
 						break;
@@ -154,7 +154,7 @@ public class SubJobServiceImpl implements SubJobService {
 				}
 			}
 		}
-		return 1;
+		return 0;
 	}
 
 	private Integer saveXxlJobSubLog(XxlJobLog xxlJobLog, String ip, Integer index, Integer total) {

@@ -103,8 +103,6 @@ public class XxlJobTrigger {
         jobLog.setJobGroup(jobInfo.getJobGroup());
         jobLog.setJobId(jobInfo.getId());
         jobLog.setTriggerTime(new Date());
-        jobLog.setContinueProcessStrategy(jobInfo.getContinueProcessStrategy());
-        jobLog.setContinueProcessValue(jobInfo.getContinueProcessValue());
         if (StringUtils.isNotEmpty(flowInstance)) {
             jobLog.setFlowInstance(flowInstance);
         } else {

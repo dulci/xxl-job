@@ -215,9 +215,10 @@
 			XXL_JOB_QRTZ_TRIGGER_INFO t
 		where
 			child_jobid regexp  #{jobidRegexp}
-
+		<if test="id != null " >
 			and
 			id != #{id}
+		</if>
 	</select>
 
 </mapper>

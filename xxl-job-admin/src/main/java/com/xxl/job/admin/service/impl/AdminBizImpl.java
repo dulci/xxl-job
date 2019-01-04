@@ -20,7 +20,6 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.text.MessageFormat;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -36,7 +35,7 @@ public class AdminBizImpl implements AdminBiz {
 	private XxlJobInfoDao xxlJobInfoDao;
 	@Resource
 	private XxlJobRegistryDao xxlJobRegistryDao;
-	public final static String CHILD_JOBID_REGXP = "^{0}|,{0}$|,{0},";
+	public final static String CHILD_JOBID_REGXP = "^{0},|,{0}$|,{0},|^{0}$";
 
 
 	@Override

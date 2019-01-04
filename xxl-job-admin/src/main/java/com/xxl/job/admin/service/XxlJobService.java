@@ -82,5 +82,6 @@ public interface XxlJobService {
 	 * @return
 	 */
 	public ReturnT<Map<String,Object>> chartInfo(Date startDate, Date endDate);
+	public  Map<String,Object>  selectFlowChartData ( int id);
 
 }

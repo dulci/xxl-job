@@ -138,7 +138,7 @@ $(function() {
 
 	                			// log url
 	                			var logUrl = base_url +'/joblog?jobId='+ row.id;
-	                			
+                                var flowchartUrl = base_url +'/flowchart?jobId='+ row.id;
 	                			// log url
 	                			var codeBtn = "";
                                 if ('BEAN' != row.glueType) {
@@ -152,9 +152,11 @@ $(function() {
 									'<button class="btn btn-primary btn-xs job_trigger" type="button">'+ I18n.jobinfo_opt_run +'</button>  '+
                                     start_stop +
 									'<button class="btn btn-primary btn-xs" type="job_del" type="button" onclick="javascript:window.open(\'' + logUrl + '\')" >'+ I18n.jobinfo_opt_log +'</button><br>  '+
+
 									'<button class="btn btn-warning btn-xs update" type="button">'+ I18n.system_opt_edit +'</button>  '+
 									codeBtn +
-									'<button class="btn btn-danger btn-xs job_operate" _type="job_del" type="button">'+ I18n.system_opt_del +'</button>  '+
+									'<button class="btn btn-danger btn-xs job_operate" _type="job_del" type="button">'+ I18n.system_opt_del +'</button>  <br>'+
+                                    '<button class="btn btn-primary btn-xs flowchart"  type="button" onclick="javascript:window.open(\'' + flowchartUrl + '\')" >flowchart</button><br>  '
 									'</p>';
 
 	                			return html;

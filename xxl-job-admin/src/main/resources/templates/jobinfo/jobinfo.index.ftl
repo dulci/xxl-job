@@ -176,6 +176,25 @@
                         <label for="lastname" class="col-sm-2 control-label">${I18n.jobinfo_field_childJobId}<font color="black">*</font></label>
                         <div class="col-sm-4"><input type="text" class="form-control" name="childJobId" placeholder="${I18n.jobinfo_field_childJobId_placeholder}" maxlength="100" ></div>
                     </div>
+                    <div class="form-group" id="vue-continueProcessStrategy">
+                        <label for="continueProcessStrategy" class="col-sm-2 control-label">${I18n.jobinfo_continue_process_strategy}<font color="black">*</font></label>
+                        <div class="col-sm-4">
+                            <select class="form-control" name="continueProcessStrategy" v-model="continueProcessStrategy">
+								<option value="" >请选择</option>
+								<#list SubJobContinueProcessStrategyEnum as item>
+                                    <option value="${item.value}" >${item.desc}</option>
+								</#list>
+                            </select>
+                        </div>
+						<template v-if="continueProcessStrategy == '402'">
+							<label for="continueProcessValue" class="col-sm-2 control-label">错误数量<font>*</font></label>
+							<div class="col-sm-4"><input type="text" class="form-control" name="continueProcessValue" placeholder="错误数量（包含）" maxlength="6" ></div>
+						</template>
+						<template v-if="continueProcessStrategy == '403'">
+							<label for="continueProcessValue" class="col-sm-2 control-label">错误百分比<font>*</font></label>
+							<div class="col-sm-4"><input type="text" class="form-control" name="continueProcessValue" placeholder="错误百分比（包含）" maxlength="6" ></div>
+						</template>
+                    </div>
                     <div class="form-group">
                         <label for="lastname" class="col-sm-2 control-label">${I18n.jobinfo_field_timeout}<font color="black">*</font></label>
                         <div class="col-sm-4"><input type="text" class="form-control" name="executorTimeout" placeholder="${I18n.jobinfo_field_executorTimeout_placeholder}" maxlength="6" ></div>
@@ -476,5 +495,16 @@ exit 0
 <!-- moment -->
 <script src="${request.contextPath}/static/adminlte/bower_components/moment/moment.min.js"></script>
 <script src="${request.contextPath}/static/js/jobinfo.index.1.js"></script>
+<script src="${request.contextPath}/static/js/vue.2.5.21.min.js"></script>
+<script>
+    var vueContinueProcessStrategy = new Vue({
+		el: '#vue-continueProcessStrategy',
+		data: {
+            continueProcessStrategy: ''
+		}
+	});
+
+
+</script>
 </body>
 </html>

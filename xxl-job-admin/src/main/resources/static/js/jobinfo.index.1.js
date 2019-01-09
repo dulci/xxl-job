@@ -10,11 +10,10 @@ $(function() {
 			type:"post",
 	        data : function ( d ) {
 	        	var obj = {};
-	        	obj.jobGroup = $('#jobGroup').val();
-                obj.jobDesc = $('#jobDesc').val();
                 obj.jobSystem = $('#jobSystem').val();
                 obj.jobModule = $('#jobModule').val();
-	        	obj.executorHandler = $('#executorHandler').val();
+                obj.jobDesc = $('#jobDesc').val();
+	        	obj.mqKey = $('#mqKey').val();
 	        	obj.start = d.start;
 	        	obj.length = d.length;
                 return obj;
@@ -45,12 +44,12 @@ $(function() {
 	                	"visible" : false,
 						"width":'20%',
 	                	"render": function ( data, type, row ) {
-	            			var groupMenu = $("#jobGroup").find("option");
-	            			for ( var index in $("#jobGroup").find("option")) {
-	            				if ($(groupMenu[index]).attr('value') == data) {
-									return $(groupMenu[index]).html();
-								}
-							}
+                            // var groupMenu = $("#jobGroup").find("option");
+                            // for ( var index in $("#jobGroup").find("option")) {
+	            				// if ($(groupMenu[index]).attr('value') == data) {
+							// 		return $(groupMenu[index]).html();
+							// 	}
+							// }
 	            			return data;
 	            		}
             		},

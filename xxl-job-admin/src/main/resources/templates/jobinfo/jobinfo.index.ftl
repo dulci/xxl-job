@@ -37,7 +37,7 @@
                         <input type="text" class="form-control" id="jobModule" autocomplete="on" >
                     </div>
                 </div>
-	    		<div class="col-xs-2">
+	    		<#--<div class="col-xs-2">
 	              	<div class="input-group">
 	                	<span class="input-group-addon">${I18n.jobinfo_field_jobgroup}</span>
                 		<select class="form-control" id="jobGroup" >
@@ -46,7 +46,7 @@
                 			</#list>
 	                  	</select>
 	              	</div>
-	            </div>
+	            </div>-->
                 <div class="col-xs-2">
                     <div class="input-group">
                         <span class="input-group-addon">${I18n.jobinfo_field_jobdesc}</span>
@@ -55,14 +55,14 @@
                 </div>
                 <div class="col-xs-2"">
                     <div class="input-group">
-                        <span class="input-group-addon">JobHandler</span>
-                        <input type="text" class="form-control" id="executorHandler" autocomplete="on" >
+                        <span class="input-group-addon">${I18n.jobinfo_field_mq_key}</span>
+                        <input type="text" class="form-control" id="mqKey" autocomplete="on" >
                     </div>
                 </div>
-	            <div class="col-xs-1">
+	            <div class="col-xs-2">
 	            	<button class="btn btn-block btn-info" id="searchBtn">${I18n.system_search}</button>
 	            </div>
-	            <div class="col-xs-1">
+	            <div class="col-xs-2">
 	            	<button class="btn btn-block btn-success add" type="button">${I18n.jobinfo_field_add}</button>
 	            </div>
           	</div>

@@ -73,8 +73,8 @@
 			<if test="jobDesc != null and jobDesc != ''">
 				AND t.job_desc like CONCAT(CONCAT('%', #{jobDesc}), '%')
 			</if>
-			<if test="executorHandler != null and executorHandler != ''">
-				AND t.executor_handler like CONCAT(CONCAT('%', #{executorHandler}), '%')
+			<if test="mqKey != null and mqKey != ''">
+				AND t.mq_key like CONCAT(CONCAT('%', #{mqKey}), '%')
 			</if>
 			<if test="jobSystem != null and jobSystem != ''">
 				AND t.job_system like CONCAT(CONCAT('%', #{jobSystem}), '%')
@@ -97,8 +97,8 @@
 			<if test="jobDesc != null and jobDesc != ''">
 				AND t.job_desc like CONCAT(CONCAT('%', #{jobDesc}), '%')
 			</if>
-			<if test="executorHandler != null and executorHandler != ''">
-				AND t.executor_handler like CONCAT(CONCAT('%', #{executorHandler}), '%')
+			<if test="mqKey != null and mqKey != ''">
+				AND t.mq_key like CONCAT(CONCAT('%', #{mqKey}), '%')
 			</if>
 			<if test="jobSystem != null and jobSystem != ''">
 				AND t.job_system like CONCAT(CONCAT('%', #{jobSystem}), '%')

@@ -48,11 +48,11 @@ public class XxlJobServiceImpl implements XxlJobService {
     private XxlJobLogGlueDao xxlJobLogGlueDao;
 
     @Override
-    public Map<String, Object> pageList(int start, int length, int jobGroup, String jobDesc, String executorHandler, String filterTime, String jobSystem, String jobModule) {
+    public Map<String, Object> pageList(int start, int length, int jobGroup, String jobDesc, String mqKey, String filterTime, String jobSystem, String jobModule) {
 
         // page list
-        List<XxlJobInfo> list = xxlJobInfoDao.pageList(start, length, jobGroup, jobDesc, executorHandler, jobSystem, jobModule);
-        int list_count = xxlJobInfoDao.pageListCount(start, length, jobGroup, jobDesc, executorHandler, jobSystem, jobModule);
+        List<XxlJobInfo> list = xxlJobInfoDao.pageList(start, length, jobGroup, jobDesc, mqKey, jobSystem, jobModule);
+        int list_count = xxlJobInfoDao.pageListCount(start, length, jobGroup, jobDesc, mqKey, jobSystem, jobModule);
 
         // fill job info
         if (list != null && list.size() > 0) {

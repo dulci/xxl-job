@@ -27,7 +27,7 @@ public interface XxlJobService {
 	 * @param filterTime
 	 * @return
 	 */
-	public Map<String, Object> pageList(int start, int length, int jobGroup, String jobDesc, String mqKey, String filterTime, String jobSystem, List<Integer> excludeIdList, String jobModule);
+	public Map<String, Object> pageList(int start, int length, int jobGroup, String jobDesc, String mqKey, String filterTime, String jobSystem, String jobModule,List<Integer> excludeIdList);
 
 	/**
 	 * add job, default quartz stop

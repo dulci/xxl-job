@@ -36,7 +36,7 @@ public class JobInfoController {
 	private XxlJobService xxlJobService;
 
 	@RequestMapping
-	public String index(Model model, @RequestParam(required = false, defaultValue = "-1") int jobGroup) {
+	public String index(Model model, @RequestParam(required = false, defaultValue = "-1") Integer jobGroup) {
 
 		// 枚举-字典
 		model.addAttribute("ExecutorRouteStrategyEnum", ExecutorRouteStrategyEnum.values());    // 路由策略-列表
@@ -56,9 +56,9 @@ public class JobInfoController {
 	@ResponseBody
 	public Map<String, Object> pageList(@RequestParam(required = false, defaultValue = "0") int start,
 	                                    @RequestParam(required = false, defaultValue = "10") int length,
-	                                    int jobGroup, String jobDesc, String executorHandler, String filterTime, String jobSystem, String jobModule) {
+										@RequestParam(required = false, defaultValue = "-1") Integer jobGroup, String jobDesc, String mqKey, String filterTime, String jobSystem, String jobModule) {
 
-		return xxlJobService.pageList(start, length, jobGroup, jobDesc, executorHandler, filterTime, jobSystem, jobModule,null);
+		return xxlJobService.pageList(start, length, jobGroup, jobDesc, mqKey, filterTime, jobSystem, jobModule);
 	}
 
 	@RequestMapping("/add")

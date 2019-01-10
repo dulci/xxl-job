@@ -19,6 +19,8 @@ public interface XxlJobLogDao {
 
 	public List<XxlJobLog> pageList(@Param("offset") int offset,
 	                                @Param("pagesize") int pagesize,
+	                                @Param("jobSystem") String jobSystem,
+	                                @Param("jobModule") String jobModule,
 	                                @Param("jobGroup") int jobGroup,
 	                                @Param("jobId") int jobId,
 	                                @Param("triggerTimeStart") Date triggerTimeStart,
@@ -27,6 +29,8 @@ public interface XxlJobLogDao {
 
 	public int pageListCount(@Param("offset") int offset,
 	                         @Param("pagesize") int pagesize,
+							 @Param("jobSystem") String jobSystem,
+							 @Param("jobModule") String jobModule,
 	                         @Param("jobGroup") int jobGroup,
 	                         @Param("jobId") int jobId,
 	                         @Param("triggerTimeStart") Date triggerTimeStart,

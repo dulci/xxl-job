@@ -69,7 +69,7 @@ public class JobLogController {
 	@ResponseBody
 	public Map<String, Object> pageList(@RequestParam(required = false, defaultValue = "0") int start,
 	                                    @RequestParam(required = false, defaultValue = "10") int length,
-	                                    int jobGroup, int jobId, int logStatus, String filterTime) {
+	                                    int jobGroup, int jobId, int logStatus, String filterTime, String jobSystem, String jobModule) {
 		// parse param
 		Date triggerTimeStart = null;
 		Date triggerTimeEnd = null;
@@ -85,8 +85,8 @@ public class JobLogController {
 		}
 
 		// page query
-		List<XxlJobLog> list = xxlJobLogDao.pageList(start, length, jobGroup, jobId, triggerTimeStart, triggerTimeEnd, logStatus);
-		int list_count = xxlJobLogDao.pageListCount(start, length, jobGroup, jobId, triggerTimeStart, triggerTimeEnd, logStatus);
+		List<XxlJobLog> list = xxlJobLogDao.pageList(start, length, jobSystem, jobModule,jobGroup, jobId, triggerTimeStart, triggerTimeEnd, logStatus);
+		int list_count = xxlJobLogDao.pageListCount(start, length, jobSystem, jobModule,jobGroup, jobId, triggerTimeStart, triggerTimeEnd, logStatus);
 
 		// package result
 		Map<String, Object> maps = new HashMap<String, Object>();

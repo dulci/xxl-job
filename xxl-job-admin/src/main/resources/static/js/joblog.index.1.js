@@ -29,6 +29,9 @@ $(function() {
 			},
 		});
 	});
+    if ($("#jobGroup option:selected").val()){
+        $("#jobGroup").change();
+    }
 	if ($("#jobGroup").attr("paramVal")){
 		$("#jobGroup").find("option[value='" + $("#jobGroup").attr("paramVal") + "']").attr("selected",true);
         $("#jobGroup").change();
@@ -79,6 +82,8 @@ $(function() {
             type:"post",
 	        data : function ( d ) {
 	        	var obj = {};
+	        	obj.jobSystem = $('#jobSystem').val();
+	        	obj.jobModule = $('#jobModule').val();
 	        	obj.jobGroup = $('#jobGroup').val();
 	        	obj.jobId = $('#jobId').val();
                 obj.logStatus = $('#logStatus').val();
@@ -234,7 +239,7 @@ $(function() {
         }
 	});
 
-    setInterval(function () {
+    jobLogListRun = setInterval(function () {
         logTable.ajax.reload(null, false); // 刷新表格数据，分页信息不会重置
     }, 15000);
 
@@ -246,8 +251,8 @@ $(function() {
 	
 	// search Btn
 	$('#searchBtn').on('click', function(){
-		logTable.fnDraw();
-	});
+        logTable.ajax.reload(null, false);
+    });
 	
 	// logDetail look
 	$('#joblog_list').on('click', '.logDetail', function(){

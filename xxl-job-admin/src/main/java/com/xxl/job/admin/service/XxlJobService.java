@@ -6,6 +6,7 @@ import com.xxl.job.core.biz.model.ReturnT;
 
 import java.util.Date;
 import java.util.List;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -22,11 +23,11 @@ public interface XxlJobService {
 	 * @param length
 	 * @param jobGroup
 	 * @param jobDesc
-	 * @param executorHandler
+	 * @param mqKey
 	 * @param filterTime
 	 * @return
 	 */
-	public Map<String, Object> pageList(int start, int length, int jobGroup, String jobDesc, String executorHandler, String filterTime, String jobSystem, String jobModule, List<Integer> excludeIdList);
+	public Map<String, Object> pageList(int start, int length, int jobGroup, String jobDesc, String mqKey, String filterTime, String jobSystem, List<Integer> excludeIdList, String jobModule);
 
 	/**
 	 * add job, default quartz stop

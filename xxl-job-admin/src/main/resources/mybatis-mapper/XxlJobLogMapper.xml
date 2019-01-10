@@ -66,6 +66,10 @@
 			<include refid="Base_Column_List" />
 		FROM
 			XXL_JOB_QRTZ_TRIGGER_LOG AS t
+			left join
+			XXL_JOB_QRTZ_TRIGGER_INFO as  info
+			on
+			t.job_id = info.id
 		<trim prefix="WHERE" prefixOverrides="AND | OR" >
 			t.type = 1
 			<if test="jobGroup gt 0">
@@ -99,6 +103,14 @@
 				t.trigger_code = 200
 				AND
 				t.handle_code = 100
+			</if>
+			<if test="jobSystem != null and jobSystem != ''">
+				and
+				info.job_system like CONCAT(CONCAT('%', #{jobSystem}), '%')
+			</if>
+			<if test="jobModule != null and jobModule != ''">
+				and
+				info.job_module like CONCAT(CONCAT('%', #{jobModule}), '%')
 			</if>
 		</trim>
 		ORDER BY
@@ -112,6 +124,10 @@
 			count(1)
 		FROM
 			XXL_JOB_QRTZ_TRIGGER_LOG AS t
+			left join
+			XXL_JOB_QRTZ_TRIGGER_INFO as  info
+			on
+			t.job_id = info.id
 		<trim prefix="WHERE" prefixOverrides="AND | OR" >
 			t.type = 1
 			<if test="jobGroup gt 0">
@@ -145,6 +161,14 @@
 				t.trigger_code = 200
 				AND
 				t.handle_code = 100
+			</if>
+			<if test="jobSystem != null and jobSystem != ''">
+				and
+				info.job_system like CONCAT(CONCAT('%', #{jobSystem}), '%')
+			</if>
+			<if test="jobModule != null and jobModule != ''">
+				and
+				info.job_module like CONCAT(CONCAT('%', #{jobModule}), '%')
 			</if>
 		</trim>
 	</select>

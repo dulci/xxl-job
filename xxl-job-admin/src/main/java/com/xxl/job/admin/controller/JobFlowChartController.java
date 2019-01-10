@@ -1,5 +1,7 @@
 package com.xxl.job.admin.controller;
 
+import com.xxl.job.admin.core.model.XxlJobInfo;
+import com.xxl.job.admin.core.schedule.XxlJobDynamicScheduler;
 import com.xxl.job.admin.service.XxlJobService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,5 +42,20 @@ public class JobFlowChartController {
 		return	xxlJobService.selectFlowChartData(jobId);
 
 	}
+
+	@RequestMapping("/pageList")
+	@ResponseBody
+	public Map<String, Object> pageList(@RequestParam(required = false, defaultValue = "0") int start,
+										@RequestParam(required = false, defaultValue = "10") int length,
+										@RequestParam(required = false) ArrayList<Integer> excludeIdList
+	)
+	{
+
+		return xxlJobService.pageList(start, length, 0, null, null, null, null, null,excludeIdList);
+	}
+
+
+
+
 
 }

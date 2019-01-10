@@ -4,6 +4,7 @@ import com.xxl.job.admin.core.model.XxlJobInfo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -20,14 +21,16 @@ public interface XxlJobInfoDao {
 									 @Param("jobDesc") String jobDesc,
 									 @Param("executorHandler") String executorHandler,
 									 @Param("jobSystem") String jobSystem,
-									 @Param("jobModule") String jobModule);
+									 @Param("jobModule") String jobModule,
+									 @Param("excludeIdList")  List<Integer> excludeIdList);
 	public int pageListCount(@Param("offset") int offset,
 							 @Param("pagesize") int pagesize,
 							 @Param("jobGroup") int jobGroup,
 							 @Param("jobDesc") String jobDesc,
 							 @Param("executorHandler") String executorHandler,
 							 @Param("jobSystem") String jobSystem,
-							 @Param("jobModule") String jobModule);
+							 @Param("jobModule") String jobModule,
+							 @Param("excludeIdList")  List<Integer> excludeIdList);
 	
 	public int save(XxlJobInfo info);
 

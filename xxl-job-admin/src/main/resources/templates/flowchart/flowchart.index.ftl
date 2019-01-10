@@ -11,7 +11,8 @@
           href="${request.contextPath}/static/adminlte/bower_components/bootstrap-daterangepicker/daterangepicker.css">
     <title>${I18n.admin_name}</title>
 </head>
-<body onload="init()" class="hold-transition skin-blue sidebar-mini <#if cookieMap?exists && cookieMap["xxljob_adminlte_settings"]?exists && "off" == cookieMap["xxljob_adminlte_settings"].value >sidebar-collapse</#if> ">
+<body onload="init()"
+      class="hold-transition skin-blue sidebar-mini <#if cookieMap?exists && cookieMap["xxljob_adminlte_settings"]?exists && "off" == cookieMap["xxljob_adminlte_settings"].value >sidebar-collapse</#if> ">
 <div class="wrapper">
     <!-- header -->
 <@netCommon.commonHeader />
@@ -28,7 +29,7 @@
         <!-- Main content -->
         <section class="content">
             <div class="row">
-                <input type="hidden" value="${jobId}"  id="jobId" >
+                <input type="hidden" value="${jobId}" id="jobId">
 
             </div>
 
@@ -46,9 +47,58 @@
     <!-- footer -->
 <@netCommon.commonFooter />
 </div>
-<@netCommon.commonScript />
 
+<!-- 更新.模态框 -->
+<div class="modal fade" id="addNodeModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">选择节点</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal form" role="form">
+
+
+                </form>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="box">
+                    <#--<div class="box-header hide">
+                        <h3 class="box-title">调度列表</h3>
+                    </div>-->
+                        <div class="box-body">
+                            <table id="job_list" class="table table-bordered table-striped" width="100%">
+                                <thead>
+                                <tr>
+                                    <th name="id">${I18n.jobinfo_field_id}</th>
+                                    <th name="jobSystem">${I18n.jobinfo_field_system}</th>
+                                    <th name="jobModule">${I18n.jobinfo_field_module}</th>
+                                    <th name="jobDesc">${I18n.jobinfo_field_jobdesc}</th>
+                                    <th name="executorParam">${I18n.jobinfo_field_executorparam}</th>
+                                    <th name="jobCron">Cron</th>
+                                    <th name="mqKey">${I18n.jobinfo_field_mqkey}</th>
+                                    <th name="author">${I18n.jobinfo_field_author}</th>
+                                    <th name="jobStatus">${I18n.system_status}</th>
+                                    <th>${I18n.system_opt}</th>
+                                </tr>
+                                </thead>
+                                <tbody></tbody>
+                                <tfoot></tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<@netCommon.commonScript />
+<script src="${request.contextPath}/static/adminlte/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="${request.contextPath}/static/adminlte/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
 <script id="code">
+    var myDiagram
     function init() {
         var $ = go.GraphObject.make;  // for conciseness in defining templates
         myDiagram =
@@ -62,17 +112,6 @@
                             "undoManager.isEnabled": true  // enable undo & redo
                         });
 
-        // when the document is modified, add a "*" to the title and enable the "Save" button
-        myDiagram.addDiagramListener("Modified", function(e) {
-            var button = document.getElementById("SaveButton");
-            if (button) button.disabled = !myDiagram.isModified;
-            var idx = document.title.indexOf("*");
-            if (myDiagram.isModified) {
-                if (idx < 0) document.title += "*";
-            } else {
-                if (idx >= 0) document.title = document.title.substr(0, idx);
-            }
-        });
 
         // helper definitions for node templates
 
@@ -114,10 +153,10 @@
                         toSpot: spot,  // declare where links may connect at this port
                         toLinkable: input,  // declare whether the user may draw links to here
                         cursor: "pointer",  // show a different cursor to indicate potential link point
-                        mouseEnter: function(e, port) {  // the PORT argument will be this Shape
+                        mouseEnter: function (e, port) {  // the PORT argument will be this Shape
                             if (!e.diagram.isReadOnly) port.fill = "rgba(255,0,255,0.5)";
                         },
-                        mouseLeave: function(e, port) {
+                        mouseLeave: function (e, port) {
                             port.fill = "transparent";
                         }
                     });
@@ -137,7 +176,7 @@
                         // the main object is a Panel that surrounds a TextBlock with a rectangular Shape
                         $(go.Panel, "Auto",
                                 $(go.Shape, "Rectangle",
-                                        { fill: "#00A9C9", strokeWidth: 0 },
+                                        {fill: "#00A9C9", strokeWidth: 0},
                                         new go.Binding("figure", "figure")),
                                 $(go.TextBlock, textStyle(),
                                         {
@@ -154,7 +193,7 @@
                         makePort("R", go.Spot.Right, go.Spot.RightSide, true, true),
                         makePort("B", go.Spot.Bottom, go.Spot.BottomSide, true, false)
                 ));
-
+        // define the Node templates for regular nodes
 
 
         // replace the default Link template in the linkTemplateMap
@@ -169,23 +208,29 @@
                             reshapable: true,
                             resegmentable: true,
                             // mouse-overs subtly highlight links:
-                            mouseEnter: function(e, link) { link.findObject("HIGHLIGHT").stroke = "rgba(30,144,255,0.2)"; },
-                            mouseLeave: function(e, link) { link.findObject("HIGHLIGHT").stroke = "transparent"; },
+                            mouseEnter: function (e, link) {
+                                link.findObject("HIGHLIGHT").stroke = "rgba(30,144,255,0.2)";
+                            },
+                            mouseLeave: function (e, link) {
+                                link.findObject("HIGHLIGHT").stroke = "transparent";
+                            },
                             selectionAdorned: false
                         },
                         new go.Binding("points").makeTwoWay(),
                         $(go.Shape,  // the highlight shape, normally transparent
-                                { isPanelMain: true, strokeWidth: 8, stroke: "transparent", name: "HIGHLIGHT" }),
+                                {isPanelMain: true, strokeWidth: 8, stroke: "transparent", name: "HIGHLIGHT"}),
                         $(go.Shape,  // the link path shape
-                                { isPanelMain: true, stroke: "gray", strokeWidth: 2 },
-                                new go.Binding("stroke", "isSelected", function(sel) { return sel ? "dodgerblue" : "gray"; }).ofObject()),
+                                {isPanelMain: true, stroke: "gray", strokeWidth: 2},
+                                new go.Binding("stroke", "isSelected", function (sel) {
+                                    return sel ? "dodgerblue" : "gray";
+                                }).ofObject()),
                         $(go.Shape,  // the arrowhead
-                                { toArrow: "standard", strokeWidth: 0, fill: "gray"}),
+                                {toArrow: "standard", strokeWidth: 0, fill: "gray"}),
                         $(go.Panel, "Auto",  // the link label, normally not visible
-                                { visible: false, name: "LABEL", segmentIndex: 2, segmentFraction: 0.5},
+                                {visible: false, name: "LABEL", segmentIndex: 2, segmentFraction: 0.5},
                                 new go.Binding("visible", "visible").makeTwoWay(),
                                 $(go.Shape, "RoundedRectangle",  // the label shape
-                                        { fill: "#F8F8F8", strokeWidth: 0 }),
+                                        {fill: "#F8F8F8", strokeWidth: 0}),
                                 $(go.TextBlock, "Yes",  // the label
                                         {
                                             textAlign: "center",
@@ -196,26 +241,105 @@
                                         new go.Binding("text").makeTwoWay())
                         )
                 );
-//        myDiagram.addDiagramListener("BackgroundDoubleClicked",function(e){
-//            alert("dd")
+
+
+        // replace the default Link template in the linkTemplateMap
+        myDiagram.linkTemplate =
+                $(go.Link,  // the whole link panel
+                        {
+                            routing: go.Link.AvoidsNodes,
+                            curve: go.Link.JumpOver,
+                            corner: 5, toShortLength: 4,
+                            relinkableFrom: true,
+                            relinkableTo: true,
+                            reshapable: true,
+                            resegmentable: true,
+                            // mouse-overs subtly highlight links:
+                            mouseEnter: function (e, link) {
+                                link.findObject("HIGHLIGHT").stroke = "rgba(30,144,255,0.2)";
+                            },
+                            mouseLeave: function (e, link) {
+                                link.findObject("HIGHLIGHT").stroke = "transparent";
+                            },
+                            selectionAdorned: false
+                        },
+                        new go.Binding("points").makeTwoWay(),
+                        $(go.Shape,  // the highlight shape, normally transparent
+                                {isPanelMain: true, strokeWidth: 8, stroke: "transparent", name: "HIGHLIGHT"}),
+                        $(go.Shape,  // the link path shape
+                                {isPanelMain: true, stroke: "gray", strokeWidth: 2},
+                                new go.Binding("stroke", "isSelected", function (sel) {
+                                    return sel ? "dodgerblue" : "gray";
+                                }).ofObject()),
+                        $(go.Shape,  // the arrowhead
+                                {toArrow: "standard", strokeWidth: 0, fill: "gray"}),
+                        $(go.Panel, "Auto",  // the link label, normally not visible
+                                {visible: false, name: "LABEL", segmentIndex: 2, segmentFraction: 0.5},
+                                new go.Binding("visible", "visible").makeTwoWay(),
+                                $(go.Shape, "RoundedRectangle",  // the label shape
+                                        {fill: "#F8F8F8", strokeWidth: 0}),
+                                $(go.TextBlock, "Yes",  // the label
+                                        {
+                                            textAlign: "center",
+                                            font: "10pt helvetica, arial, sans-serif",
+                                            stroke: "#333333",
+                                            editable: true
+                                        },
+                                        new go.Binding("text").makeTwoWay())
+                        )
+                );
+        myDiagram.addDiagramListener("BackgroundDoubleClicked", function (e) {
 //            myDiagram.model.addNodeData(CreateNode());
+            showAddNodeModel()
+        });
+//        myDiagram.addDiagramListener("LinkDrawn", function (e) {
+//            console.log(e)
+//        });
+//        myDiagram.addDiagramListener("SelectionDeleted", function (e) {
+//            console.log(e)
 //        });
 
-        var key =10
-        function CreateNode(){
+        myDiagram.addDiagramListener("LinkDrawn", function (e) {
+            console.log(e.subject.toNode)
+            console.log("LinkDrawn")
+        });
+        myDiagram.addDiagramListener("LinkRelinked", function (e) {
+            console.log("LinkRelinked")
+        });
+        myDiagram.addDiagramListener("LinkReshaped", function (e) {
+            console.log("LinkReshaped")
+        });
+        myDiagram.addDiagramListener("SelectionDeleted", function (e) {
+            console.log(e.subject)
+            console.log("SelectionDeleted")
+        });
 
-            return {
-                key: getNextKey(), //设置key的方法，每个节点最好是有自己独立的key
+        myDiagram.addChangedListener(function (e) {
 
-                "loc": "",
-                "text": "节点的text值" + getNextKey()//也阔以是动态的值
+            // record node insertions and removals
+//            if (e.change === go.ChangedEvent.Property || e.change === go.ChangedEvent.Transaction ) {
+//                return;
+//            }
+//            if( e.modelChange ===""){
+//                return;
+//            }
+//            console.log(e.modelChange)
+//            console.log(e.propertyName)
+            if (e.change === go.ChangedEvent.Insert && e.modelChange === "linkFromKey") {
+                console.log(evt.propertyName + " linkFromKey link: " + e.newValue);
             }
+        })
 
+
+        function textStyle() {
+            return {
+                font: "bold 11pt Helvetica, Arial, sans-serif",
+                stroke: "whitesmoke"
+            }
         }
 
-        function getNextKey(){
-            return key +1;
-        }
+
+
 
         // Make link labels visible if coming out of a "conditional" node.
         // This listener is called by the "LinkDrawn" and "LinkRelinked" DiagramEvents.
@@ -233,11 +357,161 @@
         // initialize the Palette that is on the left side of the page
 
     } // end init
+    var jobTable
+    function loadJobTable() {
+        if (jobTable) {
+            return jobTable;
+        }
+
+        jobTable = $("#job_list").dataTable({
+            "deferRender": true,
+            "processing": true,
+            "serverSide": true,
+            "ajax": {
+                url: base_url + "/flowchart/pageList",
+                type: "post",
+                data: function (d) {
+                    var obj = {};
+                    var nodeDataArray = myDiagram.model.nodeDataArray
+                    var query = "";
+                    var excludeIdList
+                    if (nodeDataArray) {
+                        for (var i in nodeDataArray) {
+                            query = query + "excludeIdList=" + nodeDataArray[i].key + "&"
+                        }
+                    }
+                    query = query + "start=" + d.start + "&"
+                    query = query + "length=" + d.length
+                    return query;
+                }
+            },
+            "searching": false,
+            "ordering": false,
+            //"scrollX": true,	// scroll x，close self-adaption
+            "columns": [
+                {
+                    "data": 'id',
+                    "bSortable": false,
+                    "visible": true,
+                    "width": '5%'
+                },
+                {
+                    "data": 'jobSystem',
+                    "visible": true,
+                    "width": '10%'
+                },
+                {
+                    "data": 'jobModule',
+                    "visible": true,
+                    "width": '10%'
+                },
+                {
+                    "data": 'jobDesc',
+                    "visible": true,
+                    "width": '15%'
+                },
+                {"data": 'executorParam', "visible": false},
+                {
+                    "data": 'jobCron',
+                    "visible": true,
+                    "width": '10%'
+                },
+                {
+                    "data": 'mqKey',
+                    "visible": true
+                },
+
+                {"data": 'author', "visible": true, "width": '10%'},
+                {
+                    "data": 'jobStatus',
+                    "width": '10%',
+                    "visible": true,
+                    "render": function (data, type, row) {
+
+                        // status
+                        if (data && data != 'NONE') {
+                            if ('NORMAL' == data) {
+                                return '<small class="label label-success" ><i class="fa fa-clock-o"></i>RUNNING</small>';
+                            } else {
+                                return '<small class="label label-warning" >ERROR(' + data + ')</small>';
+                            }
+                        } else {
+                            return '<small class="label label-default" ><i class="fa fa-clock-o"></i>STOP</small>';
+                        }
+
+                        return data;
+                    }
+                },
+                {
+                    "data": I18n.system_opt,
+                    "width": '15%',
+                    "render": function (data, type, row) {
+                        return function () {
+
+                            var html = '<p id="' + row.id + '" >' +
+                                    '<button class="btn btn-primary btn-xs add-node" type="button">选中</button>  ' +
+
+                                    '</p>';
+
+                            return html;
+                        };
+                    }
+                }
+            ],
+            "language": {
+                "sProcessing": I18n.dataTable_sProcessing,
+                "sLengthMenu": I18n.dataTable_sLengthMenu,
+                "sZeroRecords": I18n.dataTable_sZeroRecords,
+                "sInfo": I18n.dataTable_sInfo,
+                "sInfoEmpty": I18n.dataTable_sInfoEmpty,
+                "sInfoFiltered": I18n.dataTable_sInfoFiltered,
+                "sInfoPostFix": "",
+                "sSearch": I18n.dataTable_sSearch,
+                "sUrl": "",
+                "sEmptyTable": I18n.dataTable_sEmptyTable,
+                "sLoadingRecords": I18n.dataTable_sLoadingRecords,
+                "sInfoThousands": ",",
+                "oPaginate": {
+                    "sFirst": I18n.dataTable_sFirst,
+                    "sPrevious": I18n.dataTable_sPrevious,
+                    "sNext": I18n.dataTable_sNext,
+                    "sLast": I18n.dataTable_sLast
+                },
+                "oAria": {
+                    "sSortAscending": I18n.dataTable_sSortAscending,
+                    "sSortDescending": I18n.dataTable_sSortDescending
+                }
+            }
+        });
+        return jobTable;
+
+    }
 
 
+    function showAddNodeModel() {
+        loadJobTable().fnDraw();
+        $('#addNodeModal').modal({backdrop: false, keyboard: false}).modal('show');
+    }
+    // job operate
+    $("body").on('click', '.add-node', function () {
+        var id = $(this).parent('p').attr("id");
 
+        $.ajax({
+            type: 'post',
+            url: 'flowchart/data',
+            data: {
+                jobId: id
+            },
+            dataType: "json",
+            success: function (data) {
+                myDiagram.model.addNodeDataCollection(data.nodeDataArray);
+                myDiagram.model.addLinkDataCollection(data.linkDataArray);
+                $('#addNodeModal').modal('hide');
+            }
+        });
+
+    });
     function load() {
-
 
         $.ajax({
             url: 'flowchart/data',
@@ -245,10 +519,10 @@
             data: {
                 jobId: $("#jobId").val()
             },
-            dataType : 'json',
+            dataType: 'json',
             success: function (data) {
                 myDiagram.model.nodeDataArray = data.nodeDataArray
-                myDiagram.model.linkDataArray =  data.linkDataArray
+                myDiagram.model.linkDataArray = data.linkDataArray
 
             }
         })

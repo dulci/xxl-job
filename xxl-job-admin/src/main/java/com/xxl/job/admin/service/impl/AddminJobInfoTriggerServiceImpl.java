@@ -28,17 +28,17 @@ public class AddminJobInfoTriggerServiceImpl  implements XxlJobAdminJobInfoTrigg
     private XxlJobInfoDao xxlJobInfoDao;
 
     @Override
-    public Integer triggerByJobId(Integer jobId) {
+    public Integer triggerByJobId(Integer jobId,String param) {
         XxlJobInfo xxlJobInfo = xxlJobInfoDao.loadById(jobId);
         if(xxlJobInfo == null){
             return 1;
         }
-        JobTriggerPoolHelper.trigger(jobId, TriggerTypeEnum.API, -1, null, null, null);
+        JobTriggerPoolHelper.trigger(jobId, TriggerTypeEnum.API, -1, null, param, null);
         return  0;
     }
 
     @Override
-    public Integer triggerByJobDesc(String jobDesc) {
+    public Integer triggerByJobDesc(String jobDesc,String param) {
         XxlJobInfo xxlJobInfo = new XxlJobInfo();
         xxlJobInfo.setJobDesc(jobDesc);
         List<XxlJobInfo> xxlJobInfoList = xxlJobInfoDao.selectListByJobInfo(xxlJobInfo);
@@ -48,13 +48,13 @@ public class AddminJobInfoTriggerServiceImpl  implements XxlJobAdminJobInfoTrigg
         if(xxlJobInfoList.size()>1){
             return 2;
         }
-        JobTriggerPoolHelper.trigger(xxlJobInfoList.get(0).getId(), TriggerTypeEnum.API, -1, null, null, null);
+        JobTriggerPoolHelper.trigger(xxlJobInfoList.get(0).getId(), TriggerTypeEnum.API, -1, null, param, null);
         return 0;
 
     }
 
     @Override
-    public Integer triggerByMqKey(String mqKey) {
+    public Integer triggerByMqKey(String mqKey,String param) {
 
         XxlJobInfo xxlJobInfo = new XxlJobInfo();
         xxlJobInfo.setMqKey(mqKey);
@@ -65,7 +65,7 @@ public class AddminJobInfoTriggerServiceImpl  implements XxlJobAdminJobInfoTrigg
         if(xxlJobInfoList.size()>1){
             return 2;
         }
-        JobTriggerPoolHelper.trigger(xxlJobInfoList.get(0).getId(), TriggerTypeEnum.API, -1, null, null, null);
+        JobTriggerPoolHelper.trigger(xxlJobInfoList.get(0).getId(), TriggerTypeEnum.API, -1, null, param, null);
         return 0;
     }
 }

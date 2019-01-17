@@ -11,19 +11,19 @@ public interface XxlJobAdminJobInfoTriggerService {
      * @param jobId
      * @return 0：成功
      */
-    Integer triggerByJobId(Integer jobId);
+    Integer triggerByJobId(Integer jobId,String param);
 
     /**
      * 通过jobDesc触发任务
      * @param jobDesc
      * @return 0：成功
      */
-    Integer triggerByJobDesc(String  jobDesc);
+    Integer triggerByJobDesc(String  jobDesc,String param);
 
     /**
      * 通过mqKey触发任务
      * @param mqKey
      * @return 0：成功
      */
-    Integer triggerByMqKey(String  mqKey);
+    Integer triggerByMqKey(String  mqKey,String param);
 }

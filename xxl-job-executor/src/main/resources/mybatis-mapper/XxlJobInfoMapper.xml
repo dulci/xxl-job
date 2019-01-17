@@ -3,7 +3,7 @@
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xxl.job.executor.dao.XxlJobInfoDao">
 
-	<resultMap id="XxlJobInfo" type="com.xxl.job.admin.core.model.XxlJobInfo" >
+	<resultMap id="XxlJobInfo" type="com.xxl.job.executor.core.model.XxlJobInfo" >
 		<result column="id" property="id" />
 
 		<result column="job_group" property="jobGroup" />
@@ -93,7 +93,7 @@
 		</trim>
 	</select>
 
-	<insert id="save" parameterType="com.xxl.job.admin.core.model.XxlJobInfo" useGeneratedKeys="true" keyProperty="id" >
+	<insert id="save" parameterType="com.xxl.job.executor.core.model.XxlJobInfo" useGeneratedKeys="true" keyProperty="id" >
 		INSERT INTO XXL_JOB_QRTZ_TRIGGER_INFO (
 			job_group,
 			job_cron,
@@ -153,7 +153,7 @@
 		WHERE t.id = #{id}
 	</select>
 
-	<update id="update" parameterType="com.xxl.job.admin.core.model.XxlJobInfo" >
+	<update id="update" parameterType="com.xxl.job.executor.core.model.XxlJobInfo" >
 		UPDATE XXL_JOB_QRTZ_TRIGGER_INFO
 		SET
 			job_cron = #{jobCron},

@@ -114,7 +114,7 @@
 			</if>
 		</trim>
 		ORDER BY
-			id DESC
+			t.id DESC
 		LIMIT
 			#{offset}, #{pagesize}
 	</select>

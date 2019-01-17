@@ -111,11 +111,15 @@ public class StatusServiceImpl implements StatusService {
 	 */
 	private MainJobCallbackInfo updateMainJobPercentAndStatus(XxlJobLog xxlJobLog, Integer status) {
 		MainJobCallbackInfo result = new MainJobCallbackInfo();
-		XxlJobLog mainJobLog = xxlJobLogDao.load(xxlJobLog.getParentId());
+		XxlJobLog mainJobLog =null;
+		if(xxlJobLog.getParentId() !=null) {
+			 mainJobLog = xxlJobLogDao.load(xxlJobLog.getParentId());
+		}
 		if (xxlJobLog.getType() == 1) {//主任务汇报
 			result.setStatus(status);
 			result.setTaskInstanceId(xxlJobLog.getId());
 		} else if (status.equals(Integer.valueOf(JobStatus.SUCCESS.getValue()))) {//子任务执行成功
+
 			Integer total = xxlJobLog.getTotal();
 			if (xxlJobLog.getTotal() == 0) {
 				total = xxlJobLogDao.selectCountByParentId(xxlJobLog.getParentId(), null);

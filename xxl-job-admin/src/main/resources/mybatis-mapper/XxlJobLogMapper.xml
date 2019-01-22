@@ -244,7 +244,8 @@
 		SET 
 			`handle_time`= #{handleTime}, 
 			`handle_code`= #{handleCode},
-			`handle_msg`= #{handleMsg} 
+			`handle_msg`= #{handleMsg},
+			`finish_time` = #{finishTime}
 		WHERE `id`= #{id}
 	</update>
 	

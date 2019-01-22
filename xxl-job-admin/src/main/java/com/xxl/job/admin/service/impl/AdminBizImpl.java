@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.text.MessageFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -62,6 +63,7 @@ public class AdminBizImpl implements AdminBiz {
 		// trigger success, to trigger child job
 		String callbackMsg = null;
 		if (IJobHandler.SUCCESS.getCode() == handleCallbackParam.getExecuteResult().getCode()) {
+			log.setFinishTime(new Date());
 			XxlJobInfo xxlJobInfo = xxlJobInfoDao.loadById(log.getJobId());
 			if (xxlJobInfo != null && StringUtils.isNotBlank(xxlJobInfo.getChildJobId())) {
 				callbackMsg = "<br><br><span style=\"color:#00c0ef;\" > >>>>>>>>>>>" + I18nUtil.getString("jobconf_trigger_child_run") + "<<<<<<<<<<< </span><br>";

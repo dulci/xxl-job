@@ -232,7 +232,7 @@
 			`trigger_msg`= #{triggerMsg},
 			`death_line`= #{deathLine},
 			`executor_address`= #{executorAddress},
-			`executor_handler`=#{executorHandler},
+			`executor_handler`= #{executorHandler},
 			`executor_param`= #{executorParam},
 			`executor_sharding_param`= #{executorShardingParam},
 			`executor_fail_retry_count`= #{executorFailRetryCount}

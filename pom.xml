@@ -15,7 +15,7 @@
 		<module>xxl-job-admin</module>
 		<module>xxl-job-api</module>
 		<module>xxl-job-executor</module>
-
+		<module>xxl-job-worker</module>
 	</modules>
 
 	<properties>

@@ -106,11 +106,7 @@ public class XxlJobTrigger {
         if (StringUtils.isNotEmpty(flowInstance)) {
             jobLog.setFlowInstance(flowInstance);
         } else {
-            String jobidRegexp = MessageFormat.format(AdminBizImpl.CHILD_JOBID_REGXP, jobInfo.getId());
-            List<XxlJobInfo> jobInfoList = XxlJobAdminConfig.getAdminConfig().getXxlJobInfoDao().findJobsByChildJobId(jobInfo.getId(), jobidRegexp);
-            if (jobInfoList == null || jobInfoList.size() == 0) {
-                jobLog.setFlowInstance(getFlowInstance(jobInfo.getJobCron(), jobInfo.getId()));
-            }
+            jobLog.setFlowInstance(getFlowInstance(jobInfo.getJobCron(), jobInfo.getId()));
         }
         XxlJobAdminConfig.getAdminConfig().getXxlJobLogDao().save(jobLog);
         logger.info(">>>>>>>>>>> xxl-job trigger start, jobId:{}", jobLog.getId());

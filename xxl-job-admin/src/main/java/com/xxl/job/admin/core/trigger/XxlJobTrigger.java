@@ -147,6 +147,7 @@ public class XxlJobTrigger {
 			routeAddressResult = new ReturnT<String>(ReturnT.FAIL_CODE, I18nUtil.getString("jobconf_trigger_address_empty"));
 		}
 
+		logger.info(">>>>>>>>>>> xxl-job invokie executor begin, jobId:{}", jobLog.getId());
 		// 4、trigger remote executor
 		ReturnT<String> triggerResult = null;
 		if (address != null) {
@@ -154,8 +155,10 @@ public class XxlJobTrigger {
 		} else {
 			triggerResult = new ReturnT<String>(ReturnT.FAIL_CODE, null);
 		}
+		logger.info(">>>>>>>>>>> xxl-job invokie executor end, jobId:{}", jobLog.getId());
 
 		// 5、collection trigger info
+		logger.info(">>>>>>>>>>> xxl-job collection trigger info begin, jobId:{}", jobLog.getId());
 		StringBuffer triggerMsgSb = new StringBuffer();
 		triggerMsgSb.append(I18nUtil.getString("jobconf_trigger_type")).append("：").append(triggerType.getTitle());
 		triggerMsgSb.append("<br>").append(I18nUtil.getString("jobconf_trigger_admin_adress")).append("：").append(IpUtil.getIp());
@@ -172,8 +175,10 @@ public class XxlJobTrigger {
 
 		triggerMsgSb.append("<br><br><span style=\"color:#00c0ef;\" > >>>>>>>>>>>" + I18nUtil.getString("jobconf_trigger_run") + "<<<<<<<<<<< </span><br>")
 				.append((routeAddressResult != null && routeAddressResult.getMsg() != null) ? routeAddressResult.getMsg() + "<br><br>" : "").append(triggerResult.getMsg() != null ? triggerResult.getMsg() : "");
+		logger.info(">>>>>>>>>>> xxl-job collection trigger info end, jobId:{}", jobLog.getId());
 
 		// 6、save log trigger-info
+		logger.info(">>>>>>>>>>> xxl-job save log trigger-info begin, jobId:{}", jobLog.getId());
 		jobLog.setExecutorAddress(address);
 		jobLog.setExecutorHandler(jobInfo.getExecutorHandler());
 		jobLog.setExecutorParam(jobInfo.getExecutorParam());
@@ -188,6 +193,7 @@ public class XxlJobTrigger {
 
 		}
 		XxlJobAdminConfig.getAdminConfig().getXxlJobLogDao().updateTriggerInfo(jobLog);
+		logger.info(">>>>>>>>>>> xxl-job save log trigger-info end, jobId:{}", jobLog.getId());
 
 		logger.info(">>>>>>>>>>> xxl-job trigger end, jobId:{}", jobLog.getId());
 	}

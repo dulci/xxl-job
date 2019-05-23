@@ -121,11 +121,11 @@ public class StatusServiceImpl implements StatusService {
 			result.setTaskInstanceId(xxlJobLog.getId());
 		} else if (status.equals(Integer.valueOf(JobStatus.SUCCESS.getValue()))) {//子任务执行成功
 
-			Integer total = xxlJobLog.getTotal();
+			int total = xxlJobLog.getTotal();
 			if (xxlJobLog.getTotal() == 0) {
 				total = xxlJobLogDao.selectCountByParentId(xxlJobLog.getParentId(), null);
 			}
-			Integer finish = xxlJobLogDao.selectCountByParentId(xxlJobLog.getParentId(), Integer.valueOf(JobStatus.SUCCESS.getValue()));
+			int finish = xxlJobLogDao.selectCountByParentId(xxlJobLog.getParentId(), Integer.valueOf(JobStatus.SUCCESS.getValue()));
 			Double percent = (Double.valueOf(finish)) / Double.valueOf(total) * 100.0;
 
 			if (mainJobLog != null) {

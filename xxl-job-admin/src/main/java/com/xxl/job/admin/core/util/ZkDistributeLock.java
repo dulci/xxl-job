@@ -19,9 +19,9 @@ public class ZkDistributeLock implements Lock  {
 	private static Logger logger = LoggerFactory.getLogger(ZkDistributeLock.class);
 
 	private static final String ZK_IP_PORT = XxlJobAdminConfig.getAdminConfig().getZookeeperAddress();
-	private static final String LOCK_NODE = "/lock/";
 
-	private ZkClient client = new ZkClient(ZK_IP_PORT);
+
+	private  static  ZkClient client = new ZkClient(ZK_IP_PORT);
 
 	private CountDownLatch cdl = null;
 	// 锁的名字

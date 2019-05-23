@@ -12,6 +12,7 @@ import com.xxl.job.executor.dao.XxlJobLogDao;
 import com.xxl.job.executor.dto.MainJobCallbackInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Date;
@@ -162,5 +163,11 @@ public class StatusServiceImpl implements StatusService {
 			}
 		}
 		return result;
+	}
+	@Test
+	public void test(){
+		Integer total =Integer.valueOf(357);
+		Integer finish =Integer.valueOf(357);
+		System.out.print(total==finish);
 	}
 }

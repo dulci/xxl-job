@@ -7,7 +7,6 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -21,7 +20,6 @@ import javax.sql.DataSource;
 public class XxlJobDataSourceConfig {
 	@Primary
 	@Bean(name = "xxljobDataSourceProperties")
-	@Qualifier("xxljobDataSourceProperties")
 	@ConfigurationProperties(prefix = "spring.datasource.xxljob")
 	public DataSourceProperties xxljobDataSourceProperties() {
 		return new DataSourceProperties();
@@ -29,9 +27,8 @@ public class XxlJobDataSourceConfig {
 
 	@Primary
 	@Bean(name = "xxljobDataSource")
-	@ConfigurationProperties(prefix = "spring.datasource.xxljob")
-	public DataSource xxljobDataSource() {
-		return DataSourceBuilder.create().build();
+	public DataSource xxljobDataSource(DataSourceProperties xxljobDataSourceProperties) {
+		return xxljobDataSourceProperties.initializeDataSourceBuilder().build();
 	}
 
 	@Bean(name = "xxljobSqlSessionFactory")

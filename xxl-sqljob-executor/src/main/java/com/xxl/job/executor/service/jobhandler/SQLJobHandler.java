@@ -15,14 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import java.util.HashMap;
-import java.util.Map;
-
-/**
- * 跨平台RabbitMQ任务
- *
- * @author zhangjl-h
- */
 @JobHandler(value = "sqlJobHandler")
 @Component
 public class SQLJobHandler extends IJobHandler {
@@ -53,7 +45,7 @@ public class SQLJobHandler extends IJobHandler {
 			TriggerCallbackThread.pushCallBack(new HandleCallbackParam(LogInfoUtil.getLogId(), System.currentTimeMillis(), new ReturnT(ReturnT.PROCESSING.getCode(), "jobId is empty")));
 
 			// 1 获得任务
-			Integer jobId = LogInfoUtil.getLogId();
+			Integer jobId = LogInfoUtil.getJobId();
 			if (jobId == null) {
 				XxlJobLogger.log("jobId is empty");
 				ReturnT result = new ReturnT(ReturnT.FAIL.getCode(), "jobId is empty");
@@ -85,7 +77,7 @@ public class SQLJobHandler extends IJobHandler {
 			}
 
 			// 3 获得执行SQL
-			String executorSQL = xxlJobInfo.getExecutorSQL();
+			String executorSQL = xxlJobInfo.getExecutorSQL().replace("\r\n", " ");
 			if (StringUtils.isEmpty(executorSQL)) {
 				XxlJobLogger.log("executorSQL dosen't exist");
 				ReturnT result = new ReturnT(ReturnT.FAIL.getCode(), "executorSQL dosen't exist");
@@ -94,8 +86,8 @@ public class SQLJobHandler extends IJobHandler {
 			}
 
 			// 4 执行SQL
-			XxlJobLogger.log("the execute sql is:");
-			XxlJobLogger.log(executorSQL);
+			// TODO 占位符替换
+			XxlJobLogger.log("the execute sql is:\r\n" + executorSQL);
 			long begin = System.currentTimeMillis();
 			if ("waterdrop".equals(datasource)) {
 				try {
@@ -119,7 +111,7 @@ public class SQLJobHandler extends IJobHandler {
 
 			// 5  状态回转
 			long end = System.currentTimeMillis();
-			XxlJobLogger.log("sql execution is:" + ((double) (((int) (end - begin)) / 1000)) / 1000.0);
+			XxlJobLogger.log("sql execution is: " + ((double) (end - begin)) / 1000.0);
 			ReturnT result = new ReturnT(ReturnT.SUCCESS.getCode(), "execute success");
 			TriggerCallbackThread.pushCallBack(new HandleCallbackParam(LogInfoUtil.getLogId(), System.currentTimeMillis(), result));
 

@@ -5,8 +5,8 @@ import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
@@ -17,10 +17,15 @@ import javax.sql.DataSource;
 @Configuration
 @MapperScan(basePackages = "com.xxl.job.executor.dao.waterdrop", sqlSessionTemplateRef = "waterdropSqlSessionTemplate")
 public class WaterdropDataSourceConfig {
-	@Bean(name = "waterdropDataSource")
+	@Bean(name = "waterdropDataSourceProperties")
 	@ConfigurationProperties(prefix = "spring.datasource.waterdrop")
-	public DataSource waterdropDataSource() {
-		return DataSourceBuilder.create().build();
+	public DataSourceProperties waterdropDataSourceProperties() {
+		return new DataSourceProperties();
+	}
+
+	@Bean(name = "waterdropDataSource")
+	public DataSource waterdropDataSource(@Qualifier("waterdropDataSourceProperties") DataSourceProperties waterdropDataSourceProperties) {
+		return waterdropDataSourceProperties.initializeDataSourceBuilder().build();
 	}
 
 	@Bean(name = "waterdropSqlSessionFactory")

@@ -162,7 +162,13 @@
                             </select>
                         </div>
                         <label for="firstname" class="col-sm-2 control-label">JobHandler<font color="red">*</font></label>
-                        <div class="col-sm-4"><input type="text" class="form-control" name="executorHandler" placeholder="${I18n.system_please_input}JobHandler" maxlength="100" value="rabbitMQJobHandler"></div>
+                        <div class="col-sm-4">
+                            <select class="form-control" name="executorHandler" maxlength="100">
+                                <option value="rabbitMQJobHandler" selected="selected">rabbitMQJobHandler</option>
+                                <option value="sqlJobHandler">sqlJobHandler</option>
+                            </select>
+                            <#--<input type="text" class="form-control" name="executorHandler" placeholder="${I18n.system_please_input}JobHandler" maxlength="100" value="rabbitMQJobHandler">-->
+                        </div>
                     </div>
                     <div class="form-group">
                         <label for="firstname" class="col-sm-2 control-label">${I18n.jobinfo_field_executorBlockStrategy}<font color="red">*</font></label>
@@ -218,12 +224,23 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="firstname" class="col-sm-2 control-label">${I18n.jobinfo_field_executorparam}<font color="black">*</font></label>
+                        <label class="col-sm-2 control-label">数据库<font color="black">*</font></label>
+                        <div class="col-sm-10">
+                            <input type="text" class=" form-control" name="datasource" placeholder="waterdrop or gcxx" maxlength="100" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">执行SQL<font color="black">*</font></label>
+                        <div class="col-sm-10">
+                            <textarea class="textarea form-control" name="executorSQL" maxlength="100"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">${I18n.jobinfo_field_executorparam}<font color="black">*</font></label>
                         <div class="col-sm-10">
                             <textarea class="textarea form-control" name="executorParam" placeholder="${I18n.system_please_input}${I18n.jobinfo_field_executorparam}" maxlength="512" style="height: 63px; line-height: 1.2;"></textarea>
 						</div>
                     </div>
-
                     <hr>
 					<div class="form-group">
 						<div class="col-sm-offset-3 col-sm-6">

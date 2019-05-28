@@ -278,7 +278,7 @@ $(function() {
 	});
 
     $('body').on('click', '.showSQL', function (e) {
-    	$("#executorSQL").val($(this).attr('sql'));
+    	$("#updateSQLExecutorSQL").val($(this).attr('sql'));
         $("#updateSQLJobId").val($(this).attr('jobId'));
         $('#sqlShowModal').modal({backdrop: false, keyboard: false}).modal('show');
     });

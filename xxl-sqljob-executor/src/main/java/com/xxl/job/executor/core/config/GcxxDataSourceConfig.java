@@ -9,6 +9,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 
@@ -18,7 +19,7 @@ import javax.sql.DataSource;
 @MapperScan(basePackages = "com.xxl.job.executor.dao.gcxx", sqlSessionTemplateRef = "gcxxSqlSessionTemplate")
 public class GcxxDataSourceConfig {
 	@Bean(name = "gcxxDataSource")
-	@ConfigurationProperties(prefix = "gcxx.datasource")
+	@ConfigurationProperties(prefix = "spring.datasource.gcxx")
 	public DataSource gcxxDataSource() {
 		return DataSourceBuilder.create().build();
 	}

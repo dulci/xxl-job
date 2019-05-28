@@ -18,7 +18,7 @@ import javax.sql.DataSource;
 @MapperScan(basePackages = "com.xxl.job.executor.dao.waterdrop", sqlSessionTemplateRef = "waterdropSqlSessionTemplate")
 public class WaterdropDataSourceConfig {
 	@Bean(name = "waterdropDataSource")
-	@ConfigurationProperties(prefix = "waterdrop.datasource")
+	@ConfigurationProperties(prefix = "spring.datasource.waterdrop")
 	public DataSource waterdropDataSource() {
 		return DataSourceBuilder.create().build();
 	}

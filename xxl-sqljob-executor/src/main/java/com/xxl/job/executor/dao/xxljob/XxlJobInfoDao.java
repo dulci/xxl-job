@@ -1,6 +1,6 @@
-package com.xxl.job.executor.dao;
+package com.xxl.job.executor.dao.xxljob;
 
-import com.xxl.job.executor.core.model.XxlJobInfo;
+import com.xxl.job.executor.core.model.xxljob.XxlJobInfo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 

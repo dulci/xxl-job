@@ -1,4 +1,4 @@
-package com.xxl.job.executor.core.model;
+package com.xxl.job.executor.core.model.xxljob;
 
 import lombok.Data;
 
@@ -31,7 +31,9 @@ public class XxlJobInfo {
 	private String executorBlockStrategy;	// 阻塞处理策略
 	private int executorTimeout;     		// 任务执行超时时间，单位秒
 	private int executorFailRetryCount;		// 失败重试次数
-	private  String mqKey; //mq键值
+	private  String mqKey; // mq键值
+	private String datasource; // 数据源
+	private String executorSQL; // 执行SQL
 	
 	private String glueType;		// GLUE类型	#com.xxl.job.core.glue.GlueTypeEnum
 	private String glueSource;		// GLUE源代码

@@ -11,7 +11,7 @@ import java.util.Map;
 
 /**
  * core job action for xxl-job
- * 
+ *
  * @author xuxueli 2016-5-28 15:30:33
  */
 public interface XxlJobService {
@@ -27,7 +27,7 @@ public interface XxlJobService {
 	 * @param filterTime
 	 * @return
 	 */
-	public Map<String, Object> pageList(int start, int length, int jobGroup, String jobDesc, String mqKey, String filterTime, String jobSystem, String jobModule,List<Integer> excludeIdList);
+	public Map<String, Object> pageList(int start, int length, int jobGroup, String jobDesc, String mqKey, String filterTime, String jobSystem, String jobModule, List<Integer> excludeIdList);
 
 	/**
 	 * add job, default quartz stop
@@ -44,6 +44,8 @@ public interface XxlJobService {
 	 * @return
 	 */
 	public ReturnT<String> update(XxlJobInfo jobInfo);
+
+	public ReturnT<String> updateSQL(Integer jobId, String executorSQL);
 
 	/**
 	 * remove job, unbind quartz
@@ -74,7 +76,7 @@ public interface XxlJobService {
 	 *
 	 * @return
 	 */
-	public Map<String,Object> dashboardInfo();
+	public Map<String, Object> dashboardInfo();
 
 	/**
 	 * chart info
@@ -83,7 +85,8 @@ public interface XxlJobService {
 	 * @param endDate
 	 * @return
 	 */
-	public ReturnT<Map<String,Object>> chartInfo(Date startDate, Date endDate);
-	public  Map<String,Object>  selectFlowChartData ( int id);
+	public ReturnT<Map<String, Object>> chartInfo(Date startDate, Date endDate);
+
+	public Map<String, Object> selectFlowChartData(int id);
 
 }

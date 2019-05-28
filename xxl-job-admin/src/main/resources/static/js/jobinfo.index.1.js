@@ -78,8 +78,15 @@ $(function() {
 						"width":'10%'
 					},
 					{
-						"data": 'mqKey',
-						"visible" : true
+						"data": 'jobInfo',
+						"visible" : true,
+                        "render": function ( data, type, row ) {
+							if (row.executorHandler == 'rabbitMQJobHandler') {
+                                return row.mqKey;
+							} else if (row.executorHandler == 'sqlJobHandler') {
+                                return row.datasource + '</br><a class="showSQL" sql="' + row.executorSQL + '" jobId="' + row.id + '">查看/修改SQL</a>';
+							}
+                        }
 					},
 	                { 
 	                	"data": 'addTime', 
@@ -245,7 +252,6 @@ $(function() {
 				dataType : "json",
 				success : function(data){
 					if (data.code == 200) {
-
 						layer.open({
 							title: I18n.system_tips,
                             btn: [ I18n.system_ok ],
@@ -270,6 +276,42 @@ $(function() {
 			});
 		});
 	});
+
+    $('body').on('click', '.showSQL', function (e) {
+    	$("#executorSQL").val($(this).attr('sql'));
+        $("#updateSQLJobId").val($(this).attr('jobId'));
+        $('#sqlShowModal').modal({backdrop: false, keyboard: false}).modal('show');
+    });
+
+    $('body').on('click', '#btnUpdateSQL', function (e) {
+        $.ajax({
+            type : 'POST',
+            url : base_url + "/jobinfo/updateSQL",
+            data : {
+                "jobId" : $("#updateSQLJobId").val(),
+                "executorSQL" : $("#updateSQLExecutorSQL").val()
+            },
+            dataType : "json",
+            success : function(data){
+                if (data.code == 200) {
+                    $('#sqlShowModal').modal('hide');
+                    layer.open({
+                        title: I18n.system_tips,
+                        btn: [ I18n.system_ok ],
+                        content: I18n.jobinfo_opt_run + I18n.system_success ,
+                        icon: '1'
+                    });
+                } else {
+                    layer.open({
+                        title: I18n.system_tips,
+                        btn: [ I18n.system_ok ],
+                        content: (data.msg || I18n.jobinfo_opt_run + I18n.system_fail ),
+                        icon: '2'
+                    });
+                }
+            }
+        });
+    });
 
     // job trigger
     $("#job_list").on('click', '.job_trigger',function() {
@@ -317,6 +359,8 @@ $(function() {
 
 	// add
 	$(".add").click(function(){
+        $(".rabbitmqgroup").show();
+        $(".sqlgroup").hide();
 		$('#addModal').modal({backdrop: false, keyboard: false}).modal('show');
 	});
 	var addModalValidate = $("#addModal .form").validate({
@@ -441,6 +485,17 @@ $(function() {
             $executorHandler.attr("readonly","readonly");
         } else {
             $executorHandler.removeAttr("readonly");
+        }
+    });
+
+    $("#executorHandler").change(function(){
+    	$(".rabbitmqgroup").hide();
+        $(".sqlgroup").hide();
+        var executorHandler = $(this).val();
+        if ('sqlJobHandler' == executorHandler) {
+            $(".sqlgroup").show();
+        } else {
+        	$(".rabbitmqgroup").show();
         }
     });
 

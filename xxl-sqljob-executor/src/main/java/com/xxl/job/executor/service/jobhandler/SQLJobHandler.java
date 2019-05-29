@@ -15,6 +15,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 @JobHandler(value = "sqlJobHandler")
 @Component
 public class SQLJobHandler extends IJobHandler {
@@ -41,7 +45,8 @@ public class SQLJobHandler extends IJobHandler {
 
 		@Override
 		public void run() {
-			XxlJobLogger.log("jobId is empty");
+			long jobBegin = System.currentTimeMillis();
+			XxlJobLogger.log("sql execution begin");
 			TriggerCallbackThread.pushCallBack(new HandleCallbackParam(LogInfoUtil.getLogId(), System.currentTimeMillis(), new ReturnT(ReturnT.PROCESSING.getCode(), "jobId is empty")));
 
 			// 1 获得任务
@@ -84,34 +89,47 @@ public class SQLJobHandler extends IJobHandler {
 				TriggerCallbackThread.pushCallBack(new HandleCallbackParam(LogInfoUtil.getLogId(), System.currentTimeMillis(), result));
 				return;
 			}
-
-			// 4 执行SQL
-			// TODO 占位符替换
-			XxlJobLogger.log("the execute sql is:\r\n" + executorSQL);
-			long begin = System.currentTimeMillis();
-			if ("waterdrop".equals(datasource)) {
-				try {
-					waterdropExecutorSQLDao.executorSQL(executorSQL);
-				} catch (Exception e) {
-					XxlJobLogger.log(e);
-					ReturnT result = new ReturnT(ReturnT.FAIL.getCode(), "execution occur exception");
-					TriggerCallbackThread.pushCallBack(new HandleCallbackParam(LogInfoUtil.getLogId(), System.currentTimeMillis(), result));
-					return;
-				}
+			List<String> sqls = new ArrayList<>();
+			if (executorSQL.contains(";")) {
+				sqls.addAll(Arrays.asList(executorSQL.split(";")));
 			} else {
-				try {
-					gcxxExecutorSQLDao.executorSQL(executorSQL);
-				} catch (Exception e) {
-					XxlJobLogger.log(e);
-					ReturnT result = new ReturnT(ReturnT.FAIL.getCode(), "execution occur exception");
-					TriggerCallbackThread.pushCallBack(new HandleCallbackParam(LogInfoUtil.getLogId(), System.currentTimeMillis(), result));
-					return;
-				}
+				sqls.add(executorSQL);
 			}
 
+			// 4 执行SQL
+			for (String sql : sqls) {
+				if (StringUtils.isEmpty(sql)) {
+					continue;
+				}
+				XxlJobLogger.log("current execution sql is:\r\n\r\n" + sql + "\r\n");
+				long begin = System.currentTimeMillis();
+				if ("waterdrop".equals(datasource)) {
+					try {
+						waterdropExecutorSQLDao.executorSQL(sql);
+					} catch (Exception e) {
+						XxlJobLogger.log(e);
+						ReturnT result = new ReturnT(ReturnT.FAIL.getCode(), "execution occur exception");
+						TriggerCallbackThread.pushCallBack(new HandleCallbackParam(LogInfoUtil.getLogId(), System.currentTimeMillis(), result));
+						return;
+					}
+				} else {
+					try {
+						gcxxExecutorSQLDao.executorSQL(sql);
+					} catch (Exception e) {
+						XxlJobLogger.log(e);
+						ReturnT result = new ReturnT(ReturnT.FAIL.getCode(), "execution occur exception");
+						TriggerCallbackThread.pushCallBack(new HandleCallbackParam(LogInfoUtil.getLogId(), System.currentTimeMillis(), result));
+						return;
+					}
+				}
+				long end = System.currentTimeMillis();
+				XxlJobLogger.log("current execution finished in " + ((double) (end - begin)) / 1000.0 + "s");
+			}
+
+
 			// 5  状态回转
-			long end = System.currentTimeMillis();
-			XxlJobLogger.log("sql execution is: " + ((double) (end - begin)) / 1000.0);
+			long jobEnd = System.currentTimeMillis();
+			XxlJobLogger.log("total execution is: " + ((double) (jobEnd - jobBegin)) / 1000.0 + "s");
 			ReturnT result = new ReturnT(ReturnT.SUCCESS.getCode(), "execute success");
 			TriggerCallbackThread.pushCallBack(new HandleCallbackParam(LogInfoUtil.getLogId(), System.currentTimeMillis(), result));
 

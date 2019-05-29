@@ -491,7 +491,7 @@ exit 0
                     <div class="form-group">
                         <label for="firstname" class="col-sm-2 control-label">执行SQL</label>
                         <div class="col-sm-10">
-                            <textarea style="height: 450px;" class="textarea form-control" name="executorSQL" id="updateSQLExecutorSQL" placeholder="please input executorSQL" maxlength="512" style="height: 63px; line-height: 1.2;"></textarea>
+                            <textarea class="textarea form-control" name="executorSQL" id="updateSQLExecutorSQL" placeholder="please input executorSQL" style="height: 450px; line-height: 1.2;"></textarea>
                         </div>
                     </div>
                     <hr>

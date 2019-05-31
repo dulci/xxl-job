@@ -56,9 +56,9 @@ public class JobInfoController {
 	@ResponseBody
 	public Map<String, Object> pageList(@RequestParam(required = false, defaultValue = "0") int start,
 	                                    @RequestParam(required = false, defaultValue = "10") int length,
-										@RequestParam(required = false, defaultValue = "-1") Integer jobGroup, String jobDesc, String mqKey, String filterTime, String jobSystem, String jobModule) {
+	                                    @RequestParam(required = false, defaultValue = "-1") Integer jobGroup, String jobDesc, String mqKey, String filterTime, String jobSystem, String jobModule) {
 
-		return xxlJobService.pageList(start, length, jobGroup, jobDesc, mqKey, filterTime, jobSystem, jobModule,null);
+		return xxlJobService.pageList(start, length, jobGroup, jobDesc, mqKey, filterTime, jobSystem, jobModule, null);
 	}
 
 	@RequestMapping("/add")
@@ -71,6 +71,12 @@ public class JobInfoController {
 	@ResponseBody
 	public ReturnT<String> update(XxlJobInfo jobInfo) {
 		return xxlJobService.update(jobInfo);
+	}
+
+	@RequestMapping("/updateSQL")
+	@ResponseBody
+	public ReturnT<String> updateSQL(Integer jobId, String executorSQL) {
+		return xxlJobService.updateSQL(jobId, executorSQL);
 	}
 
 	@RequestMapping("/remove")

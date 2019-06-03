@@ -237,7 +237,7 @@
                     <div class="form-group sqlgroup" style="display: none;">
                         <label class="col-sm-2 control-label">执行SQL<font color="black">*</font></label>
                         <div class="col-sm-10">
-                            <textarea class="textarea form-control" name="executorSQL" maxlength="100"></textarea>
+                            <textarea class="textarea form-control" name="executorSQL"></textarea>
                         </div>
                     </div>
                     <div class="form-group">

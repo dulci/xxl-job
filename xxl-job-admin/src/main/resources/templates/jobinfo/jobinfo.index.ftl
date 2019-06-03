@@ -230,6 +230,7 @@
                                 <option value="" >请选择</option>
                                 <option value="waterdrop" >waterdrop</option>
                                 <option value="gcxx" >gcxx</option>
+                                <option value="crawlerself" >crawlerself</option>
                             </select>
                         </div>
                     </div>

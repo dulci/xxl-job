@@ -8,6 +8,7 @@ import com.xxl.job.core.log.XxlJobLogger;
 import com.xxl.job.core.thread.TriggerCallbackThread;
 import com.xxl.job.core.util.LogInfoUtil;
 import com.xxl.job.executor.core.model.xxljob.XxlJobInfo;
+import com.xxl.job.executor.dao.crawlerself.CrawlerselfExecutorSQLDao;
 import com.xxl.job.executor.dao.gcxx.GcxxExecutorSQLDao;
 import com.xxl.job.executor.dao.waterdrop.WaterdropExecutorSQLDao;
 import com.xxl.job.executor.dao.xxljob.XxlJobInfoDao;
@@ -28,6 +29,8 @@ public class SQLJobHandler extends IJobHandler {
 	private GcxxExecutorSQLDao gcxxExecutorSQLDao;
 	@Autowired
 	private WaterdropExecutorSQLDao waterdropExecutorSQLDao;
+	@Autowired
+	private CrawlerselfExecutorSQLDao crawlerselfExecutorSQLDao;
 
 	@Override
 	public ReturnT<String> execute(String param) throws Exception {
@@ -74,7 +77,7 @@ public class SQLJobHandler extends IJobHandler {
 				return;
 			}
 
-			if (!"waterdrop".equals(datasource) && !"gcxx".equals(datasource)) {
+			if (!"waterdrop".equals(datasource) && !"gcxx".equals(datasource) && !"crawlerself".equals(datasource)) {
 				XxlJobLogger.log("unrecognized datasource");
 				ReturnT result = new ReturnT(ReturnT.FAIL.getCode(), "unrecognized datasource");
 				TriggerCallbackThread.pushCallBack(new HandleCallbackParam(LogInfoUtil.getLogId(), System.currentTimeMillis(), result));
@@ -106,6 +109,15 @@ public class SQLJobHandler extends IJobHandler {
 				if ("waterdrop".equals(datasource)) {
 					try {
 						waterdropExecutorSQLDao.executorSQL(sql);
+					} catch (Exception e) {
+						XxlJobLogger.log(e);
+						ReturnT result = new ReturnT(ReturnT.FAIL.getCode(), "execution occur exception");
+						TriggerCallbackThread.pushCallBack(new HandleCallbackParam(LogInfoUtil.getLogId(), System.currentTimeMillis(), result));
+						return;
+					}
+				} else if ("crawlerself".equals(datasource)) {
+					try {
+						crawlerselfExecutorSQLDao.executorSQL(sql);
 					} catch (Exception e) {
 						XxlJobLogger.log(e);
 						ReturnT result = new ReturnT(ReturnT.FAIL.getCode(), "execution occur exception");

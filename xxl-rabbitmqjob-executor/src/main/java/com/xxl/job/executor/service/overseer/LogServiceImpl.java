@@ -37,7 +37,8 @@ public class LogServiceImpl implements LogService {
 		StringBuffer stringBuffer = new StringBuffer();
 		stringBuffer.append(DateUtil.format(new Date())).append(" recieve log report ").append("[" + taskInstanceId + "]").append("[" + ip + "]").append(" ").append(log);
 		this.log.info(stringBuffer.toString());
-		new LogThread(taskInstanceId, ip, log).start();
+		//new LogThread(taskInstanceId, ip, log).start();
+		printLog(taskInstanceId,ip,log,null);
 		return 0;
 	}
 
@@ -54,8 +55,21 @@ public class LogServiceImpl implements LogService {
 		StringBuffer stringBuffer = new StringBuffer();
 		stringBuffer.append(DateUtil.format(new Date())).append(" recieve log report ").append("[" + taskInstanceId + "]").append("[" + ip + "]").append(" ").append(log);
 		this.log.info(stringBuffer.toString());
-		new LogThread(taskInstanceId, ip, e).start();
+		//new LogThread(taskInstanceId, ip, e).start();
+
+		printLog(taskInstanceId,ip,null,e);
 		return 0;
+	}
+
+	private void printLog(Integer logId,String ip,String log,Exception e){
+		String logFileName = XxlJobFileAppender.makeLogFileName(new Date(),  logId);
+		XxlJobFileAppender.contextHolder.set(logFileName);
+		if (StringUtils.isNotEmpty(log)) {
+			XxlJobLogger.log("ip:{} , detail:{}", ip, log);
+		} else if (e != null) {
+			XxlJobLogger.log("ip:{} , exception detail:{}", ip, e.getClass().getName());
+			XxlJobLogger.log(e);
+		}
 	}
 
 	private static class LogThread extends Thread {

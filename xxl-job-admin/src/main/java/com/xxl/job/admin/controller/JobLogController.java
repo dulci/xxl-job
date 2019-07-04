@@ -53,6 +53,8 @@ public class JobLogController {
 		if (jobId > 0) {
 			XxlJobInfo jobInfo = xxlJobInfoDao.loadById(jobId);
 			model.addAttribute("jobInfo", jobInfo);
+		}else{
+			model.addAttribute("jobInfo", new XxlJobInfo());
 		}
 
 		return "joblog/joblog.index";
@@ -60,7 +62,7 @@ public class JobLogController {
 
 	@RequestMapping("/getJobsByGroup")
 	@ResponseBody
-	public ReturnT<List<XxlJobInfo>> getJobsByGroup(int jobGroup) {
+	public ReturnT<List<XxlJobInfo>> getJobsByGroup(Integer jobGroup) {
 		List<XxlJobInfo> list = xxlJobInfoDao.getJobsByGroup(jobGroup);
 		return new ReturnT<List<XxlJobInfo>>(list);
 	}
@@ -69,7 +71,7 @@ public class JobLogController {
 	@ResponseBody
 	public Map<String, Object> pageList(@RequestParam(required = false, defaultValue = "0") int start,
 	                                    @RequestParam(required = false, defaultValue = "10") int length,
-	                                    int jobGroup, int jobId, int logStatus, String filterTime, String jobSystem, String jobModule) {
+	                                    Integer jobGroup, Integer jobId, Integer logStatus, String filterTime, String jobSystem, String jobModule) {
 		// parse param
 		Date triggerTimeStart = null;
 		Date triggerTimeEnd = null;

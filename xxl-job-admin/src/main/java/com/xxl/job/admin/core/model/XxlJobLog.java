@@ -51,4 +51,6 @@ public class XxlJobLog {
 
 	private Date deathLine;
 
+	private String jobDesc;
+
 }

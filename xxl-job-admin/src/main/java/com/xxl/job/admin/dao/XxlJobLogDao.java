@@ -21,8 +21,8 @@ public interface XxlJobLogDao {
 	                                @Param("pagesize") int pagesize,
 	                                @Param("jobSystem") String jobSystem,
 	                                @Param("jobModule") String jobModule,
-	                                @Param("jobGroup") int jobGroup,
-	                                @Param("jobId") int jobId,
+	                                @Param("jobGroup") Integer jobGroup,
+	                                @Param("jobId") Integer jobId,
 	                                @Param("triggerTimeStart") Date triggerTimeStart,
 	                                @Param("triggerTimeEnd") Date triggerTimeEnd,
 	                                @Param("logStatus") int logStatus);
@@ -31,8 +31,8 @@ public interface XxlJobLogDao {
 	                         @Param("pagesize") int pagesize,
 	                         @Param("jobSystem") String jobSystem,
 	                         @Param("jobModule") String jobModule,
-	                         @Param("jobGroup") int jobGroup,
-	                         @Param("jobId") int jobId,
+	                         @Param("jobGroup") Integer jobGroup,
+	                         @Param("jobId") Integer jobId,
 	                         @Param("triggerTimeStart") Date triggerTimeStart,
 	                         @Param("triggerTimeEnd") Date triggerTimeEnd,
 	                         @Param("logStatus") int logStatus);

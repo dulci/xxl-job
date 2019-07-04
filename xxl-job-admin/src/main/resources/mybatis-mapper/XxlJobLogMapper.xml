@@ -34,6 +34,7 @@
 		<result column="percent" property="percent" />
 
 		<result column="alarm_status" property="alarmStatus" />
+		<result column="job_desc" property="jobDesc" />
 	</resultMap>
 
 	<sql id="Base_Column_List">
@@ -63,7 +64,8 @@
 	
 	<select id="pageList" resultMap="XxlJobLog">
 		SELECT
-			<include refid="Base_Column_List" />
+			<include refid="Base_Column_List" />,
+			info.job_desc
 		FROM
 			XXL_JOB_QRTZ_TRIGGER_LOG AS t
 			left join
@@ -72,11 +74,11 @@
 			t.job_id = info.id
 		<trim prefix="WHERE" prefixOverrides="AND | OR" >
 			t.type = 1
-			<if test="jobGroup gt 0">
+			<if test="jobGroup !=null">
 				AND
 				t.job_group = #{jobGroup}
 			</if>
-			<if test="jobId gt 0">
+			<if test="jobId !=null">
 				AND
 				t.job_id = #{jobId}
 			</if>
@@ -130,7 +132,7 @@
 			t.job_id = info.id
 		<trim prefix="WHERE" prefixOverrides="AND | OR" >
 			t.type = 1
-			<if test="jobGroup gt 0">
+			<if test="jobGroup !=null">
 				AND
 				t.job_group = #{jobGroup}
 			</if>

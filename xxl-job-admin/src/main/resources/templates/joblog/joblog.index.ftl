@@ -38,11 +38,11 @@
                         <input type="text" class="form-control" id="jobModule" autocomplete="on" >
                     </div>
                 </div>
-	    		<div class="col-xs-2" style="display: none;">
+	    		<div class="col-xs-2" >
  					<div class="input-group">
 	                	<span class="input-group-addon">${I18n.jobinfo_field_jobgroup}</span>
                 		<select class="form-control" id="jobGroup"  paramVal="<#if jobInfo?exists>${jobInfo.jobGroup}</#if>" >
-                            <option value="0" >${I18n.system_all}</option>
+                            <option value="" >${I18n.system_all}</option>
                 			<#list JobGroupList as group>
                 				<option value="${group.id}" <#if group.title == "执行器&监督者" >selected="selected"</#if>>${group.title}</option>
                 			</#list>
@@ -53,7 +53,7 @@
 	              	<div class="input-group">
 	                	<span class="input-group-addon">${I18n.jobinfo_job}</span>
                         <select class="form-control" id="jobId" paramVal="<#if jobInfo?exists>${jobInfo.id}</#if>" >
-                            <option value="0" >${I18n.system_all}</option>
+                            <option value="" >${I18n.system_all}</option>
 						</select>
 	              	</div>
 	            </div>
@@ -97,6 +97,7 @@
 				                <thead>
 					            	<tr>
                                         <th name="jobId" >${I18n.jobinfo_field_id}</th>
+                                        <th name="jobDesc">jobDesc</th>
                                         <th name="id" >id</th>
                                         <th name="jobGroup" >jobGroup</th>
 										<#--<th name="executorAddress" >执行器地址</th>

@@ -4,7 +4,6 @@ import com.xxl.job.admin.core.model.XxlJobInfo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -40,7 +39,7 @@ public interface XxlJobInfoDao {
 	
 	public int delete(@Param("id") int id);
 
-	public List<XxlJobInfo> getJobsByGroup(@Param("jobGroup") int jobGroup);
+	public List<XxlJobInfo> getJobsByGroup(@Param("jobGroup") Integer jobGroup);
 
 	public int findAllCount();
 

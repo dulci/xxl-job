@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xxl.job.executor.dao.waterdrop.WaterdropExecutorSQLDao">
-	<select id="executorSQL" timeout="1200">
+	<select id="executorSQL" >
 		${sql}
 	</select>
 </mapper>

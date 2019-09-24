@@ -8,16 +8,19 @@ import com.xxl.job.core.log.XxlJobLogger;
 import com.xxl.job.core.thread.TriggerCallbackThread;
 import com.xxl.job.core.util.LogInfoUtil;
 import com.xxl.job.executor.core.model.xxljob.XxlJobInfo;
+import com.xxl.job.executor.core.model.xxljob.XxlJobLog;
 import com.xxl.job.executor.dao.crawlerself.CrawlerselfExecutorSQLDao;
 import com.xxl.job.executor.dao.gcxx.GcxxExecutorSQLDao;
 import com.xxl.job.executor.dao.waterdrop.WaterdropExecutorSQLDao;
 import com.xxl.job.executor.dao.xxljob.XxlJobInfoDao;
+import com.xxl.job.executor.dao.xxljob.XxlJobLogDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 @JobHandler(value = "sqlJobHandler")
@@ -25,6 +28,8 @@ import java.util.List;
 public class SQLJobHandler extends IJobHandler {
 	@Autowired
 	private XxlJobInfoDao xxlJobInfoDao;
+	@Autowired
+	private XxlJobLogDao xxlJobLogDao;
 	@Autowired
 	private GcxxExecutorSQLDao gcxxExecutorSQLDao;
 	@Autowired
@@ -35,7 +40,7 @@ public class SQLJobHandler extends IJobHandler {
 	@Override
 	public ReturnT<String> execute(String param) throws Exception {
 		new SendMessageThread(param).start();
-		return NO_START;
+		return PROCESS;
 	}
 
 	private class SendMessageThread extends Thread {
@@ -67,6 +72,16 @@ public class SQLJobHandler extends IJobHandler {
 				TriggerCallbackThread.pushCallBack(new HandleCallbackParam(LogInfoUtil.getLogId(), System.currentTimeMillis(), result));
 				return;
 			}
+			XxlJobLog xxlJobLog = xxlJobLogDao.load(LogInfoUtil.getLogId());
+			if (xxlJobLog == null) {
+				XxlJobLogger.log("log dosen't exist");
+				ReturnT result = new ReturnT(ReturnT.FAIL.getCode(), "log dosen't exist");
+				TriggerCallbackThread.pushCallBack(new HandleCallbackParam(LogInfoUtil.getLogId(), System.currentTimeMillis(), result));
+				return;
+			}
+			xxlJobLog.setHandleCode(100);
+			xxlJobLog.setHandleTime(new Date());
+			xxlJobLogDao.updateHandleInfo(xxlJobLog);
 
 			// 2 获得数据源
 			String datasource = xxlJobInfo.getDatasource();

@@ -11,7 +11,7 @@ $(function() {
 			dataType : "json",
 			success : function(data){
 				if (data.code == 200) {
-					$("#jobId").html( '<option value="0" >'+ I18n.system_all +'</option>' );
+					$("#jobId").html( '<option value="" >'+ I18n.system_all +'</option>' );
 					$.each(data.content, function (n, value) {
                         $("#jobId").append('<option value="' + value.id + '" >' + value.jobDesc + '</option>');
                     });
@@ -29,13 +29,11 @@ $(function() {
 			},
 		});
 	});
-    if ($("#jobGroup option:selected").val()){
-        $("#jobGroup").change();
-    }
-	if ($("#jobGroup").attr("paramVal")){
+
+
 		$("#jobGroup").find("option[value='" + $("#jobGroup").attr("paramVal") + "']").attr("selected",true);
         $("#jobGroup").change();
-	}
+
 
 	// filter Time
     var rangesConf = {};
@@ -114,6 +112,14 @@ $(function() {
 							temp += '<br>'+ I18n.jobinfo_field_executorparam +'：' + row.executorParam;
 
 							return '<a class="logTips" href="javascript:;" >'+ row.jobId +'<span style="display:none;">'+ temp +'</span></a>';
+						}
+					},
+					{
+						"data": 'jobDesc',
+                        "visible" : true,
+						"width":'10%',
+						"render": function ( data, type, row ) {
+							return data;
 						}
 					},
 					{
@@ -197,7 +203,7 @@ $(function() {
 	                {
 						"data": 'handleMsg' ,
 						"bSortable": false,
-                        "width":'15%',
+                        "width":'10%',
 	                	"render": function ( data, type, row ) {
 	                		// better support expression or string, not function
 	                		return function () {

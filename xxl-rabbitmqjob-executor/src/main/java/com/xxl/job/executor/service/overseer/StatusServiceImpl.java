@@ -20,12 +20,7 @@ import java.util.Date;
 /**
  * Created by dul-c on 2018-12-12.
  */
-@Service(
-		version = "${xxl.job.overseer.service.version}",
-		application = "${dubbo.application.id}",
-		protocol = "${dubbo.protocol.id}",
-		registry = "${dubbo.registry.id}"
-)
+@Service(version = "${xxl.job.overseer.service.version}", application = "${dubbo.application.id}", protocol = "${dubbo.protocol.id}", registry = "${dubbo.registry.id}")
 @Slf4j
 public class StatusServiceImpl implements StatusService {
 	@Autowired
@@ -42,7 +37,8 @@ public class StatusServiceImpl implements StatusService {
 	@Override
 	public Integer report(Integer taskInstanceId, String ip, Integer status, String msg) {
 		StringBuffer stringBuffer = new StringBuffer();
-		stringBuffer.append(DateUtil.format(new Date())).append(" recieve status report ").append("[" + taskInstanceId + "]").append("[" + ip + "]").append(" ").append(status).append(" ").append(msg);
+		stringBuffer.append(DateUtil.format(new Date())).append(" recieve status report ").append("[" + taskInstanceId + "]").append("[" + ip + "]").append(" ").append(status)
+				.append(" ").append(msg);
 		this.log.info(stringBuffer.toString());
 
 		XxlJobLog xxlJobLog = xxlJobLogDao.load(taskInstanceId);
@@ -75,7 +71,8 @@ public class StatusServiceImpl implements StatusService {
 	@Override
 	public Integer report(Integer taskInstanceId, String ip, JobStatus jobStatus, String msg) {
 		StringBuffer stringBuffer = new StringBuffer();
-		stringBuffer.append(DateUtil.format(new Date())).append(" recieve status report ").append("[" + taskInstanceId + "]").append("[" + ip + "]").append(" ").append(jobStatus.getValue()).append(" ").append(msg);
+		stringBuffer.append(DateUtil.format(new Date())).append(" recieve status report ").append("[" + taskInstanceId + "]").append("[" + ip + "]").append(" ").append(jobStatus
+				.getValue()).append(" ").append(msg);
 		this.log.info(stringBuffer.toString());
 
 		return report(taskInstanceId, ip, Integer.valueOf(jobStatus.getValue()), msg);
@@ -112,40 +109,41 @@ public class StatusServiceImpl implements StatusService {
 	 */
 	private MainJobCallbackInfo updateMainJobPercentAndStatus(XxlJobLog xxlJobLog, Integer status) {
 		MainJobCallbackInfo result = new MainJobCallbackInfo();
-		XxlJobLog mainJobLog =null;
-		if(xxlJobLog.getParentId() !=null) {
-			 mainJobLog = xxlJobLogDao.load(xxlJobLog.getParentId());
+		XxlJobLog mainJobLog = null;
+		if (xxlJobLog.getParentId() != null) {
+			mainJobLog = xxlJobLogDao.load(xxlJobLog.getParentId());
 		}
 		if (xxlJobLog.getType() == 1) {//主任务汇报
 			result.setStatus(status);
 			result.setTaskInstanceId(xxlJobLog.getId());
 		} else if (status.equals(Integer.valueOf(JobStatus.SUCCESS.getValue()))) {//子任务执行成功
-
-			int total = xxlJobLog.getTotal();
-			if (xxlJobLog.getTotal() == 0) {
-				total = xxlJobLogDao.selectCountByParentId(xxlJobLog.getParentId(), null);
-			}
-			int finish = xxlJobLogDao.selectCountByParentId(xxlJobLog.getParentId(), Integer.valueOf(JobStatus.SUCCESS.getValue()));
-			Double percent = (Double.valueOf(finish)) / Double.valueOf(total) * 100.0;
-
-			if (mainJobLog != null) {
-				// 更新主任务进度
-				mainJobLog.setPercent(percent);
-
-				// 更新主任务状态(只更新不是子任务的主任务的状态)
-				if ((finish == total) && mainJobLog.getType() == 2) {
-					mainJobLog.setTriggerCode(Integer.valueOf(JobStatus.SUCCESS.getValue()));
+			if (xxlJobLog.getTotal() != null) {
+				int total = xxlJobLog.getTotal();
+				if (xxlJobLog.getTotal() == 0) {
+					total = xxlJobLogDao.selectCountByParentId(xxlJobLog.getParentId(), null);
 				}
-				xxlJobLogDao.updateTriggerInfo(mainJobLog);
+				int finish = xxlJobLogDao.selectCountByParentId(xxlJobLog.getParentId(), Integer.valueOf(JobStatus.SUCCESS.getValue()));
+				Double percent = (Double.valueOf(finish)) / Double.valueOf(total) * 100.0;
 
-				if (finish == total) {
-					if (mainJobLog.getType() == 2) {
-						// 若主任务仍然是子任务则进行递归调用
-						return updateMainJobPercentAndStatus(mainJobLog, Integer.valueOf(JobStatus.SUCCESS.getValue()));
-					} else {
-						// 若主任务不是子任务则进行递归调用
-						result.setStatus(Integer.valueOf(JobStatus.SUCCESS.getValue()));
-						result.setTaskInstanceId(mainJobLog.getId());
+				if (mainJobLog != null) {
+					// 更新主任务进度
+					mainJobLog.setPercent(percent);
+
+					// 更新主任务状态(只更新不是子任务的主任务的状态)
+					if ((finish == total) && mainJobLog.getType() == 2) {
+						mainJobLog.setTriggerCode(Integer.valueOf(JobStatus.SUCCESS.getValue()));
+					}
+					xxlJobLogDao.updateTriggerInfo(mainJobLog);
+
+					if (finish == total) {
+						if (mainJobLog.getType() == 2) {
+							// 若主任务仍然是子任务则进行递归调用
+							return updateMainJobPercentAndStatus(mainJobLog, Integer.valueOf(JobStatus.SUCCESS.getValue()));
+						} else {
+							// 若主任务不是子任务则进行递归调用
+							result.setStatus(Integer.valueOf(JobStatus.SUCCESS.getValue()));
+							result.setTaskInstanceId(mainJobLog.getId());
+						}
 					}
 				}
 			}
@@ -164,10 +162,11 @@ public class StatusServiceImpl implements StatusService {
 		}
 		return result;
 	}
+
 	@Test
-	public void test(){
-		Integer total =Integer.valueOf(357);
-		Integer finish =Integer.valueOf(357);
-		System.out.print(total==finish);
+	public void test() {
+		Integer total = Integer.valueOf(357);
+		Integer finish = Integer.valueOf(357);
+		System.out.print(total == finish);
 	}
 }

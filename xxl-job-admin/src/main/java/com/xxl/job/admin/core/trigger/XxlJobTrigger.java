@@ -68,8 +68,8 @@ public class XxlJobTrigger {
 				shardingParam[1] = Integer.valueOf(shardingArr[1]);
 			}
 		}
-		if (ExecutorRouteStrategyEnum.SHARDING_BROADCAST == ExecutorRouteStrategyEnum.match(jobInfo.getExecutorRouteStrategy(), null)
-				&& CollectionUtils.isNotEmpty(group.getRegistryList()) && shardingParam == null) {
+		if (ExecutorRouteStrategyEnum.SHARDING_BROADCAST == ExecutorRouteStrategyEnum.match(jobInfo.getExecutorRouteStrategy(), null) && CollectionUtils.isNotEmpty(group
+				.getRegistryList()) && shardingParam == null) {
 			for (int i = 0; i < group.getRegistryList().size(); i++) {
 				processTrigger(group, jobInfo, finalFailRetryCount, triggerType, i, group.getRegistryList().size(), flowInstance);
 			}
@@ -94,9 +94,11 @@ public class XxlJobTrigger {
 	private static void processTrigger(XxlJobGroup group, XxlJobInfo jobInfo, int finalFailRetryCount, TriggerTypeEnum triggerType, int index, int total, String flowInstance) {
 
 		// param
-		ExecutorBlockStrategyEnum blockStrategy = ExecutorBlockStrategyEnum.match(jobInfo.getExecutorBlockStrategy(), ExecutorBlockStrategyEnum.SERIAL_EXECUTION);  // block strategy
+		ExecutorBlockStrategyEnum blockStrategy = ExecutorBlockStrategyEnum.match(jobInfo.getExecutorBlockStrategy(), ExecutorBlockStrategyEnum.SERIAL_EXECUTION);  // block
+		// strategy
 		ExecutorRouteStrategyEnum executorRouteStrategyEnum = ExecutorRouteStrategyEnum.match(jobInfo.getExecutorRouteStrategy(), null);    // route strategy
-		String shardingParam = (ExecutorRouteStrategyEnum.SHARDING_BROADCAST == executorRouteStrategyEnum) ? String.valueOf(index).concat("/").concat(String.valueOf(total)) : null;
+		String shardingParam = (ExecutorRouteStrategyEnum.SHARDING_BROADCAST == executorRouteStrategyEnum) ? String.valueOf(index).concat("/").concat(String.valueOf(total)) :
+				null;
 
 		// 1、save log-id
 		XxlJobLog jobLog = new XxlJobLog();
@@ -162,8 +164,8 @@ public class XxlJobTrigger {
 		StringBuffer triggerMsgSb = new StringBuffer();
 		triggerMsgSb.append(I18nUtil.getString("jobconf_trigger_type")).append("：").append(triggerType.getTitle());
 		triggerMsgSb.append("<br>").append(I18nUtil.getString("jobconf_trigger_admin_adress")).append("：").append(IpUtil.getIp());
-		triggerMsgSb.append("<br>").append(I18nUtil.getString("jobconf_trigger_exe_regtype")).append("：")
-				.append((group.getAddressType() == 0) ? I18nUtil.getString("jobgroup_field_addressType_0") : I18nUtil.getString("jobgroup_field_addressType_1"));
+		triggerMsgSb.append("<br>").append(I18nUtil.getString("jobconf_trigger_exe_regtype")).append("：").append((group.getAddressType() == 0) ? I18nUtil.getString
+				("jobgroup_field_addressType_0") : I18nUtil.getString("jobgroup_field_addressType_1"));
 		triggerMsgSb.append("<br>").append(I18nUtil.getString("jobconf_trigger_exe_regaddress")).append("：").append(group.getRegistryList());
 		triggerMsgSb.append("<br>").append(I18nUtil.getString("jobinfo_field_executorRouteStrategy")).append("：").append(executorRouteStrategyEnum.getTitle());
 		if (shardingParam != null) {
@@ -173,8 +175,9 @@ public class XxlJobTrigger {
 		triggerMsgSb.append("<br>").append(I18nUtil.getString("jobinfo_field_timeout")).append("：").append(jobInfo.getExecutorTimeout());
 		triggerMsgSb.append("<br>").append(I18nUtil.getString("jobinfo_field_executorFailRetryCount")).append("：").append(finalFailRetryCount);
 
-		triggerMsgSb.append("<br><br><span style=\"color:#00c0ef;\" > >>>>>>>>>>>" + I18nUtil.getString("jobconf_trigger_run") + "<<<<<<<<<<< </span><br>")
-				.append((routeAddressResult != null && routeAddressResult.getMsg() != null) ? routeAddressResult.getMsg() + "<br><br>" : "").append(triggerResult.getMsg() != null ? triggerResult.getMsg() : "");
+		triggerMsgSb.append("<br><br><span style=\"color:#00c0ef;\" > >>>>>>>>>>>" + I18nUtil.getString("jobconf_trigger_run") + "<<<<<<<<<<< </span><br>").append(
+				(routeAddressResult != null && routeAddressResult.getMsg() != null) ? routeAddressResult.getMsg() + "<br><br>" : "").append(triggerResult.getMsg() != null ?
+				triggerResult.getMsg() : "");
 		logger.info(">>>>>>>>>>> xxl-job collection trigger info end, jobId:{}", jobLog.getId());
 
 		// 6、save log trigger-info
@@ -229,15 +232,35 @@ public class XxlJobTrigger {
 		if (!c[6].equals("*")) {
 			return new SimpleDateFormat("yyyy").format(new Date());
 		} else if (!c[4].equals("*")) {
-			return new SimpleDateFormat("yyyyMM").format(new Date());
+			if (c[4].contains("/")) {
+				return new SimpleDateFormat("yyyyMM").format(new Date());
+			} else {
+				return new SimpleDateFormat("yyyy").format(new Date());
+			}
 		} else if (!c[3].equals("*")) {
-			return new SimpleDateFormat("yyyyMMdd").format(new Date());
+			if (c[3].contains("/")) {
+				return new SimpleDateFormat("yyyyMMdd").format(new Date());
+			} else {
+				return new SimpleDateFormat("yyyyMM").format(new Date());
+			}
 		} else if (!c[2].equals("*")) {
-			return new SimpleDateFormat("yyyyMMddHH").format(new Date());
+			if (c[2].contains("/")) {
+				return new SimpleDateFormat("yyyyMMddHH").format(new Date());
+			} else {
+				return new SimpleDateFormat("yyyyMMdd").format(new Date());
+			}
 		} else if (!c[1].equals("*")) {
-			return new SimpleDateFormat("yyyyMMddHHmm").format(new Date());
+			if (c[1].contains("/")) {
+				return new SimpleDateFormat("yyyyMMddHHmm").format(new Date());
+			} else {
+				return new SimpleDateFormat("yyyyMMddHH").format(new Date());
+			}
 		} else if (!c[0].equals("*")) {
-			return new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+			if (c[0].contains("/")) {
+				return new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+			} else {
+				return new SimpleDateFormat("yyyyMMddHHmm").format(new Date());
+			}
 		} else {
 			return String.valueOf(taskId);
 		}

@@ -53,7 +53,7 @@ public class JobLogController {
 		if (jobId > 0) {
 			XxlJobInfo jobInfo = xxlJobInfoDao.loadById(jobId);
 			model.addAttribute("jobInfo", jobInfo);
-		}else{
+		} else {
 			model.addAttribute("jobInfo", new XxlJobInfo());
 		}
 
@@ -69,9 +69,9 @@ public class JobLogController {
 
 	@RequestMapping("/pageList")
 	@ResponseBody
-	public Map<String, Object> pageList(@RequestParam(required = false, defaultValue = "0") int start,
-	                                    @RequestParam(required = false, defaultValue = "10") int length,
-	                                    Integer jobGroup, Integer jobId, Integer logStatus, String filterTime, String jobSystem, String jobModule) {
+	public Map<String, Object> pageList(
+			@RequestParam(required = false, defaultValue = "0") int start, @RequestParam(required = false, defaultValue = "10") int length, Integer jobGroup, Integer jobId,
+			Integer logStatus, String filterTime, String jobSystem, String jobModule) {
 		// parse param
 		Date triggerTimeStart = null;
 		Date triggerTimeEnd = null;
@@ -87,8 +87,8 @@ public class JobLogController {
 		}
 
 		// page query
-		List<XxlJobLog> list = xxlJobLogDao.pageList(start, length, jobSystem, jobModule,jobGroup, jobId, triggerTimeStart, triggerTimeEnd, logStatus);
-		int list_count = xxlJobLogDao.pageListCount(start, length, jobSystem, jobModule,jobGroup, jobId, triggerTimeStart, triggerTimeEnd, logStatus);
+		List<XxlJobLog> list = xxlJobLogDao.pageList(start, length, jobSystem, jobModule, jobGroup, jobId, triggerTimeStart, triggerTimeEnd, logStatus);
+		int list_count = xxlJobLogDao.pageListCount(start, length, jobSystem, jobModule, jobGroup, jobId, triggerTimeStart, triggerTimeEnd, logStatus);
 
 		// package result
 		Map<String, Object> maps = new HashMap<String, Object>();
@@ -118,8 +118,8 @@ public class JobLogController {
 
 	@ResponseBody
 	@RequestMapping("/subjobTable")
-	public Map<String, Object> subjobTable(@RequestParam("logId") Integer logId, @RequestParam(required = false, defaultValue = "0") int start,
-	                                       @RequestParam(required = false, defaultValue = "10") int length) {
+	public Map<String, Object> subjobTable(
+			@RequestParam("logId") Integer logId, @RequestParam(required = false, defaultValue = "0") int start, @RequestParam(required = false, defaultValue = "10") int length) {
 		Map<String, Object> maps = new HashMap<String, Object>();
 		XxlJobLog jobLog = xxlJobLogDao.load(logId);
 		if (jobLog == null) {
@@ -142,8 +142,17 @@ public class JobLogController {
 	@ResponseBody
 	public ReturnT<LogResult> logDetailCat(String executorAddress, long triggerTime, int logId, int fromLineNum) {
 		try {
+			XxlJobLog xxlJobLog = xxlJobLogDao.load(logId);
+			if (xxlJobLog == null) {
+				return new ReturnT<>();
+			}
+			Date triggerDate = xxlJobLog.getTriggerTime();
+			if (triggerDate == null) {
+				triggerDate = new Date();
+			}
+
 			ExecutorBiz executorBiz = XxlJobDynamicScheduler.getExecutorBiz(executorAddress);
-			ReturnT<LogResult> logResult = executorBiz.log(triggerTime, logId, fromLineNum);
+			ReturnT<LogResult> logResult = executorBiz.log(triggerDate.getTime(), logId, fromLineNum);
 
 			// is end
 			if (logResult.getContent() != null && logResult.getContent().getFromLineNum() > logResult.getContent().getToLineNum()) {

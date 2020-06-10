@@ -5,8 +5,11 @@ import com.xxl.job.api.service.LogService;
 import com.xxl.job.core.log.XxlJobFileAppender;
 import com.xxl.job.core.log.XxlJobLogger;
 import com.xxl.job.core.util.DateUtil;
+import com.xxl.job.executor.core.model.XxlJobLog;
+import com.xxl.job.executor.dao.XxlJobLogDao;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -14,15 +17,12 @@ import java.util.Date;
 /**
  * Created by dul-c on 2018-12-12.
  */
-@Service(
-		version = "${xxl.job.overseer.service.version}",
-		application = "${dubbo.application.id}",
-		protocol = "${dubbo.protocol.id}",
-		registry = "${dubbo.registry.id}"
-)
+@Service(version = "${xxl.job.overseer.service.version}", application = "${dubbo.application.id}", protocol = "${dubbo.protocol.id}", registry = "${dubbo.registry.id}")
 @Component
 @Slf4j
 public class LogServiceImpl implements LogService {
+	@Autowired
+	private XxlJobLogDao xxlJobLogDao;
 
 	/**
 	 * Log Report 日志汇报
@@ -38,7 +38,7 @@ public class LogServiceImpl implements LogService {
 		stringBuffer.append(DateUtil.format(new Date())).append(" recieve log report ").append("[" + taskInstanceId + "]").append("[" + ip + "]").append(" ").append(log);
 		this.log.info(stringBuffer.toString());
 		//new LogThread(taskInstanceId, ip, log).start();
-		printLog(taskInstanceId,ip,log,null);
+		printLog(taskInstanceId, ip, log, null);
 		return 0;
 	}
 
@@ -57,12 +57,20 @@ public class LogServiceImpl implements LogService {
 		this.log.info(stringBuffer.toString());
 		//new LogThread(taskInstanceId, ip, e).start();
 
-		printLog(taskInstanceId,ip,null,e);
+		printLog(taskInstanceId, ip, null, e);
 		return 0;
 	}
 
-	private void printLog(Integer logId,String ip,String log,Exception e){
-		String logFileName = XxlJobFileAppender.makeLogFileName(new Date(),  logId);
+	private void printLog(Integer logId, String ip, String log, Exception e) {
+		XxlJobLog xxlJobLog = xxlJobLogDao.load(logId);
+		if (xxlJobLog == null) {
+			return;
+		}
+		Date triggerDate = xxlJobLog.getTriggerTime();
+		if (triggerDate == null) {
+			triggerDate = new Date();
+		}
+		String logFileName = XxlJobFileAppender.makeLogFileName(triggerDate, logId);
 		XxlJobFileAppender.contextHolder.set(logFileName);
 		if (StringUtils.isNotEmpty(log)) {
 			XxlJobLogger.log("ip:{} , detail:{}", ip, log);

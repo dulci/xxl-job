@@ -11,9 +11,11 @@ import com.xxl.job.executor.core.model.xxljob.XxlJobInfo;
 import com.xxl.job.executor.core.model.xxljob.XxlJobLog;
 import com.xxl.job.executor.dao.crawlerself.CrawlerselfExecutorSQLDao;
 import com.xxl.job.executor.dao.gcxx.GcxxExecutorSQLDao;
+import com.xxl.job.executor.dao.pc.PcExecutorSQLDao;
 import com.xxl.job.executor.dao.waterdrop.WaterdropExecutorSQLDao;
 import com.xxl.job.executor.dao.xxljob.XxlJobInfoDao;
 import com.xxl.job.executor.dao.xxljob.XxlJobLogDao;
+import com.xxl.job.executor.dao.zhyx.ZhyxExecutorSQLDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -36,6 +38,10 @@ public class SQLJobHandler extends IJobHandler {
 	private WaterdropExecutorSQLDao waterdropExecutorSQLDao;
 	@Autowired
 	private CrawlerselfExecutorSQLDao crawlerselfExecutorSQLDao;
+	@Autowired
+	private ZhyxExecutorSQLDao zhyxExecutorSQLDao;
+	@Autowired
+	private PcExecutorSQLDao pcExecutorSQLDao;
 
 	@Override
 	public ReturnT<String> execute(String param) throws Exception {
@@ -92,7 +98,7 @@ public class SQLJobHandler extends IJobHandler {
 				return;
 			}
 
-			if (!"waterdrop".equals(datasource) && !"gcxx".equals(datasource) && !"crawlerself".equals(datasource)) {
+			if (!"waterdrop".equals(datasource) && !"gcxx".equals(datasource) && !"crawlerself".equals(datasource) && !"pc".equals(datasource) && !"zhyx".equals(datasource)) {
 				XxlJobLogger.log("unrecognized datasource");
 				ReturnT result = new ReturnT(ReturnT.FAIL.getCode(), "unrecognized datasource");
 				TriggerCallbackThread.pushCallBack(new HandleCallbackParam(LogInfoUtil.getLogId(), System.currentTimeMillis(), result));
@@ -133,6 +139,24 @@ public class SQLJobHandler extends IJobHandler {
 				} else if ("crawlerself".equals(datasource)) {
 					try {
 						crawlerselfExecutorSQLDao.executorSQL(sql);
+					} catch (Exception e) {
+						XxlJobLogger.log(e);
+						ReturnT result = new ReturnT(ReturnT.FAIL.getCode(), "execution occur exception");
+						TriggerCallbackThread.pushCallBack(new HandleCallbackParam(LogInfoUtil.getLogId(), System.currentTimeMillis(), result));
+						return;
+					}
+				} else if ("pc".equals(datasource)) {
+					try {
+						pcExecutorSQLDao.executorSQL(sql);
+					} catch (Exception e) {
+						XxlJobLogger.log(e);
+						ReturnT result = new ReturnT(ReturnT.FAIL.getCode(), "execution occur exception");
+						TriggerCallbackThread.pushCallBack(new HandleCallbackParam(LogInfoUtil.getLogId(), System.currentTimeMillis(), result));
+						return;
+					}
+				} else if ("zhyx".equals(datasource)) {
+					try {
+						zhyxExecutorSQLDao.executorSQL(sql);
 					} catch (Exception e) {
 						XxlJobLogger.log(e);
 						ReturnT result = new ReturnT(ReturnT.FAIL.getCode(), "execution occur exception");

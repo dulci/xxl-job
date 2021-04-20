@@ -231,6 +231,8 @@
                                 <option value="waterdrop" >waterdrop</option>
                                 <option value="gcxx" >gcxx</option>
                                 <option value="crawlerself" >crawlerself</option>
+                                <option value="pc" >pc</option>
+                                <option value="zhyx" >zhyx</option>
                             </select>
                         </div>
                     </div>
